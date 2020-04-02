@@ -1,0 +1,6 @@
+{
+    "name": "RegionManagement",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./RegionManagement.js"
+}

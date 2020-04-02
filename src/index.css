@@ -1,0 +1,50 @@
+.card{
+    background-color: #1b1b1b !important;
+    color: white !important;
+}
+.card-header{
+    background-color: hsl(198, 96%, 18%) !important;
+    color: white !important;
+    border: #023e58 !important;
+}
+.card-header-action {
+    color: white !important;
+}
+.chartjs-render-monitor{
+    color: white !important;
+}
+td {
+    color: white !important;
+}
+thead{
+    background-color: #023e58;
+    color: white !important;
+}
+.app-header{
+    background-color: #023e58 !important;
+    border: #023e58 !important;
+    color: white !important;
+}
+.nav-link{
+    color: white !important;
+}
+.dropdown-item{
+    color: white !important;
+}
+.navbar-toggler-icon{
+    color: white !important;
+}
+
+.modal-header{
+    background-color: #023e58 !important;
+    color:white !important;
+}
+.close{
+    color:white !important;
+}
+.d-md-down-none .navbar-toggler{
+    color:white !important;
+}
+a{
+    cursor: pointer !important;
+}

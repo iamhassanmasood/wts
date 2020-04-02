@@ -1,0 +1,6 @@
+{
+    "name": "AllSitesInformation",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./AllSitesInformation.js"
+}
