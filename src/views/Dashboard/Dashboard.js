@@ -37,6 +37,7 @@ class Dashboard extends Component {
           '#d9534f',
           '#FFCC00'],
         legend: {
+          show: false,
           position: 'bottom',
           labels: {
             colors: 'white',
@@ -134,7 +135,7 @@ class Dashboard extends Component {
         </Row>
         <Row>
           <Col>
-            <CardGroup className="mb-4">
+            <CardGroup className="mb-3">
               <Widget04 icon="icon-people" color="info" header="10" value="10">Registered UnDiscovered</Widget04>
               <Widget04 icon="icon-user-follow" color="success" header="20" value="20">Registered Discovered</Widget04>
               <Widget04 icon="icon-basket-loaded" color="primary" header="30" value="30">UnAuthoried Entry</Widget04>
@@ -143,49 +144,62 @@ class Dashboard extends Component {
             </CardGroup>
           </Col>
         </Row>
-        {/* 
         <Row>
-        <Col>
-        
-        </Col>
-      </Row> */}
-        <Card>
-          <CardHeader><i className='fa fa-map'></i>Location </CardHeader>
-          <MapModule
-            isMarkerShown
-            markers={latlng}
-          />
-        </Card>
+          <Col>
+            <CardGroup className="mb-3">
+              <Widget04 icon="icon-people" color="info" header="10" value="10">Registered UnDiscovered</Widget04>
+              <Widget04 icon="icon-user-follow" color="success" header="20" value="20">Registered Discovered</Widget04>
+              <Widget04 icon="icon-basket-loaded" color="primary" header="30" value="30">UnAuthoried Entry</Widget04>
+              <Widget04 icon="icon-pie-chart" color="danger" header="40" value="40">Stolen</Widget04>
+              <Widget04 icon="icon-speedometer" color="warning" header="50" value="50">In Transit</Widget04>
+            </CardGroup>
+          </Col>
+        </Row>
+        <Row>
 
-        <CardColumns className="cols-2">
+          <div className='col-lg-8'>
+            <Card style={{ height: '220px' }}>
+              <CardHeader style={{ height: '1.5rem', fontSize: '9px', padding: '6px' }}><i className='fa fa-map'></i>Location </CardHeader>
+              <MapModule
+                isMarkerShown
+                markers={latlng}
+              />
+            </Card>
+          </div>
+          <div className='col-lg-4'>
 
-          {flag ? <Card>
-            <CardHeader><i class="far fa-chart-pie"></i>
-              Asset Summary
-                <a className="card-header-actions" onClick={this.switchCharts}>
-                <i className="fa fa-plus"></i> Switch Alarms
-                </a>
-              <CardBody>
-                <Chart options={options} series={data} type="pie" width={`100%`} height={300} />
-              </CardBody>
-            </CardHeader>
-          </Card> : ""}
+            {flag ? <Card style={{ height: '220px' }}>
+              <CardHeader style={{ height: '1.5rem', fontSize: '9px', padding: '6px' }}><i class="far fa-chart-pie"></i>
+            Asset Summary
+              <a className="card-header-actions" onClick={this.switchCharts}>
+                  <i className="fa fa-plus"></i> Switch Alarms
+              </a>
+                <CardBody>
+                  <Chart options={options} series={data} type="pie" width={`100%`} height={180} />
+                </CardBody>
+              </CardHeader>
+            </Card> : ""}
 
-          {!flag ? <Card>
-            <CardHeader>
-              Asset Alarms
-                <a className="card-header-actions" color='info' size='sm' onClick={this.switchCharts}>
-                <i className="fa fa-plus"></i> Switch Summary
-                </a>
-              <CardBody>
-                <Chart options={options} series={data} type="donut" width={`100%`} height={300} />
-              </CardBody>
-            </CardHeader>
-          </Card> : ''}
+            {!flag ? <Card style={{ height: '220px' }}>
+              <CardHeader style={{ height: '1.5rem', fontSize: '9px', padding: '6px' }}>
+                Asset Alarms
+              <a className="card-header-actions" color='info' size='sm' onClick={this.switchCharts}>
+                  <i className="fa fa-plus"></i> Switch Summary
+              </a>
+                <CardBody>
+                  <Chart options={options} series={data} type="donut" width={`100%`} height={180} />
+                </CardBody>
+              </CardHeader>
+            </Card> : ''}
 
-        </CardColumns>
+
+          </div>
+
+        </Row>
+
         <AllSitesInformation />
-      </div >
+      </div>
+
     );
   }
 }
