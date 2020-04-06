@@ -136,22 +136,22 @@ class Dashboard extends Component {
         <Row>
           <Col>
             <CardGroup className="mb-3">
-              <Widget04 icon="icon-people" color="info" header="10" value="10">Registered UnDiscovered</Widget04>
-              <Widget04 icon="icon-user-follow" color="success" header="20" value="20">Registered Discovered</Widget04>
-              <Widget04 icon="icon-basket-loaded" color="primary" header="30" value="30">UnAuthoried Entry</Widget04>
-              <Widget04 icon="icon-pie-chart" color="danger" header="40" value="40">Stolen</Widget04>
-              <Widget04 icon="icon-speedometer" color="warning" header="50" value="50">In Transit</Widget04>
+              <Widget04 icon="icon-people" color="info" header="10" value="10"></Widget04>
+              <Widget04 icon="icon-user-follow" color="success" header="20" value="20"></Widget04>
+              <Widget04 icon="icon-basket-loaded" color="primary" header="30" value="30"></Widget04>
+              <Widget04 icon="icon-pie-chart" color="danger" header="40" value="40"></Widget04>
+              <Widget04 icon="icon-speedometer" color="warning" header="50" value="50"></Widget04>
             </CardGroup>
           </Col>
-        </Row>
-        <Row>
+          {/* </Row>
+        <Row> */}
           <Col>
             <CardGroup className="mb-3">
-              <Widget04 icon="icon-people" color="info" header="10" value="10">Registered UnDiscovered</Widget04>
-              <Widget04 icon="icon-user-follow" color="success" header="20" value="20">Registered Discovered</Widget04>
-              <Widget04 icon="icon-basket-loaded" color="primary" header="30" value="30">UnAuthoried Entry</Widget04>
-              <Widget04 icon="icon-pie-chart" color="danger" header="40" value="40">Stolen</Widget04>
-              <Widget04 icon="icon-speedometer" color="warning" header="50" value="50">In Transit</Widget04>
+              <Widget04 icon="icon-people" color="info" header="10" value="10"></Widget04>
+              <Widget04 icon="icon-user-follow" color="success" header="20" value="20"></Widget04>
+              <Widget04 icon="icon-basket-loaded" color="primary" header="30" value="30"></Widget04>
+              <Widget04 icon="icon-pie-chart" color="danger" header="40" value="40"></Widget04>
+              <Widget04 icon="icon-speedometer" color="warning" header="50" value="50"></Widget04>
             </CardGroup>
           </Col>
         </Row>
