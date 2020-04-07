@@ -352,7 +352,7 @@ class SiteManagement extends Component {
                                   this.removerow(rowData.id)
                                 }}>Delete</Button >
                                 <span></span>
-                                <Button color='info' onClick={() => this.setState({ opendeleteModal: false })}>Cancel</Button >
+                                <Button color='primary' onClick={() => this.setState({ opendeleteModal: false })}>Cancel</Button >
                               </ModalFooter>
                             </Modal>
 

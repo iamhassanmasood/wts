@@ -48,3 +48,14 @@ thead{
 a{
     cursor: pointer !important;
 }
+.btn-brand{
+    border-radius: 0 !important;
+}
+.fa{
+    border-radius: 0 !important;
+}
+.boxes{
+    display: flex;
+    align-items: stretch;
+    margin-right: 2px;
+}

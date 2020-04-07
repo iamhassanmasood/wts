@@ -175,7 +175,7 @@ class Dashboard extends Component {
                   <i className="fa fa-plus"></i> Switch Alarms
               </a>
                 <CardBody>
-                  <Chart options={options} series={data} type="pie" width={`100%`} height={280} />
+                  <Chart options={options} series={data} type="pie" width={`100%`} height={300} />
                 </CardBody>
               </CardHeader>
             </Card> : ""}
@@ -187,7 +187,7 @@ class Dashboard extends Component {
                   <i className="fa fa-plus"></i> Switch Summary
               </a>
                 <CardBody>
-                  <Chart options={options} series={data} type="donut" width={`100%`} height={280} />
+                  <Chart options={options} series={data} type="donut" width={`100%`} height={300} />
                 </CardBody>
               </CardHeader>
             </Card> : ''}

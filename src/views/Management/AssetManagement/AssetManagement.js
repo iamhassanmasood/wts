@@ -299,7 +299,7 @@ class AssetManagement extends Component {
                                 this.removerow(rd.id)
                               }}>Delete</Button>
                               <span></span>
-                              <Button color='info'
+                              <Button color='primary'
                                 onClick={() => this.setState({ opendeleteModal: false })}> Cancel</Button>
                             </ModalFooter>
                           </Modal>
