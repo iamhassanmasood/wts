@@ -50,12 +50,24 @@ a{
 }
 .btn-brand{
     border-radius: 0 !important;
+    color:white !important;
 }
 .fa{
     border-radius: 0 !important;
 }
 .boxes{
     display: inline;
-    align-items: right;
-    margin-right: 2px;
+}
+.Names{
+    font-size: 12px;
+}
+.Values{
+    font-size: 10px;
+    font-weight: bold;
+}
+.logoutButton{
+    background-color: #023e58 !important;
+    color:white !important;
+    border: none !important;
+    border-radius: none !important;
 }

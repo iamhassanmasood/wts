@@ -42,42 +42,29 @@ function DefaultHeader(props) {
           <Link to="/dashboard/assetlevel" className="nav-link">Asset Level</Link>
         </NavItem>
       </Nav>
-      <Nav className="ml-auto" navbar>
-        <NavItem className="d-md-down-none">
-          <Button style={{ backgroundColor: "blue", color: 'white' }} size="lg" className=" btn-brand mr-1 mb-1">
+      <Nav className="m-auto" navbar>
+        <div className="divforcard">
+
+          <Button color='info' size="lg" className=" btn-brand mr-1 mb-1">
             <i className="fa fa-sitemap"></i>
-            <div className='boxes'>
-              <span>Sites</span>
-              <span> 3444 </span>
-            </div>
+            <span> 3444 </span>
           </Button>
-          {/* <NavLink to="#" className="nav-link"><i className="fa fa-sitemap fa-lg" title="Sites"></i><Badge pill color="info">15</Badge></NavLink> */}
-        </NavItem>
-        <NavItem className="d-md-down-none">
-          <Button style={{ backgroundColor: "red", color: 'white' }} size="lg" className=" btn-brand mr-1 mb-1">
+
+          <Button color='success' size="lg" className=" btn-brand mr-1 mb-1">
             <i className="fa fa-ticket"></i>
-            <div className='boxes'>
-              <span>Assets</span>
-              <span> 3444 </span>
-            </div>
+            <span> 3444 </span>
           </Button>
-          {/* <NavLink to="#" className="nav-link"><i className="fa fa-ticket fa-lg" title="Assets"></i><Badge pill color="primary">15</Badge></NavLink> */}
-        </NavItem>
-        <NavItem className="d-md-down-none">
-          <Button style={{ backgroundColor: "yellow", color: 'white' }} size="lg" className=" btn-brand mr-1 mb-1">
+
+          <Button color='danger' size="lg" className=" btn-brand mr-1 mb-1">
             <i className="fa fa-bell"></i>
-            <div className='boxes'>
-              <span>Alerts</span>
-              <span> 3444 </span>
-            </div>
+            <span> 3444 </span>
           </Button>
-          {/* <NavLink to="#" className="nav-link" title="Alerts"><i className="fa fa-bell fa-lg"></i><Badge pill color="danger">5</Badge></NavLink> */}
-        </NavItem>
-        <UncontrolledDropdown nav direction="down">
-          <DropdownToggle nav>
-            <DropdownItem onClick={handleLogout}><i className="fa fa-sign-out" title="Alerts"></i> Logout</DropdownItem>
-          </DropdownToggle>
-        </UncontrolledDropdown>
+
+        </div>
+      </Nav>
+      <Nav className="ml-auto" navbar>
+        <Button onClick={handleLogout} className='logoutButton'><i className="fa fa-sign-out" title="Alerts"></i> Logout</Button>
+
       </Nav>
     </React.Fragment>
   );
