@@ -10,7 +10,7 @@ const MapModule = compose(
     withProps({
         googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyCHZV-ToxlUuJbLbuMNb7NrWhZYTgfT0L8",
         loadingElement: <div style={{ height: "100%" }} />,
-        containerElement: <div style={{ height: "300px" }} />,
+        containerElement: <div style={{ height: "320px" }} />,
         mapElement: <div style={{ height: "100%" }} />
     }),
     withHandlers({

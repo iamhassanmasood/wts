@@ -193,7 +193,7 @@ class TransferAssets extends Component {
                       </Input>
                     </FormGroup> : ''}
                     <FormGroup>
-                      <Button color="info" block type="submit" onClick={this.toggleModal}> Transfer Asset</Button>
+                      <Button color="primary" block type="submit" onClick={this.toggleModal}> Transfer Asset</Button>
                       {errors ? <span style={{ color: 'red', fontSize: '12px' }}>{errors}</span> : ''}
                       {transfer ? <span style={{ color: 'green', fontSize: '14px' }}>Asset Transferred Successfully!!!</span> : ''}
                     </FormGroup>

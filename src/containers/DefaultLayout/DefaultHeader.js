@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, NavLink, useHistory } from 'react-router-dom';
-import { Badge, UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem } from 'reactstrap';
+import { Badge, UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, Card, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import Logo from '../../assets/img/brand/Logo.PNG'
@@ -31,6 +31,7 @@ function DefaultHeader(props) {
       <AppSidebarToggler className="d-md-down-none" display="lg" />
 
       <Nav className="d-md-down-none" navbar>
+
         <NavItem className="px-3">
           <NavLink to="/dashboard/networklevel" className="nav-link" >Network Level</NavLink>
         </NavItem>
@@ -43,13 +44,34 @@ function DefaultHeader(props) {
       </Nav>
       <Nav className="ml-auto" navbar>
         <NavItem className="d-md-down-none">
-          <NavLink to="#" className="nav-link"><i className="fa fa-sitemap fa-lg" title="Sites"></i><Badge pill color="info">15</Badge></NavLink>
+          <Button style={{ backgroundColor: "blue", color: 'white' }} size="lg" className=" btn-brand mr-1 mb-1">
+            <i className="fa fa-sitemap"></i>
+            <div className='boxes'>
+              <span>Sites</span>
+              <span> 3444 </span>
+            </div>
+          </Button>
+          {/* <NavLink to="#" className="nav-link"><i className="fa fa-sitemap fa-lg" title="Sites"></i><Badge pill color="info">15</Badge></NavLink> */}
         </NavItem>
         <NavItem className="d-md-down-none">
-          <NavLink to="#" className="nav-link"><i className="fa fa-ticket fa-lg" title="Assets"></i><Badge pill color="primary">15</Badge></NavLink>
+          <Button style={{ backgroundColor: "red", color: 'white' }} size="lg" className=" btn-brand mr-1 mb-1">
+            <i className="fa fa-ticket"></i>
+            <div className='boxes'>
+              <span>Assets</span>
+              <span> 3444 </span>
+            </div>
+          </Button>
+          {/* <NavLink to="#" className="nav-link"><i className="fa fa-ticket fa-lg" title="Assets"></i><Badge pill color="primary">15</Badge></NavLink> */}
         </NavItem>
         <NavItem className="d-md-down-none">
-          <NavLink to="#" className="nav-link" title="Alerts"><i className="fa fa-bell fa-lg"></i><Badge pill color="danger">5</Badge></NavLink>
+          <Button style={{ backgroundColor: "yellow", color: 'white' }} size="lg" className=" btn-brand mr-1 mb-1">
+            <i className="fa fa-bell"></i>
+            <div className='boxes'>
+              <span>Alerts</span>
+              <span> 3444 </span>
+            </div>
+          </Button>
+          {/* <NavLink to="#" className="nav-link" title="Alerts"><i className="fa fa-bell fa-lg"></i><Badge pill color="danger">5</Badge></NavLink> */}
         </NavItem>
         <UncontrolledDropdown nav direction="down">
           <DropdownToggle nav>
