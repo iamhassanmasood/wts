@@ -158,8 +158,8 @@ class Dashboard extends Component {
         <Row>
 
           <div className='col-lg-8'>
-            <Card style={{ height: '220px' }}>
-              <CardHeader style={{ height: '1.5rem', fontSize: '9px', padding: '6px' }}><i className='fa fa-map'></i>Location </CardHeader>
+            <Card>
+              <CardHeader ><i className='fa fa-map'></i>Location </CardHeader>
               <MapModule
                 isMarkerShown
                 markers={latlng}
@@ -168,26 +168,26 @@ class Dashboard extends Component {
           </div>
           <div className='col-lg-4'>
 
-            {flag ? <Card style={{ height: '220px' }}>
-              <CardHeader style={{ height: '1.5rem', fontSize: '9px', padding: '6px' }}><i class="far fa-chart-pie"></i>
+            {flag ? <Card>
+              <CardHeader ><i class="far fa-chart-pie"></i>
             Asset Summary
               <a className="card-header-actions" onClick={this.switchCharts}>
                   <i className="fa fa-plus"></i> Switch Alarms
               </a>
                 <CardBody>
-                  <Chart options={options} series={data} type="pie" width={`100%`} height={180} />
+                  <Chart options={options} series={data} type="pie" width={`100%`} height={280} />
                 </CardBody>
               </CardHeader>
             </Card> : ""}
 
-            {!flag ? <Card style={{ height: '220px' }}>
-              <CardHeader style={{ height: '1.5rem', fontSize: '9px', padding: '6px' }}>
+            {!flag ? <Card>
+              <CardHeader >
                 Asset Alarms
               <a className="card-header-actions" color='info' size='sm' onClick={this.switchCharts}>
                   <i className="fa fa-plus"></i> Switch Summary
               </a>
                 <CardBody>
-                  <Chart options={options} series={data} type="donut" width={`100%`} height={180} />
+                  <Chart options={options} series={data} type="donut" width={`100%`} height={280} />
                 </CardBody>
               </CardHeader>
             </Card> : ''}
