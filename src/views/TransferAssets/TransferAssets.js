@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Card, CardBody, CardHeader, Col, Row, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
-import { BASE_URL, PORT, SITES_API, ASSET_BY_SITE } from '../../Config/Config'
+import { BASE_URL, PORT, SITES_API, ASSET_BY_SITE, TRANSFER_ASSET } from '../../Config/Config'
 import transferValidation from './Validator'
 import axios from 'axios'
 
@@ -26,7 +26,7 @@ class TransferAssets extends Component {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
     this.setState({ done: true })
-    axios.get(`${BASE_URL}:${PORT}/${SITES_API}/`, { headers })
+    axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
         if (res.status === 200) {
           this.setState({
@@ -84,7 +84,7 @@ class TransferAssets extends Component {
   handleChangeAssets = (id) => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}:${PORT}/${ASSET_BY_SITE}${id}`, { headers })
+    axios.get(`${BASE_URL}/${ASSET_BY_SITE}${id}`, { headers })
       .then(res => {
         this.setState({ loading: true })
         if (res.status === 200) {
@@ -122,7 +122,7 @@ class TransferAssets extends Component {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
     let body = "asset_id=" + this.state.assetVal + "&site_id=" + this.state.toSite;
-    axios.post(`${BASE_URL}:${PORT}/assets_transfer`, body, { headers })
+    axios.post(`${BASE_URL}/${TRANSFER_ASSET}`, body, { headers })
       .then(res => {
         this.setState({ done: true })
         if (res.status === 200) {

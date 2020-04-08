@@ -34,7 +34,7 @@ class Breadcrumbs extends Component {
     this._isMounted = true;
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}:${PORT}/${DEVICES_API}/`, { headers })
+    axios.get(`${BASE_URL}/${DEVICES_API}/`, { headers })
       .then(res => {
         this.setState({ done: true })
         if (this._isMounted) {
@@ -54,7 +54,7 @@ class Breadcrumbs extends Component {
   removerow = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.delete(`${BASE_URL}:${PORT}/${DEVICES_API}/${this.state.delId}/`, { headers }).then(res => {
+    axios.delete(`${BASE_URL}/${DEVICES_API}/${this.state.delId}/`, { headers }).then(res => {
       this.setState({ done: true })
       var index = this.state.delId;
       const items = this.state.data.filter(row => row.id !== index)
@@ -116,7 +116,7 @@ class Breadcrumbs extends Component {
       let body = "device_id=" + this.state.device_id + "&device_name=" + this.state.device_name + "&api_key=" + this.state.api_key + "&timestamp=" + this.state.timestamp;
       var token = localStorage.getItem('accessToken');
       var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-      axios.put(`${BASE_URL}:${PORT}/${DEVICES_API}/${this.state.id}/`, body, { headers })
+      axios.put(`${BASE_URL}/${DEVICES_API}/${this.state.id}/`, body, { headers })
         .then(res => {
           if (res.status === 200) {
             this.setState({
@@ -149,7 +149,7 @@ class Breadcrumbs extends Component {
       let body = "device_id=" + this.state.device_id + "&device_name=" + this.state.device_name + "&api_key=" + this.state.api_key + "&timestamp=" + this.state.timestamp;
       var token = localStorage.getItem('accessToken');
       var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-      axios.post(`${BASE_URL}:${PORT}/${DEVICES_API}/`, body, { headers })
+      axios.post(`${BASE_URL}/${DEVICES_API}/`, body, { headers })
         .then(res => {
           if (res.status === 201) {
             this.setState({

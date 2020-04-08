@@ -41,7 +41,7 @@ class AssetManagement extends Component {
     this._isMounted = true;
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}:${PORT}/${ASSET_API}/`, { headers })
+    axios.get(`${BASE_URL}/${ASSET_API}/`, { headers })
       .then(res => {
         this.setState({ done: true })
         if (res.status === 200) {
@@ -63,7 +63,7 @@ class AssetManagement extends Component {
         } else return err
       })
 
-    axios.get(`${BASE_URL}:${PORT}/${SITES_API}/`, { headers })
+    axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
         this.setState({ done: true })
         if (res.status === 200) {
@@ -79,7 +79,7 @@ class AssetManagement extends Component {
   removerow = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.delete(`${BASE_URL}:${PORT}/${ASSET_API}/${this.state.delId}/`, { headers }).then(res => {
+    axios.delete(`${BASE_URL}/${ASSET_API}/${this.state.delId}/`, { headers }).then(res => {
       this.setState({ done: true })
       var index = this.state.delId;
       const items = this.state.data.filter(row => row.id !== index)
@@ -149,7 +149,7 @@ class AssetManagement extends Component {
     } else {
       let body = "asset_id=" + this.state.asset_id + "&asset_name=" + this.state.asset_name + "&asset_brand=" + this.state.asset_brand + "&asset_owner_name=" +
         this.state.asset_owner_name + "&asset_owner_type=" + this.state.asset_owner_type + "&site=" + this.state.site + "&timestamp=" + this.state.timestamp;
-      axios.post(`${BASE_URL}:${PORT}/${ASSET_API}/`, body, { headers })
+      axios.post(`${BASE_URL}/${ASSET_API}/`, body, { headers })
         .then(res => {
           if (res.status === 201) {
             this.setState({
@@ -178,7 +178,7 @@ class AssetManagement extends Component {
       return false;
     } else {
       let body = `asset_id=+${this.state.asset_id}+&asset_name=+${this.state.asset_name}+&asset_brand=+${this.state.asset_brand}+&asset_owner_name=+${this.state.asset_owner_name}+&asset_owner_type=+${this.state.asset_owner_type}+&timestamp=${this.state.timestamp}+&site=+${this.state.site}`;
-      axios.put(`${BASE_URL}:${PORT}/${ASSET_API}/${this.state.id}/`, body, { headers })
+      axios.put(`${BASE_URL}/${ASSET_API}/${this.state.id}/`, body, { headers })
         .then(res => {
           if (res.status === 200) {
             this.setState({

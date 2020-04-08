@@ -45,7 +45,7 @@ class SiteManagement extends Component {
     this._isMounted = true;
     var index = this.state.delId;
     let data = this.state.data.filter(row => row.id !== index)
-    axios.delete(`${BASE_URL}:${PORT}/${SITES_API}/${this.state.delId}/`, { headers }).then(res => {
+    axios.delete(`${BASE_URL}/${SITES_API}/${this.state.delId}/`, { headers }).then(res => {
       this.setState({ done: true })
       if (res.status === 204) {
         this.setState({ data, done: false })
@@ -79,7 +79,7 @@ class SiteManagement extends Component {
     this.getDevice();
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    await axios.get(`${BASE_URL}:${PORT}/${SITES_API}/`, { headers })
+    await axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
         this.setState({ done: true })
         if (res.status === 200) {
@@ -104,7 +104,7 @@ class SiteManagement extends Component {
   getRegion = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}:${PORT}/${REGIONS_API}/`, { headers })
+    axios.get(`${BASE_URL}/${REGIONS_API}/`, { headers })
       .then(res => {
         if (res.status === 200) {
           this.setState({
@@ -118,7 +118,7 @@ class SiteManagement extends Component {
   getDevice = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}:${PORT}/${DEVICES_API}/`, { headers })
+    axios.get(`${BASE_URL}/${DEVICES_API}/`, { headers })
       .then(res => {
         if (res.status === 200) {
           this.setState({
@@ -139,7 +139,7 @@ class SiteManagement extends Component {
     } else {
       let body = "site_id=" + this.state.site_id + "&site_name=" + this.state.site_name + "&lat_lng=" + this.state.lat_lng + "&region=" + this.state.region + "&device=" +
         this.state.device + "&timestamp=" + this.state.timestamp;
-      axios.post(`${BASE_URL}:${PORT}/${SITES_API}/`, body, { headers })
+      axios.post(`${BASE_URL}/${SITES_API}/`, body, { headers })
         .then(res => {
           if (res.status === 201) {
             this.setState({
@@ -172,7 +172,7 @@ class SiteManagement extends Component {
     } else {
       let body = "site_id=" + this.state.site_id + "&site_name=" + this.state.site_name + "&lat_lng=" + this.state.lat_lng + "&region=" + this.state.region + "&device=" +
         this.state.device + "&timestamp=" + this.state.timestamp;
-      axios.put(`${BASE_URL}:${PORT}/${SITES_API}/${this.state.id}/`, body, { headers })
+      axios.put(`${BASE_URL}/${SITES_API}/${this.state.id}/`, body, { headers })
         .then(res => {
           if (res.status === 200) {
             this.setState({
