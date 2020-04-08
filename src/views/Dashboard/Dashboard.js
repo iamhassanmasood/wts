@@ -8,6 +8,8 @@ import AllSitesInformation from '../AllSitesInformation/AllSitesInformation.js'
 import SearchSite from '../SeachModule/SearchSite'
 import SearchAsset from '../SeachModule/SearchAsset'
 
+const Widget04 = lazy(() => import('../../views/Widgets/Widget04'));
+
 class Dashboard extends Component {
 
   constructor(props) {
@@ -131,95 +133,33 @@ class Dashboard extends Component {
           <SearchAsset id='assete' asset={asset} handleChange={this.handleAst} Data={assetData} />
         </Row>
         <Row>
+
           <Col>
+            <b>WAREHOUSE</b>
             <CardGroup className="mb-3">
-              <Card>
-                <CardBody style={{ backgroundColor: "gray" }}>
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className='icon-people' style={{ color: '#ffffff' }}></i>
-                  </div>
-                  <div className="h4 mb-0">10</div>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardBody style={{ backgroundColor: "green" }}>
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className='icon-people' style={{ color: '#ffffff' }}></i>
-                  </div>
-                  <div className="h4 mb-0">10</div>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardBody style={{ backgroundColor: "blue" }}>
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className='icon-people' style={{ color: '#ffffff' }}></i>
-                  </div>
-                  <div className="h4 mb-0">10</div>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardBody style={{ backgroundColor: "red" }}>
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className='icon-pie-chart' style={{ color: '#ffffff' }}></i>
-                  </div>
-                  <div className="h4 mb-0">10</div>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardBody style={{ backgroundColor: "yellow" }}>
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className='icon-speedometer' style={{ color: '#ffffff' }}></i>
-                  </div>
-                  <div className="h4 mb-0">10</div>
-                </CardBody>
-              </Card>
+              <Widget04 icon="icon-people" color="checkIn" header="10" value="10"></Widget04>
+              <Widget04 icon="icon-user-follow" color="assigned" header="20" value="20"></Widget04>
+              <Widget04 icon="icon-basket-loaded" color="checkOut" header="30" value="30"></Widget04>
+              <Widget04 icon="icon-pie-chart" color="stolen" header="40" value="40"></Widget04>
+              <Widget04 icon="icon-speedometer" color="delivered" header="50" value="50"></Widget04>
+            </CardGroup>
+          </Col>
+          {/* </Row>
+        <Row> */}
+          <Col>
+            <b>NETWORK SITES</b>
+
+            <CardGroup className="mb-3">
+              <Widget04 icon="icon-people" color="info" header="10" value="10"></Widget04>
+              <Widget04 icon="icon-user-follow" color="success" header="20" value="20"></Widget04>
+              <Widget04 icon="icon-basket-loaded" color="primary" header="30" value="30"></Widget04>
+              <Widget04 icon="icon-pie-chart" color="danger" header="40" value="40"></Widget04>
+              <Widget04 icon="icon-speedometer" color="warning" header="50" value="50"></Widget04>
             </CardGroup>
           </Col>
 
-          <Col>
-            <CardGroup className="mb-3">
-              <Card>
-                <CardBody style={{ backgroundColor: "gray" }}>
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className='icon-people' style={{ color: '#ffffff' }}></i>
-                  </div>
-                  <div className="h4 mb-0">10</div>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardBody style={{ backgroundColor: "green" }}>
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className='icon-people' style={{ color: '#ffffff' }}></i>
-                  </div>
-                  <div className="h4 mb-0">10</div>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardBody style={{ backgroundColor: "blue" }}>
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className='icon-people' style={{ color: '#ffffff' }}></i>
-                  </div>
-                  <div className="h4 mb-0">10</div>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardBody style={{ backgroundColor: "red" }}>
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className='icon-pie-chart' style={{ color: '#ffffff' }}></i>
-                  </div>
-                  <div className="h4 mb-0">10</div>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardBody style={{ backgroundColor: "yellow" }}>
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className='icon-speedometer' style={{ color: '#ffffff' }}></i>
-                  </div>
-                  <div className="h4 mb-0">10</div>
-                </CardBody>
-              </Card>
-            </CardGroup>
-          </Col>
+
+
         </Row>
         <Row>
 

@@ -71,3 +71,6 @@ a{
     border: none !important;
     border-radius: none !important;
 }
+.cardFooter{
+    text-align: "center"; height: "40px"; justify-content: "center"; align-items: "center"; display: "flex"; 
+}
