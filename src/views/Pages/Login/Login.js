@@ -43,7 +43,7 @@ class Login extends Component {
       let body = "grant_type=password&username=" + username + "&password=" + password;
       let headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ' + CLIENT64 }
       this.setState({ loading: true })
-      axios.post(`${BASE_URL}:${PORT}/${LOGIN}/`, body, { headers })
+      axios.post(`${BASE_URL}/${LOGIN}/`, body, { headers })
         .then(res => {
           localStorage.setItem('accessToken', res.data.access_token);
           localStorage.setItem('expiry', res.data.expires_in);
