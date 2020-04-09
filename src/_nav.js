@@ -30,7 +30,7 @@ export default {
           icon: 'fa fa-ticket',
         },
         {
-          name: 'Device Managemnt',
+          name: 'Device Management',
           url: '/management/DeviceManagement',
           icon: 'fa fa-tablet',
         },
@@ -40,7 +40,7 @@ export default {
           icon: 'fa fa-tag',
         },
         {
-          name: 'Region Managemnt',
+          name: 'Region Management',
           url: '/management/RegionManagement',
           icon: 'fa fa-apple',
         },

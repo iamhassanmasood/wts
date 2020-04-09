@@ -128,11 +128,12 @@ class Dashboard extends Component {
 
     return (
       <div className="animated fadeIn">
-        <Row>
+        <Row style={{ marginTop: "-15px" }}>
           <SearchSite id='sitee' site={site} handleChange={this.handleSite} Data={siteData} />
           <SearchAsset id='assete' asset={asset} handleChange={this.handleAst} Data={assetData} />
         </Row>
-        <Row>
+
+        <Row style={{ marginTop: "-10px" }}>
 
           <Col>
             <b>WAREHOUSE</b>

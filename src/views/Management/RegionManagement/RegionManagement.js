@@ -34,7 +34,6 @@ export default class RegionManagement extends Component {
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
     axios.get(`${BASE_URL}/${REGIONS_API}/`, { headers })
       .then(res => {
-        console.log(res, 'Tis is')
         this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
@@ -100,7 +99,6 @@ export default class RegionManagement extends Component {
     this.setState({
       region_id: "",
       region_name: "",
-      api_key: "",
     })
   }
   handleEditSubmit(e) {
@@ -111,7 +109,7 @@ export default class RegionManagement extends Component {
       this.setState({ errors, isSubmitted: false });
       return false;
     } else {
-      let body = "region_id=" + this.state.region_id + "&region_name=" + this.state.region_name + "&api_key=" + this.state.api_key + "&timestamp=" + this.state.timestamp;
+      let body = "region_id=" + this.state.region_id + "&region_name=" + this.state.region_name + "&timestamp=" + this.state.timestamp;
       var token = localStorage.getItem('accessToken');
       var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
       axios.put(`${BASE_URL}/${REGIONS_API}/${this.state.id}/`, body, { headers })
@@ -129,8 +127,6 @@ export default class RegionManagement extends Component {
             this.setState({ errors: "Oops! Region ID already exists ", isSubmitted: false })
           } else if (err.response.data.region_name) {
             this.setState({ errors: "Oops! Region Name already exists ", isSubmitted: false })
-          } else if (err.response.data.api_key) {
-            this.setState({ errors: "Oops! Region With this key already exists ", isSubmitted: false })
           }
         })
     }
@@ -162,8 +158,6 @@ export default class RegionManagement extends Component {
             this.setState({ errors: "Oops! Region ID already exists ", isSubmitted: false })
           } else if (err.response.data.region_name) {
             this.setState({ errors: "Oops! Region Name already exists ", isSubmitted: false })
-          } else if (err.response.data.api_key) {
-            this.setState({ errors: "Oops! Region With this key already exists ", isSubmitted: false })
           }
         }
         )

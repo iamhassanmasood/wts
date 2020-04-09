@@ -4,6 +4,7 @@ export const SITES_API = `api/sites`;
 export const REGIONS_API = `api/regions`;
 export const DEVICES_API = `api/devices`;
 export const ALERTS_API = `api/alerts`;
+export const TAGS_API = `api/tags`;
 export const token = localStorage.getItem('accessToken');
 export const headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token };
 export const ASSET_API = `api/assets`

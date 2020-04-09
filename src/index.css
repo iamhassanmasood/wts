@@ -58,13 +58,6 @@ a{
 .boxes{
     display: inline;
 }
-.Names{
-    font-size: 12px;
-}
-.Values{
-    font-size: 10px;
-    font-weight: bold;
-}
 .logoutButton{
     background-color: #023e58 !important;
     color:white !important;
@@ -73,4 +66,10 @@ a{
 }
 .cardFooter{
     text-align: "center"; height: "40px"; justify-content: "center"; align-items: "center"; display: "flex"; 
+}
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -30px !important;
+    margin-left: -30px !important;
 }

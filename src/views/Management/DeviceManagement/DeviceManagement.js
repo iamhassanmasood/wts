@@ -19,7 +19,6 @@ class Breadcrumbs extends Component {
       openaddmodal: false,
       isOpen: false,
       device_id: "",
-      device_name: "",
       api_key: "",
       timestamp: Math.floor(Date.now() / 1000),
       id: '',
@@ -71,13 +70,12 @@ class Breadcrumbs extends Component {
     })
   }
 
-  openEditModal = (id, d_id, name, api) => {
+  openEditModal = (id, d_id, api) => {
     const previousState = !this.state.isOpen;
     this.setState({
       isOpen: previousState,
       id: id,
       device_id: d_id,
-      device_name: name,
       api_key: api,
       errors: undefined
     })
@@ -101,7 +99,6 @@ class Breadcrumbs extends Component {
   handleEmpty() {
     this.setState({
       device_id: "",
-      device_name: "",
       api_key: "",
     })
   }
@@ -113,7 +110,7 @@ class Breadcrumbs extends Component {
       this.setState({ errors, isSubmitted: false });
       return false;
     } else {
-      let body = "device_id=" + this.state.device_id + "&device_name=" + this.state.device_name + "&api_key=" + this.state.api_key + "&timestamp=" + this.state.timestamp;
+      let body = "device_id=" + this.state.device_id + "&api_key=" + this.state.api_key + "&timestamp=" + this.state.timestamp;
       var token = localStorage.getItem('accessToken');
       var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
       axios.put(`${BASE_URL}/${DEVICES_API}/${this.state.id}/`, body, { headers })
@@ -129,8 +126,6 @@ class Breadcrumbs extends Component {
         .catch(err => {
           if (err.response.data.device_id) {
             this.setState({ errors: "Oops! Device ID already exists ", isSubmitted: false })
-          } else if (err.response.data.device_name) {
-            this.setState({ errors: "Oops! Device Name already exists ", isSubmitted: false })
           } else if (err.response.data.api_key) {
             this.setState({ errors: "Oops! Device With this key already exists ", isSubmitted: false })
           }
@@ -146,7 +141,7 @@ class Breadcrumbs extends Component {
       this.setState({ errors, isSubmitted: false });
       return false;
     } else {
-      let body = "device_id=" + this.state.device_id + "&device_name=" + this.state.device_name + "&api_key=" + this.state.api_key + "&timestamp=" + this.state.timestamp;
+      let body = "device_id=" + this.state.device_id + "&api_key=" + this.state.api_key + "&timestamp=" + this.state.timestamp;
       var token = localStorage.getItem('accessToken');
       var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
       axios.post(`${BASE_URL}/${DEVICES_API}/`, body, { headers })
@@ -162,8 +157,6 @@ class Breadcrumbs extends Component {
         .catch(err => {
           if (err.response.data.device_id) {
             this.setState({ errors: "Oops! Device ID already exists ", isSubmitted: false })
-          } else if (err.response.data.device_name) {
-            this.setState({ errors: "Oops! Device Name already exists ", isSubmitted: false })
           } else if (err.response.data.api_key) {
             this.setState({ errors: "Oops! Device With this key already exists ", isSubmitted: false })
           }
@@ -199,7 +192,7 @@ class Breadcrumbs extends Component {
   }
 
   render() {
-    const { data, opendeleteModal, isOpen, page, rowsPerPage, api_key, device_id, device_name, openaddmodal, errors } = this.state;
+    const { data, opendeleteModal, isOpen, page, rowsPerPage, api_key, device_id, openaddmodal, errors } = this.state;
     return (
       <div className="justify-content-center">
         <Row>
@@ -217,26 +210,24 @@ class Breadcrumbs extends Component {
                     <tr>
                       <th>Sr#</th>
                       <th>Device Id</th>
-                      <th>Device Name</th>
                       <th>Device Api Key</th>
                       <th>Created At</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).reverse().map((alt, i) => {
+                    {data.map((alt, i) => {
 
                       var timeNow = this.timeConverter(alt.timestamp)
                       return <tr key={i}>
-                        <td>{i + 1 + rowsPerPage * page}</td>
+                        <td>{i + 1}</td>
                         <td>{alt.device_id}</td>
-                        <td>{alt.device_name}</td>
                         <td>{alt.api_key}</td>
                         <td>{timeNow}</td>
                         <td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
 
                           <button className='btn btn-primary btn-sm'
-                            onClick={this.openEditModal.bind(this, alt.id, alt.device_id, alt.device_name, alt.api_key)}
+                            onClick={this.openEditModal.bind(this, alt.id, alt.device_id, alt.api_key)}
                           >
                             <i className='fa fa-edit fa-lg'></i></button>
                           <button className='btn btn-danger btn-sm'
@@ -292,11 +283,6 @@ class Breadcrumbs extends Component {
               </FormGroup>
 
               <FormGroup >
-                <Label>Device Name : </Label>
-                <Input type="text" name="device_name" value={device_name} onChange={this.handleChange} placeholder="Device Name" />
-              </FormGroup>
-
-              <FormGroup >
                 <Label>Device Key :</Label>
                 <Input type="text" name="api_key" value={api_key.trim()} onChange={this.handleChange} placeholder="Device Key" />
               </FormGroup>
@@ -315,11 +301,6 @@ class Breadcrumbs extends Component {
               <FormGroup >
                 <Label>Device ID <span /></Label>
                 <Input type="text" name="device_id" value={device_id.trim()} onChange={this.handleChange} placeholder="Device ID" required />
-              </FormGroup>
-
-              <FormGroup >
-                <Label>Device Name <span /> </Label>
-                <Input type="text" name="device_name" value={device_name} onChange={this.handleChange} placeholder="Device Name" />
               </FormGroup>
 
               <FormGroup >

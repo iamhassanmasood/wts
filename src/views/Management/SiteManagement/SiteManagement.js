@@ -26,7 +26,8 @@ class SiteManagement extends Component {
       backdrop: true,
       site_id: "",
       site_name: '',
-      lat_lng: '',
+      site_location: '',
+      site_type: '',
       region: '',
       device: '',
       page: 0,
@@ -59,14 +60,15 @@ class SiteManagement extends Component {
     })
   }
 
-  openEditModal = (id, si, sn, lal, rg, dev) => {
+  openEditModal = (id, si, sn, st, lal, rg, dev) => {
     const currentState = !this.state.isOpen
     this.setState({
       isOpen: currentState,
       id: id,
       site_id: si,
       site_name: sn,
-      lat_lng: lal,
+      site_type: st,
+      site_location: lal,
       region: rg,
       device: dev,
       errors: undefined
@@ -81,10 +83,11 @@ class SiteManagement extends Component {
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
     await axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
+        console.log(res, "This is response from sites api")
         this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
-            data: res.data.results.reverse(),
+            data: res.data.reverse(),
             done: false
           })
         }
@@ -137,7 +140,7 @@ class SiteManagement extends Component {
       this.setState({ errors, isSubmitted: false });
       return false;
     } else {
-      let body = "site_id=" + this.state.site_id + "&site_name=" + this.state.site_name + "&lat_lng=" + this.state.lat_lng + "&region=" + this.state.region + "&device=" +
+      let body = "site_id=" + this.state.site_id + "&site_name=" + this.state.site_name + "site_type=" + this.state.site_type + "&site_location=" + this.state.site_location + "&region=" + this.state.region + "&device=" +
         this.state.device + "&timestamp=" + this.state.timestamp;
       axios.post(`${BASE_URL}/${SITES_API}/`, body, { headers })
         .then(res => {
@@ -170,7 +173,7 @@ class SiteManagement extends Component {
       this.setState({ errors, isSubmitted: false });
       return false;
     } else {
-      let body = "site_id=" + this.state.site_id + "&site_name=" + this.state.site_name + "&lat_lng=" + this.state.lat_lng + "&region=" + this.state.region + "&device=" +
+      let body = "site_id=" + this.state.site_id + "&site_name=" + this.state.site_name + "site_type=" + this.state.site_type + "&site_location=" + this.state.site_location + "&region=" + this.state.region + "&device=" +
         this.state.device + "&timestamp=" + this.state.timestamp;
       axios.put(`${BASE_URL}/${SITES_API}/${this.state.id}/`, body, { headers })
         .then(res => {
@@ -197,7 +200,8 @@ class SiteManagement extends Component {
     this.setState({
       site_id: "",
       site_name: '',
-      lat_lng: '',
+      site_type: '',
+      site_location: '',
       region: '',
       device: '',
     })
@@ -240,7 +244,7 @@ class SiteManagement extends Component {
         errors: "No Space allow in lat long, i.e 76,34"
       })
     }
-    this.setState({ lat_lng: val });
+    this.setState({ site_location: val });
   }
   handleChangeRegion = () => {
     var e = document.getElementById("region");
@@ -286,8 +290,8 @@ class SiteManagement extends Component {
 
 
   render() {
-    const { site_name, site_id, id, lat_lng, region, device, isOpen, data, openaddmodal, page, rowsPerPage, opendeleteModal, regionData, deviceData, errors, done } = this.state;
-
+    const { site_name, site_id, site_type, id, site_location, region, device, isOpen, data, openaddmodal, page, rowsPerPage, opendeleteModal, regionData, deviceData, errors, done } = this.state;
+    console.log(data, 'yyyyyyyyyyyyyyyyyyyyyyy')
 
     return (
 
@@ -310,6 +314,7 @@ class SiteManagement extends Component {
                         <th>Site Id</th>
                         <th>Site Name</th>
                         <th>Location</th>
+                        <th>Site Type</th>
                         <th>Region</th>
                         <th>Device</th>
                         <th>Time</th>
@@ -317,27 +322,28 @@ class SiteManagement extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).reverse().map((rowData, i) => {
-                        var rName = this.state.regionData[this.state.regionData.findIndex(x => x.id === parseInt(rowData.region))]
+                      {data.map((rowData, i) => {
+                        var rName = this.state.regionData[this.state.regionData.findIndex(x => x.redion_id === parseInt(rowData.region))]
                         if (rName) {
                           var region_name = rName.region_name;
                         }
-                        var dName = this.state.deviceData[this.state.deviceData.findIndex(x => x.id === parseInt(rowData.device))]
+                        var dName = this.state.deviceData[this.state.deviceData.findIndex(x => x.device_id === parseInt(rowData.device))]
                         if (dName) {
-                          var device_name = dName.device_name;
+                          var device_name = dName.device_id;
                         }
                         var timeNow = this.timeConverter(rowData.timestamp)
                         return <tr key={i}>
                           <td>{i + 1 + rowsPerPage * page}</td>
                           <td>{rowData.site_id}</td>
                           <td>{rowData.site_name}</td>
-                          <td>{rowData.lat_lng}</td>
-                          <td>{region_name}</td>
-                          <td>{device_name}</td>
+                          <td>{rowData.site_location}</td>
+                          <td>{rowData.site_type}</td>
+                          <td>{rowData.region}</td>
+                          <td>{rowData.device}</td>
                           <td>{timeNow}</td>
                           <td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                             <button className='btn btn-primary btn-sm'
-                              onClick={this.openEditModal.bind(this, rowData.id, rowData.site_id, rowData.site_name, rowData.lat_lng, rowData.region, rowData.device)}>
+                              onClick={this.openEditModal.bind(this, rowData.id, rowData.site_id, rowData.site_name, rowData.site_location, rowData.region, rowData.device)}>
                               <i className='fa fa-edit fa-lg'></i></button>
                             <button className='btn btn-danger btn-sm'
                               onClick={this.toggleDeleteModal.bind(this, rowData.id)}>
@@ -399,8 +405,13 @@ class SiteManagement extends Component {
               </FormGroup>
 
               <FormGroup>
-                <Label htmlFor="lat_lng">Lat,Lng <span /> </Label>
-                <Input type="text" name="lat_lng" value={lat_lng.trim()} onChange={this.handleChange} placeholder="Latitude, Longitude" />
+                <Label htmlFor="site_name">Site Type <span /> </Label>
+                <Input type="text" name="site_type" value={site_type} onChange={this.handleChange} placeholder="Site Type" />
+              </FormGroup>
+
+              <FormGroup>
+                <Label htmlFor="site_location">Lat,Lng <span /> </Label>
+                <Input type="text" name="site_location" value={site_location.trim()} onChange={this.handleChange} placeholder="Latitude, Longitude" />
               </FormGroup>
 
               <FormGroup>
@@ -417,7 +428,7 @@ class SiteManagement extends Component {
                 <Input type="select" name="device" id="device" value={device} onChange={this.handleChangeDevice} placeholder="Device" >
                   <option value="" disabled defaultValue>Select Device</option>
                   {deviceData.map((dev, i) => (
-                    <option key={i} value={dev.id}> {dev.device_name} </option>))}
+                    <option key={i} value={dev.id}> {dev.device_id} </option>))}
                 </Input>
               </FormGroup>
               <Button color="info" block onClick={this.handleEditSubmit.bind(this)} type="submit"> Done</Button>
@@ -438,14 +449,20 @@ class SiteManagement extends Component {
                 <Label htmlFor="site_id">Site ID <span /> </Label>
                 <Input type="text" name="site_id" value={site_id.trim()} onChange={this.handleChange} placeholder="Site ID" />
               </FormGroup>
+
               <FormGroup>
                 <Label>Site Name <span /> </Label>
                 <Input type="text" name="site_name" value={site_name} onChange={this.handleChange} placeholder="Site Name" />
               </FormGroup>
 
               <FormGroup>
-                <Label htmlFor="lat_lng">Lat,Lng <span /> </Label>
-                <Input type="text" name="lat_lng" value={lat_lng.trim()} onChange={this.handleChange} placeholder="Latitude, Longitude" />
+                <Label htmlFor="site_name">Site Type <span /> </Label>
+                <Input type="text" name="site_type" value={site_type} onChange={this.handleChange} placeholder="Site Type" />
+              </FormGroup>
+
+              <FormGroup>
+                <Label htmlFor="site_location">Lat,Lng <span /> </Label>
+                <Input type="text" name="site_location" value={site_location.trim()} onChange={this.handleChange} placeholder="Latitude, Longitude" />
               </FormGroup>
 
               <FormGroup>
@@ -462,7 +479,7 @@ class SiteManagement extends Component {
                 <Input type='select' name="device" id="device" value={device} onChange={this.handleChangeDevice} placeholder="Device" >
                   <option value="" disabled defaultValue>Select Device</option>
                   {deviceData.map((dev, i) => (
-                    <option key={i} value={dev.id}> {dev.device_name} </option>))}
+                    <option key={i} value={dev.id}> {dev.device_id} </option>))}
                 </Input>
               </FormGroup>
               <Button onClick={this.handleAddSubmit.bind(this)} color='success' block type="submit" >ADD SITE</Button>
