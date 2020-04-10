@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
-
 import { BASE_URL, PORT, SITES_API, REGIONS_API, DEVICES_API } from '../../../Config/Config'
 import axios from 'axios'
 import siteValidation from './Validator'
@@ -11,9 +10,6 @@ var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorizat
 
 class SiteManagement extends Component {
 
-
-
-  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -76,14 +72,12 @@ class SiteManagement extends Component {
   }
 
   async componentDidMount() {
-    this._isMounted = true;
     this.getRegion();
     this.getDevice();
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
     await axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
-        console.log(res, "This is response from sites api")
         this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
@@ -99,11 +93,6 @@ class SiteManagement extends Component {
         } else return err
       })
   }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
   getRegion = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
@@ -140,7 +129,7 @@ class SiteManagement extends Component {
       this.setState({ errors, isSubmitted: false });
       return false;
     } else {
-      let body = "site_id=" + this.state.site_id + "&site_name=" + this.state.site_name + "site_type=" + this.state.site_type + "&site_location=" + this.state.site_location + "&region=" + this.state.region + "&device=" +
+      let body = "site_id=" + this.state.site_id + "&site_name=" + this.state.site_name + "&site_type=" + this.state.site_type + "&site_location=" + this.state.site_location + "&region=" + this.state.region + "&device=" +
         this.state.device + "&timestamp=" + this.state.timestamp;
       axios.post(`${BASE_URL}/${SITES_API}/`, body, { headers })
         .then(res => {
@@ -165,6 +154,14 @@ class SiteManagement extends Component {
     }
   }
 
+  search = (nameKey, myArray) => {
+    for (var i = 0; i < myArray.length; i++) {
+      if (myArray[i].name === nameKey) {
+        return myArray[i];
+      }
+    }
+  }
+
   handleEditSubmit(e) {
     e.preventDefault();
     this.setState({ isSubmitted: true, errors: undefined });
@@ -173,8 +170,23 @@ class SiteManagement extends Component {
       this.setState({ errors, isSubmitted: false });
       return false;
     } else {
-      let body = "site_id=" + this.state.site_id + "&site_name=" + this.state.site_name + "site_type=" + this.state.site_type + "&site_location=" + this.state.site_location + "&region=" + this.state.region + "&device=" +
-        this.state.device + "&timestamp=" + this.state.timestamp;
+
+      var regionValue;
+      for (var i = 0; i < this.state.regionData.length; i++) {
+        if (this.state.regionData[i].region_id === this.state.region) {
+          regionValue = this.state.regionData[i].id
+        }
+      }
+
+      var deviceValue;
+      for (var i = 0; i < this.state.deviceData.length; i++) {
+        if (this.state.deviceData[i].device_id === this.state.device) {
+          deviceValue = this.state.deviceData[i].id
+        }
+      }
+
+      let body = "site_id=" + this.state.site_id + "&site_name=" + this.state.site_name + "&site_type=" + this.state.site_type +
+        "&site_location=" + this.state.site_location + "&region=" + regionValue + "&device=" + deviceValue + "&timestamp=" + this.state.timestamp;
       axios.put(`${BASE_URL}/${SITES_API}/${this.state.id}/`, body, { headers })
         .then(res => {
           if (res.status === 200) {
@@ -290,8 +302,12 @@ class SiteManagement extends Component {
 
 
   render() {
-    const { site_name, site_id, site_type, id, site_location, region, device, isOpen, data, openaddmodal, page, rowsPerPage, opendeleteModal, regionData, deviceData, errors, done } = this.state;
-    console.log(data, 'yyyyyyyyyyyyyyyyyyyyyyy')
+    const { site_name, site_id, site_type, id, site_location, region, device, isOpen, data,
+      openaddmodal, page, rowsPerPage, opendeleteModal, regionData, deviceData, errors, done } = this.state;
+    // if (regionData) {
+    //   let regionValue = this.search(region, regionData)
+
+    // }
 
     return (
 
@@ -323,14 +339,6 @@ class SiteManagement extends Component {
                     </thead>
                     <tbody>
                       {data.map((rowData, i) => {
-                        var rName = this.state.regionData[this.state.regionData.findIndex(x => x.redion_id === parseInt(rowData.region))]
-                        if (rName) {
-                          var region_name = rName.region_name;
-                        }
-                        var dName = this.state.deviceData[this.state.deviceData.findIndex(x => x.device_id === parseInt(rowData.device))]
-                        if (dName) {
-                          var device_name = dName.device_id;
-                        }
                         var timeNow = this.timeConverter(rowData.timestamp)
                         return <tr key={i}>
                           <td>{i + 1 + rowsPerPage * page}</td>
@@ -343,7 +351,7 @@ class SiteManagement extends Component {
                           <td>{timeNow}</td>
                           <td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                             <button className='btn btn-primary btn-sm'
-                              onClick={this.openEditModal.bind(this, rowData.id, rowData.site_id, rowData.site_name, rowData.site_location, rowData.region, rowData.device)}>
+                              onClick={this.openEditModal.bind(this, rowData.id, rowData.site_id, rowData.site_name, rowData.site_type, rowData.site_location, rowData.region, rowData.device)}>
                               <i className='fa fa-edit fa-lg'></i></button>
                             <button className='btn btn-danger btn-sm'
                               onClick={this.toggleDeleteModal.bind(this, rowData.id)}>
@@ -406,7 +414,11 @@ class SiteManagement extends Component {
 
               <FormGroup>
                 <Label htmlFor="site_name">Site Type <span /> </Label>
-                <Input type="text" name="site_type" value={site_type} onChange={this.handleChange} placeholder="Site Type" />
+                <Input type="select" name="site_type" value={site_type} onChange={this.handleChange} placeholder="Site Type" >
+                  <option value="" disabled defaultValue>Select Site Type </option>
+                  <option>warehouse</option>
+                  <option>network</option>
+                </Input>
               </FormGroup>
 
               <FormGroup>
@@ -457,7 +469,11 @@ class SiteManagement extends Component {
 
               <FormGroup>
                 <Label htmlFor="site_name">Site Type <span /> </Label>
-                <Input type="text" name="site_type" value={site_type} onChange={this.handleChange} placeholder="Site Type" />
+                <Input type="select" name="site_type" value={site_type} onChange={this.handleChange} placeholder="Site Type" >
+                  <option value="" disabled defaultValue>Select Site Type </option>
+                  <option>warehouse</option>
+                  <option>network</option>
+                </Input>
               </FormGroup>
 
               <FormGroup>

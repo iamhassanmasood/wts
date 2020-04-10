@@ -129,11 +129,12 @@ class TagManagement extends Component {
         })
         .catch(err => {
           if (err.response.data.tag_id) {
-            this.setState({ errors: "Oops! Tag ID already exists ", isSubmitted: false })
+            this.setState({ errors: "Oops! Tag ID invalid ", isSubmitted: false })
           } else if (err.response.data.tag_type) {
-            this.setState({ errors: "Oops! Tag Name already exists ", isSubmitted: false })
+            this.setState({ errors: "Oops! Tag Type invalid ", isSubmitted: false })
           }
-        })
+        }
+        )
     }
   }
 
@@ -162,7 +163,7 @@ class TagManagement extends Component {
           if (err.response.data.tag_id) {
             this.setState({ errors: "Oops! Tag ID already exists ", isSubmitted: false })
           } else if (err.response.data.tag_type) {
-            this.setState({ errors: "Oops! Tag Name already exists ", isSubmitted: false })
+            this.setState({ errors: "Oops! Tag Type inValid ", isSubmitted: false })
           }
         }
         )
@@ -181,18 +182,6 @@ class TagManagement extends Component {
 
   handleChangeRowsPerPage = event => {
     this.setState({ rowsPerPage: +event.target.value, page: 0 });
-  }
-  timeConverter(UNIX_timestamp) {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-    return time;
   }
 
   timeConverter = (UNIX_timestamp) => {
@@ -230,7 +219,7 @@ class TagManagement extends Component {
                     <tr>
                       <th>Sr#</th>
                       <th>Tag ID</th>
-                      <th>Tag Name</th>
+                      <th>Tag Type</th>
                       <th>Time</th>
                       <th>Actions</th>
                     </tr>
@@ -290,8 +279,13 @@ class TagManagement extends Component {
               </FormGroup>
 
               <FormGroup >
-                <Label>Tag Name : </Label>
-                <Input type="text" name="tag_type" value={tag_type} onChange={this.handleChange} placeholder="tag Name" />
+                <Label>Tag Type <span /> </Label>
+                <Input type="select" name="tag_type" value={tag_type} onChange={this.handleChange} placeholder="Tag Type" >
+                  <option value="" disabled defaultValue>Select Tag </option>
+                  <option>E9</option>
+                  <option>E8</option>
+                  <option>C7</option>
+                </Input>
               </FormGroup>
 
               <Button color='info' block type="submit" onClick={this.handleEditSubmit.bind(this)}> Done</Button>
@@ -311,8 +305,13 @@ class TagManagement extends Component {
               </FormGroup>
 
               <FormGroup >
-                <Label>Tag Name <span /> </Label>
-                <Input type="text" name="tag_type" value={tag_type} onChange={this.handleChange} placeholder="tag Name" />
+                <Label>Tag Type <span /> </Label>
+                <Input type="select" name="tag_type" value={tag_type} onChange={this.handleChange} placeholder="Tag Type" >
+                  <option value="" disabled defaultValue>Select Tag </option>
+                  <option>E9</option>
+                  <option>E8</option>
+                  <option>C7</option>
+                </Input>
               </FormGroup>
 
               <Button onClick={this.handleAddSubmit.bind(this)}
