@@ -172,9 +172,9 @@ class SiteManagement extends Component {
     } else {
 
       var regionValue;
-      for (var i = 0; i < this.state.regionData.length; i++) {
-        if (this.state.regionData[i].region_id === this.state.region) {
-          regionValue = this.state.regionData[i].id
+      for (var j = 0; j < this.state.regionData.length; j++) {
+        if (this.state.regionData[j].region_id === this.state.region) {
+          regionValue = this.state.regionData[j].id
         }
       }
 

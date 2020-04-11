@@ -4,9 +4,6 @@ import axios from 'axios'
 import { BASE_URL, TAGS_API } from '../../../Config/Config'
 import tagValidation from './Validator'
 
-var token = localStorage.getItem('accessToken');
-var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-
 
 class TagManagement extends Component {
 
@@ -15,11 +12,9 @@ class TagManagement extends Component {
     this.state = {
       tagData: [],
       done: false,
-      opendeleteModal: false,
 
       isOpen: false,
       openaddmodal: false,
-      errors: undefined,
       tag_id: undefined,
       tag_type: undefined,
 
