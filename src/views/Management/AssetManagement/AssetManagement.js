@@ -86,17 +86,17 @@ class AssetManagement extends Component {
     axios.delete(`${BASE_URL}/${ASSET_API}/${this.state.delId}/`, { headers }).then(res => {
       this.setState({ done: true })
       var index = this.state.delId;
-      const items = this.state.data.filter(row => row.id !== index)
+      const items = this.state.AssetData.filter(row => row.id !== index)
       if (res.status === 204) {
-        this.setState({ data: items })
+        this.setState({ AssetData: items })
       }
     }).catch(err => {
       if (err.response.data.detail === "Authentication credentials were not provided.") {
         localStorage.removeItem('accessToken');
-        this.setState({ redirect: true })
       } else return err
     })
   }
+
 
   openEditModal = (id, ai, an, on, ab, ot, tg, sit) => {
     const currentState = !this.state.isOpen
@@ -224,14 +224,6 @@ class AssetManagement extends Component {
     })
   }
 
-  handleChangePage = (event, newPage) => {
-    this.setState({ page: newPage });
-  }
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: +event.target.value, page: 0 });
-  };
-
   timeConverter(UNIX_timestamp) {
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -319,18 +311,6 @@ class AssetManagement extends Component {
                     })}
                   </tbody>
                 </Table>
-                {/* <nav>
-                <Pagination>
-                  <PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-                  <PaginationItem active>
-                    <PaginationLink tag="button">1</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
-                </Pagination>
-              </nav> */}
               </CardBody>
             </Card>
           </Col>
@@ -368,31 +348,35 @@ class AssetManagement extends Component {
                 <Input type="text" name="owner_type" value={owner_type} onChange={this.handleChange} placeholder="Owner Type" />
               </FormGroup>
 
-              <FormGroup>
-                <Label htmlFor="tag">Tag<span /> </Label>
-                <Input type="select" name="tag" id="tag" value={tag} onChange={this.handleChangeTag} placeholder="Tag">
-                  <option className="brave" value="" disabled defaultValue>Select Tag</option>
-                  {tagData.map((tag, i) => (
-                    <option key={i} value={tag.id}> {tag.tag_id} </option>))}
-                </Input>
-              </FormGroup>
+              <Row form>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="tag">Tag<span /> </Label>
+                    <Input type="select" name="tag" id="tag" value={tag} onChange={this.handleChangeTag} placeholder="Tag">
+                      <option className="brave" value="" disabled defaultValue>Select Tag</option>
+                      {tagData.map((tag, i) => (
+                        <option key={i} value={tag.id}> {tag.tag_id} </option>))}
+                    </Input>
+                  </FormGroup>
+                </Col>
 
-              <FormGroup>
-                <Label htmlFor="site">Site<span /> </Label>
-                <Input type="select" name="site" id="site" value={site} onChange={this.handleChangeSite} placeholder="Site">
-                  <option className="brave" value="" disabled defaultValue>Select Site</option>
-                  {siteData.map((sit, i) => (
-                    <option key={i} value={sit.id}> {sit.site_id} </option>))}
-                </Input>
-              </FormGroup>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="site">Site<span /> </Label>
+                    <Input type="select" name="site" id="site" value={site} onChange={this.handleChangeSite} placeholder="Site">
+                      <option className="brave" value="" disabled defaultValue>Select Site</option>
+                      {siteData.map((sit, i) => (
+                        <option key={i} value={sit.id}> {sit.site_id} </option>))}
+                    </Input>
+                  </FormGroup>
+                </Col>
+              </Row>
 
               <Button color="info" block onClick={this.handleEditSubmit} type="submit"> Done</Button>
               {errors ? <span style={{ color: 'red', margin: "auto", fontSize: '12px' }}>{errors}</span> : ""}
             </form>
           </ModalBody>
         </Modal>
-
-
 
         <Modal isOpen={openaddmodal} toggle={this.openAddModal} backdrop={false}>
           <ModalHeader toggle={() => this.setState({ openaddmodal: false })}>Add New Asset</ModalHeader>
@@ -423,23 +407,29 @@ class AssetManagement extends Component {
                 <Input type="text" name="owner_type" value={owner_type} onChange={this.handleChange} placeholder="Owner Type" />
               </FormGroup>
 
-              <FormGroup>
-                <Label htmlFor="tag">Tag<span /> </Label>
-                <Input type="select" name="tag" id="tag" value={tag} onChange={this.handleChangeTag} placeholder="Tag">
-                  <option className="brave" value="" disabled defaultValue>Select Tag</option>
-                  {tagData.map((tag, i) => (
-                    <option key={i} value={tag.id}> {tag.tag_id} </option>))}
-                </Input>
-              </FormGroup>
+              <Row form>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="tag">Tag<span /> </Label>
+                    <Input type="select" name="tag" id="tag" value={tag} onChange={this.handleChangeTag} placeholder="Tag">
+                      <option className="brave" value="" disabled defaultValue>Select Tag</option>
+                      {tagData.map((tag, i) => (
+                        <option key={i} value={tag.id}> {tag.tag_id} </option>))}
+                    </Input>
+                  </FormGroup>
+                </Col>
 
-              <FormGroup>
-                <Label htmlFor="site">Site<span /> </Label>
-                <Input type="select" name="site" id="site" value={site} onChange={this.handleChangeSite} placeholder="Site">
-                  <option className="brave" value="" disabled defaultValue>Select Site</option>
-                  {siteData.map((sit, i) => (
-                    <option key={i} value={sit.id}> {sit.site_id} </option>))}
-                </Input>
-              </FormGroup>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="site">Site<span /> </Label>
+                    <Input type="select" name="site" id="site" value={site} onChange={this.handleChangeSite} placeholder="Site">
+                      <option className="brave" value="" disabled defaultValue>Select Site</option>
+                      {siteData.map((sit, i) => (
+                        <option key={i} value={sit.id}> {sit.site_id} </option>))}
+                    </Input>
+                  </FormGroup>
+                </Col>
+              </Row>
 
               <Button color="success" block onClick={this.handleAddSubmit.bind(this)} type='submit'>ADD ASSET</Button>
               {errors ? <span style={{ color: 'red', margin: "auto", fontSize: '12px' }}>{errors}</span> : ""}
