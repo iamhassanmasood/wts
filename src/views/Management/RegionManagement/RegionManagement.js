@@ -42,12 +42,7 @@ export default class RegionManagement extends Component {
           })
         }
       })
-      .catch(err => {
-        console.log(err, "error")
-        if (err.response.data.detail === "Authentication credentials were not provided.") {
-          localStorage.removeItem('accessToken');
-        } else return err
-      })
+      .catch(err => console.error(err, "error"))
   }
 
   removerow = () => {

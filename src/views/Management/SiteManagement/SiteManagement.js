@@ -433,6 +433,7 @@ class SiteManagement extends Component {
                   {regionData.map((reg, i) => (
                     <option key={i} value={reg.id}> {reg.region_name} </option>))}
                 </Input>
+
               </FormGroup>
 
               <FormGroup>
