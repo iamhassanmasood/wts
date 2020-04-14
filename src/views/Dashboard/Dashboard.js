@@ -7,99 +7,93 @@ import { Button, Card, CardHeader, CardGroup, CardColumns, CardBody, Col, Row } 
 import AllSitesInformation from '../AllSitesInformation/AllSitesInformation.js'
 import SearchSite from '../SeachModule/SearchSite'
 import SearchAsset from '../SeachModule/SearchAsset'
+import Widget04 from '../../views/Widgets/Widget04'
 
-const Widget04 = lazy(() => import('../../views/Widgets/Widget04'));
+// const Widget04 = lazy(() => import());
 
 class Dashboard extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      flag: false,
-      siteData: [],
-      site: '',
-      assetData: [],
-      Alertdata: [],
-      count: undefined,
-      deviceData: [],
-      regionData: [],
-      lat: undefined,
-      lng: undefined,
-      latlng: [],
-      ws: null,
-      wss: null,
-      options: {
-        labels: ['Registered Undiscovered', 'Registered Discovered', 'UnAuthorized Entry', 'Stolen', 'In Transit'],
-        colors: ['#5bc0de',
-          '#4BB543',
-          '#0275d8',
-          '#d9534f',
-          '#FFCC00'],
-        legend: {
-          show: false,
-          position: 'bottom',
-          labels: {
-            colors: 'white',
-            useSeriesColors: false
-          },
+  state = {
+    flag: false,
+    siteData: [],
+    site: '',
+    assetData: [],
+    Alertdata: [],
+    count: undefined,
+    deviceData: [],
+    regionData: [],
+    lat: undefined,
+    lng: undefined,
+    latlng: [],
+    ws: null,
+    wss: null,
+    options: {
+      labels: ['Registered Undiscovered', 'Registered Discovered', 'UnAuthorized Entry', 'Stolen', 'In Transit'],
+      colors: ['#5bc0de',
+        '#4BB543',
+        '#0275d8',
+        '#d9534f',
+        '#FFCC00'],
+      legend: {
+        show: false,
+        position: 'bottom',
+        labels: {
+          colors: 'white',
+          useSeriesColors: false
         },
-        plotOptions: {
-          pie: {
-            size: '65%'
-          }
-        },
-        responsive: [{
-          breakpoint: undefined,
-          options: {
-            chart: {
-              sparkline: {
-                enabled: false
-              }
+      },
+      plotOptions: {
+        pie: {
+          size: '65%'
+        }
+      },
+      responsive: [{
+        breakpoint: undefined,
+        options: {
+          chart: {
+            sparkline: {
+              enabled: false
             }
           }
-        }]
-      },
-    }
+        }
+      }]
+    },
   }
+
   componentDidMount() {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    this.handleAssetData();
-    this.setState({ done: true })
-    axios.get(`${BASE_URL}:${PORT}/${SITES_API}/`, { headers })
+    // this.handleAssetData();
+    axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
         if (res.status === 200) {
-          var latlng = res.data.results.map(item => {
+          var latlng = [...res.data.map(item => {
             return {
-              latitude: parseFloat(item.lat_lng.split(",")[0]), longitude: parseFloat(item.lat_lng.split(",")[1]),
-              site_name: item.site_name, id: item.id, site_id: item.site_id, region: item.region, timestamp: item.timestamp,
+              latitude: parseFloat(item.site_loction.split(",")[0]), longitude: parseFloat(item.site_loction.split(",")[1]),
+              site_name: item.site_name, site_type: item.site_type, id: item.id, site_id: item.site_id, region: item.region, timestamp: item.timestamp,
               device: item.device
             }
-          })
-          this.setState({ siteData: res.data.results, done: false, latlng })
-        }
-      })
-      .catch(err => {
-        if (err.response.data.detail === "Authentication credentials were not provided.") {
-          localStorage.removeItem('accessToken');
-          this.setState({ redirect: true })
-        } else return err
-      })
-
-  }
-
-  handleAssetData = () => {
-    var token = localStorage.getItem('accessToken');
-    var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}:${PORT}/${ASSET_API}/`, { headers })
-      .then(res => {
-        if (res.status === 200) {
+          })]
           this.setState({
-            assetData: res.data.results,
+            siteData: res.data,
+            latlng
           })
         }
-      }).catch(err => err)
+      })
+      .catch(err => err)
   }
+
+  // handleAssetData = () => {
+  //   var token = localStorage.getItem('accessToken');
+  //   var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
+  //   axios.get(`${BASE_URL}:${PORT}/${ASSET_API}/`, { headers })
+  //     .then(res => {
+  //       if (res.status === 200) {
+  //         this.setState({
+  //           assetData: res.data.results,
+  //         })
+  //       }
+  //     }).catch(err => err)
+  // }
 
   handleSite = () => {
     var e = document.getElementById("sitee");
@@ -123,11 +117,11 @@ class Dashboard extends Component {
 
   render() {
     const { options, flag, latlng, siteData, assetData, site, asset } = this.state;
-
+    console.log(siteData)
     const data = [10, 20, 30, 40, 50];
 
     return (
-      <div className="animated fadeIn">
+      <div className="">
         <Row style={{ marginTop: "-15px" }}>
           <SearchSite id='sitee' site={site} handleChange={this.handleSite} Data={siteData} />
           <SearchAsset id='assete' asset={asset} handleChange={this.handleAst} Data={assetData} />
@@ -159,18 +153,16 @@ class Dashboard extends Component {
             </CardGroup>
           </Col>
 
-
-
         </Row>
         <Row>
 
-          <div className='col-lg-8'>
+          <div className='col-lg-8 MapModule'>
             <Card>
               <CardHeader ><i className='fa fa-map'></i>Location </CardHeader>
-              <MapModule
+              {/* <MapModule
                 isMarkerShown
-                markers={latlng}
-              />
+              // markers={latlng}
+              /> */}
             </Card>
           </div>
           <div className='col-lg-4'>
