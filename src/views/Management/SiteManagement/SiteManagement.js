@@ -26,8 +26,6 @@ class SiteManagement extends Component {
       site_type: '',
       region: '',
       device: '',
-      page: 0,
-      rowsPerPage: 10,
       timestamp: Math.floor(Date.now() / 1000),
       id: "",
       delId: '',
@@ -235,6 +233,7 @@ class SiteManagement extends Component {
     if (k === 32) return false;
     this.setState({ [name]: val, errors: "" });
   }
+
   handleChangeLatLng = (e) => {
     let val = e.target.value;
     var k = e ? e.which : window.event.keyCode;
@@ -273,14 +272,6 @@ class SiteManagement extends Component {
     })
   }
 
-  handleChangePage = (event, newPage) => {
-    this.setState({ page: newPage });
-  }
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: +event.target.value, page: 0 });
-  };
-
   toggleDeleteModal = (id) => {
     const currentState = this.state.opendeleteModal;
     this.setState({ opendeleteModal: !currentState, delId: id })
@@ -298,16 +289,9 @@ class SiteManagement extends Component {
     return time;
   }
 
-
-
-
   render() {
     const { site_name, site_id, site_type, id, site_location, region, device, isOpen, data,
-      openaddmodal, page, rowsPerPage, opendeleteModal, regionData, deviceData, errors, done } = this.state;
-    // if (regionData) {
-    //   let regionValue = this.search(region, regionData)
-
-    // }
+      openaddmodal, opendeleteModal, regionData, deviceData, errors, done } = this.state;
 
     return (
 
@@ -341,7 +325,7 @@ class SiteManagement extends Component {
                       {data.map((rowData, i) => {
                         var timeNow = this.timeConverter(rowData.timestamp)
                         return <tr key={i}>
-                          <td>{i + 1 + rowsPerPage * page}</td>
+                          <td>{i + 1}</td>
                           <td>{rowData.site_id}</td>
                           <td>{rowData.site_name}</td>
                           <td>{rowData.site_location}</td>
@@ -370,32 +354,15 @@ class SiteManagement extends Component {
                               </ModalFooter>
                             </Modal>
 
-
                           </td>
                         </tr>
                       })}
                     </tbody>
                   </Table>}
-                {/* <nav>
-                <Pagination>
-                  <PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-                  <PaginationItem active>
-                    <PaginationLink tag="button">1</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
-                </Pagination>
-              </nav> */}
               </CardBody>
             </Card>
           </Col>
         </Row>
-
-
-
-
 
         <Modal isOpen={isOpen} toggle={this.openEditModal} backdrop={false}>
           <ModalHeader toggle={() => this.setState({ isOpen: false })}>Edit Site</ModalHeader>
@@ -426,24 +393,29 @@ class SiteManagement extends Component {
                 <Input type="text" name="site_location" value={site_location.trim()} onChange={this.handleChange} placeholder="Latitude, Longitude" />
               </FormGroup>
 
-              <FormGroup>
-                <Label htmlFor="region">Region <span /> </Label>
-                <Input type="select" name="region" id="region" value={region} onChange={this.handleChangeRegion} placeholder="Region" >
-                  <option value="" disabled defaultValue>Select Region</option>
-                  {regionData.map((reg, i) => (
-                    <option key={i} value={reg.id}> {reg.region_name} </option>))}
-                </Input>
+              <Row form>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="region">Region <span /> </Label>
+                    <Input type="select" name="region" id="region" value={region} onChange={this.handleChangeRegion} placeholder="Region" >
+                      <option value="" disabled defaultValue>Select Region</option>
+                      {regionData.map((reg, i) => (
+                        <option key={i} value={reg.id}> {reg.region_name} </option>))}
+                    </Input>
+                  </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="Device">Device <span /> </Label>
+                    <Input type="select" name="device" id="device" value={device} onChange={this.handleChangeDevice} placeholder="Device" >
+                      <option value="" disabled defaultValue>Select Device</option>
+                      {deviceData.map((dev, i) => (
+                        <option key={i} value={dev.id}> {dev.device_id} </option>))}
+                    </Input>
+                  </FormGroup>
+                </Col>
+              </Row>
 
-              </FormGroup>
-
-              <FormGroup>
-                <Label htmlFor="Device">Device <span /> </Label>
-                <Input type="select" name="device" id="device" value={device} onChange={this.handleChangeDevice} placeholder="Device" >
-                  <option value="" disabled defaultValue>Select Device</option>
-                  {deviceData.map((dev, i) => (
-                    <option key={i} value={dev.id}> {dev.device_id} </option>))}
-                </Input>
-              </FormGroup>
               <Button color="info" block onClick={this.handleEditSubmit.bind(this)} type="submit"> Done</Button>
               {errors ? <span style={{ color: 'red', margin: "auto", fontSize: '12px' }}>{errors}</span> : ""}
             </form>
@@ -481,89 +453,37 @@ class SiteManagement extends Component {
                 <Label htmlFor="site_location">Lat,Lng <span /> </Label>
                 <Input type="text" name="site_location" value={site_location.trim()} onChange={this.handleChange} placeholder="Latitude, Longitude" />
               </FormGroup>
+              <Row form>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="region">Region <span /> </Label>
+                    <Input type='select' name="region" id="region" value={region} onChange={this.handleChangeRegion} placeholder="Region" >
+                      <option value="" disabled defaultValue>Select Region</option>
+                      {regionData.map((reg, i) => (
+                        <option key={i} value={reg.id}> {reg.region_name} </option>))}
+                    </Input>
+                  </FormGroup>
 
-              <FormGroup>
-                <Label htmlFor="region">Region <span /> </Label>
-                <Input type='select' name="region" id="region" value={region} onChange={this.handleChangeRegion} placeholder="Region" >
-                  <option value="" disabled defaultValue>Select Region</option>
-                  {regionData.map((reg, i) => (
-                    <option key={i} value={reg.id}> {reg.region_name} </option>))}
-                </Input>
-              </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="device">Device <span /> </Label>
+                    <Input type='select' name="device" id="device" value={device} onChange={this.handleChangeDevice} placeholder="Device" >
+                      <option value="" disabled defaultValue>Select Device</option>
+                      {deviceData.map((dev, i) => (
+                        <option key={i} value={dev.id}> {dev.device_id} </option>))}
+                    </Input>
+                  </FormGroup>
+                </Col>
+              </Row>
 
-              <FormGroup>
-                <Label htmlFor="device">Device <span /> </Label>
-                <Input type='select' name="device" id="device" value={device} onChange={this.handleChangeDevice} placeholder="Device" >
-                  <option value="" disabled defaultValue>Select Device</option>
-                  {deviceData.map((dev, i) => (
-                    <option key={i} value={dev.id}> {dev.device_id} </option>))}
-                </Input>
-              </FormGroup>
               <Button onClick={this.handleAddSubmit.bind(this)} color='success' block type="submit" >ADD SITE</Button>
               {errors ? <span style={{ color: 'red', margin: "auto", fontSize: '12px' }}>{errors}</span> : ""}
             </form>
           </ModalBody>
         </Modal>
 
-
-
-
-
-
-
-
-
       </div>
-
-      // <div className="animated fadeIn">
-      //   <Row>
-      //     <Col xs="12" sm="6">
-      //       <Card>
-      //         <CardHeader>
-      //           <strong>Company</strong>
-      //           <small> Form</small>
-      //         </CardHeader>
-      //         <CardBody>
-      //           <FormGroup>
-      //             <Label htmlFor="company">Company</Label>
-      //             <Input type="text" id="company" placeholder="Enter your company name" />
-      //           </FormGroup>
-      //           <FormGroup>
-      //             <Label htmlFor="vat">VAT</Label>
-      //             <Input type="text" id="vat" placeholder="DE1234567890" />
-      //           </FormGroup>
-      //           <FormGroup>
-      //             <Label htmlFor="street">Street</Label>
-      //             <Input type="text" id="street" placeholder="Enter street name" />
-      //           </FormGroup>
-      //           <FormGroup>
-      //             <Label htmlFor="city">City</Label>
-      //             <Input type="select" name="ccmonth">
-      //               <option value="1">1</option>
-      //               <option value="2">2</option>
-      //               <option value="3">3</option>
-      //               <option value="4">4</option>
-      //               <option value="5">5</option>
-      //               <option value="6">6</option>
-      //               <option value="7">7</option>
-      //               <option value="8">8</option>
-      //               <option value="9">9</option>
-      //               <option value="10">10</option>
-      //               <option value="11">11</option>
-      //               <option value="12">12</option>
-      //             </Input>
-      //           </FormGroup>
-      //           <FormGroup>
-      //             <Label htmlFor="country">Country</Label>
-      //             <Input type="text" id="country" placeholder="Country name" />
-      //           </FormGroup>
-      //         </CardBody>
-      //       </Card>
-      //     </Col>
-      //   </Row>
-      // </div>
-
-
     );
   }
 }

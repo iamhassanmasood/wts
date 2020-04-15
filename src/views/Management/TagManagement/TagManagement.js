@@ -170,15 +170,6 @@ class TagManagement extends Component {
     this.setState({ opendeleteModal: !currentState, delId: id })
   }
 
-
-  handleChangePage = (event, newPage) => {
-    this.setState({ page: newPage });
-  }
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: +event.target.value, page: 0 });
-  }
-
   timeConverter = (UNIX_timestamp) => {
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -259,9 +250,6 @@ class TagManagement extends Component {
             </Card>
           </Col>
         </Row>
-
-
-
 
         <Modal isOpen={isOpen} toggle={this.openEditModal} backdrop={false}>
           <ModalHeader toggle={() => this.setState({ isOpen: false })}>Edit Tag</ModalHeader>

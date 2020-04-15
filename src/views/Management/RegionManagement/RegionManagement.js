@@ -164,27 +164,6 @@ export default class RegionManagement extends Component {
     this.setState({ opendeleteModal: !currentState, delId: id })
   }
 
-
-  handleChangePage = (event, newPage) => {
-    this.setState({ page: newPage });
-  }
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: +event.target.value, page: 0 });
-  }
-  timeConverter(UNIX_timestamp) {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-    return time;
-  }
-
   timeConverter = (UNIX_timestamp) => {
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -197,8 +176,6 @@ export default class RegionManagement extends Component {
     var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
     return time;
   }
-
-
 
   render() {
 
@@ -266,9 +243,6 @@ export default class RegionManagement extends Component {
           </Col>
         </Row>
 
-
-
-
         <Modal isOpen={isOpen} toggle={this.openEditModal} backdrop={false}>
           <ModalHeader toggle={() => this.setState({ isOpen: false })}>Edit Region</ModalHeader>
           <ModalBody>
@@ -312,9 +286,6 @@ export default class RegionManagement extends Component {
             </form>
           </ModalBody>
         </Modal>
-
-
-
 
       </div>
     )
