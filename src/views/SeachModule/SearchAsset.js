@@ -6,7 +6,7 @@ export default function SearchAsset({ id, asset, handleChange, Data, name }) {
         <Col >
             <FormGroup>
                 <Input type='select' id={id} name={name} value={asset} onChange={handleChange} >
-                    <option value="" >Select Asset </option>
+                    <option value="" disabled defaultValue>Select Asset </option>
                     {Data.map((ast, i) => (
                         <option key={i} value={ast.id}>{ast.asset_name}</option>))}
                 </Input>

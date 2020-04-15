@@ -16,6 +16,7 @@ class Dashboard extends Component {
     flag: false,
     siteData: [],
     site: '',
+    asset: '',
     assetData: [],
     Alertdata: [],
     count: undefined,
@@ -66,34 +67,34 @@ class Dashboard extends Component {
     axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
         if (res.status === 200) {
-          var latlng = [...res.data.map(item => {
-            return {
-              latitude: parseFloat(item.site_loction.split(",")[0]), longitude: parseFloat(item.site_loction.split(",")[1]),
-              site_name: item.site_name, site_type: item.site_type, id: item.id, site_id: item.site_id, region: item.region, timestamp: item.timestamp,
-              device: item.device
-            }
-          })]
+          const data = [...res.data]
+          // console.log(data, "this is res")
+          // var latlng = data.map(item => {
+          //   return {
+          //     latitude: parseFloat(item.site_loction.split(",")[0]), longitude: parseFloat(item.site_loction.split(",")[1]),
+          //     site_name: item.site_name, site_type: item.site_type, id: item.id, site_id: item.site_id, region: item.region, timestamp: item.timestamp,
+          //     device: item.device
+          //   }
+          // })
           this.setState({
-            siteData: res.data,
-            latlng
+            siteData: data,
+            // latlng
           })
         }
       })
       .catch(err => err)
+
+    axios.get(`${BASE_URL}/${ASSET_API}/`, { headers })
+      .then(res => {
+        if (res.status === 200) {
+          const data = [...res.data]
+          this.setState({
+            assetData: data,
+          })
+        }
+      }).catch(err => err)
   }
 
-  // handleAssetData = () => {
-  //   var token = localStorage.getItem('accessToken');
-  //   var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-  //   axios.get(`${BASE_URL}:${PORT}/${ASSET_API}/`, { headers })
-  //     .then(res => {
-  //       if (res.status === 200) {
-  //         this.setState({
-  //           assetData: res.data.results,
-  //         })
-  //       }
-  //     }).catch(err => err)
-  // }
 
   handleSite = () => {
     var e = document.getElementById("sitee");
@@ -117,7 +118,6 @@ class Dashboard extends Component {
 
   render() {
     const { options, flag, latlng, siteData, assetData, site, asset } = this.state;
-    console.log(siteData)
     const data = [10, 20, 30, 40, 50];
 
     return (
