@@ -13,8 +13,6 @@ class Breadcrumbs extends Component {
     super(props);
     this.state = {
       data: [],
-      rowsPerPage: 15,
-      page: 0,
       opendeleteModal: false,
       openaddmodal: false,
       isOpen: false,
@@ -96,12 +94,14 @@ class Breadcrumbs extends Component {
     let val = event.target.value;
     this.setState({ [name]: val });
   }
+
   handleEmpty() {
     this.setState({
       device_id: "",
       api_key: "",
     })
   }
+
   handleEditSubmit(e) {
     e.preventDefault();
     this.setState({ isSubmitted: true, errors: undefined });
@@ -170,14 +170,6 @@ class Breadcrumbs extends Component {
     this.setState({ opendeleteModal: !currentState, delId: id })
   }
 
-
-  handleChangePage = (event, newPage) => {
-    this.setState({ page: newPage });
-  }
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: +event.target.value, page: 0 });
-  }
   timeConverter(UNIX_timestamp) {
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -192,7 +184,7 @@ class Breadcrumbs extends Component {
   }
 
   render() {
-    const { data, opendeleteModal, isOpen, page, rowsPerPage, api_key, device_id, openaddmodal, errors } = this.state;
+    const { data, opendeleteModal, isOpen, api_key, device_id, openaddmodal, errors } = this.state;
     return (
       <div className="justify-content-center">
         <Row>
@@ -250,27 +242,10 @@ class Breadcrumbs extends Component {
                     })}
                   </tbody>
                 </Table>
-
-
-                {/* <nav>
-                  <Pagination size="sm" >
-                    <PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-                    <PaginationItem active>
-                      <PaginationLink tag="button">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-                    <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-                    <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
-                    <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
-                  </Pagination>
-                </nav> */}
               </CardBody>
             </Card>
           </Col>
         </Row>
-
-
-
 
         <Modal isOpen={isOpen} toggle={this.openEditModal} backdrop={false}>
           <ModalHeader toggle={() => this.setState({ isOpen: false })}>Edit Device</ModalHeader>
