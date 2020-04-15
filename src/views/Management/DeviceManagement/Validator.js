@@ -1,8 +1,8 @@
 import isEmpty from 'lodash/isEmpty'
 export default function deviceValidation(data) {
     let errors = {}
-    if (!data.device_id || !data.api_key) {
-        errors = `All Fields are Required`
+    if (!data.device_id) {
+        errors = `Please Insert Device ID`
     }
 
     return {

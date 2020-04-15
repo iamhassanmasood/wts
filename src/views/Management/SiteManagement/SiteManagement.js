@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
-import { BASE_URL, PORT, SITES_API, REGIONS_API, DEVICES_API } from '../../../Config/Config'
+import { BASE_URL, SITES_API, REGIONS_API, DEVICES_API } from '../../../Config/Config'
 import axios from 'axios'
 import siteValidation from './Validator'
 
