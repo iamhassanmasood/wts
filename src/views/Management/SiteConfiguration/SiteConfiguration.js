@@ -93,6 +93,7 @@ export default class SiteConfiguration extends Component {
 
   handleEditSubmit = (e) => {
     e.preventDefault();
+
     this.setState({ isSubmitted: true, errors: undefined });
     const { isValid, errors } = siteConfigValidation(this.state);
     if (!isValid) {
@@ -115,7 +116,7 @@ export default class SiteConfiguration extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => err)
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.site ? "Sorry! This Site Already in use" : '')) }))
     }
   }
 
@@ -144,7 +145,7 @@ export default class SiteConfiguration extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => err)
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.uuid ? "Sorry! This UUID Already Exist" : '') || (err.response.data.site ? "Sorry! This Site Already in use" : '')) }))
     }
   }
 
@@ -260,7 +261,7 @@ export default class SiteConfiguration extends Component {
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="uuid">UUID<span /> </Label>
-                    <Input type="text" name="uuid" id="uuid" value={uuid} onChange={this.handleChange} />
+                    <Input type="text" name="uuid" id="uuid" value={uuid} disabled={true} />
                   </FormGroup>
                 </Col>
 

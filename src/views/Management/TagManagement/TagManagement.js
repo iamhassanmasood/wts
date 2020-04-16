@@ -122,14 +122,7 @@ class TagManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => {
-          if (err.response.data.tag_id) {
-            this.setState({ errors: "Oops! Tag ID invalid ", isSubmitted: false })
-          } else if (err.response.data.tag_type) {
-            this.setState({ errors: "Oops! Tag Type invalid ", isSubmitted: false })
-          }
-        }
-        )
+        .catch(err => err)
     }
   }
 
@@ -154,13 +147,8 @@ class TagManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => {
-          if (err.response.data.tag_id) {
-            this.setState({ errors: "Oops! Tag ID already exists ", isSubmitted: false })
-          } else if (err.response.data.tag_type) {
-            this.setState({ errors: "Oops! Tag Type inValid ", isSubmitted: false })
-          }
-        }
+        .catch(err =>
+          this.setState({ errors: (err.response.data.tag_id ? "Sorry! This Tag ID already exists " : ''), isSubmitted: false })
         )
     }
   }
@@ -258,7 +246,7 @@ class TagManagement extends Component {
 
               <FormGroup >
                 <Label>Tag ID : </Label>
-                <Input type="text" value={tag_id} name="tag_id" value={tag_id} onChange={this.handleChange} placeholder="tag ID" />
+                <Input type="text" value={tag_id} name="tag_id" value={tag_id} disabled={true} />
               </FormGroup>
 
               <FormGroup >

@@ -7,7 +7,7 @@ import axios from 'axios'
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
 
-class Breadcrumbs extends Component {
+class DeviceManagement extends Component {
   _isMounted = false;
   constructor(props) {
     super(props);
@@ -40,19 +40,16 @@ class Breadcrumbs extends Component {
           })
         }
       }).catch(err => {
-        if (err.response.data.detail === "Authentication credentials were not provided.") {
-          localStorage.removeItem('accessToken');
-          this.setState({ redirect: true })
-        } else return err
+        if (err.response.status === 204) {
+          return localStorage.removeItem('accessToken');
+        }
+        return err
       })
   }
 
 
   removerow = () => {
-    var token = localStorage.getItem('accessToken');
-    var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
     axios.delete(`${BASE_URL}/${DEVICES_API}/${this.state.delId}/`, { headers }).then(res => {
-      this.setState({ done: true })
       var index = this.state.delId;
       const items = this.state.data.filter(row => row.id !== index)
       if (res.status === 204) {
@@ -60,12 +57,7 @@ class Breadcrumbs extends Component {
           data: items
         })
       }
-    }).catch(err => {
-      if (err.response.data.detail === "Authentication credentials were not provided.") {
-        localStorage.removeItem('accessToken');
-        this.setState({ redirect: true })
-      } else return err
-    })
+    }).catch(err => err)
   }
 
   openEditModal = (id, d_id, api) => {
@@ -119,17 +111,13 @@ class Breadcrumbs extends Component {
             this.setState({
               isSubmitted: true,
               isOpen: false,
+              isSubmitted: true,
+              errors: undefined
             })
             this.componentDidMount()
           }
         })
-        .catch(err => {
-          if (err.response.data.device_id) {
-            this.setState({ errors: "Oops! Device ID already exists ", isSubmitted: false })
-          } else if (err.response.data.api_key) {
-            this.setState({ errors: "Oops! Device With this key already exists ", isSubmitted: false })
-          }
-        })
+        .catch(err => this.setState({ isSubmitted: false }))
     }
   }
 
@@ -154,14 +142,7 @@ class Breadcrumbs extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => {
-          if (err.response.data.device_id) {
-            this.setState({ errors: "Oops! Device ID already exists ", isSubmitted: false })
-          } else if (err.response.data.api_key) {
-            this.setState({ errors: "Oops! Device With this key already exists ", isSubmitted: false })
-          }
-        }
-        )
+        .catch(err => this.setState({ isSubmitted: false, errors: (err.response.data.device_id ? "Device Id Must Be Unique, Sorry this device id already exist" : '') }))
     }
   }
 
@@ -285,4 +266,4 @@ class Breadcrumbs extends Component {
   }
 }
 
-export default Breadcrumbs;
+export default DeviceManagement;
