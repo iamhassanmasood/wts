@@ -17,33 +17,31 @@ class Alerts extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    this.connectAlert();
+    this.loadPage()
+  }
+  loadPage = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    this.connectAlert();
-    this.setState({ done: true })
-    axios.get(`${BASE_URL}:${PORT}/${ALERTS_API}/?limit=1&offset=0`, { headers })
+    axios.get(`${BASE_URL}/${ALERTS_API}/?limit=1&offset=0`, { headers })
       .then(res => {
+        console.log(res, "ssssssssss")
         this.setState({ count: res.data.count })
         var offset = this.state.count - 100;
-        axios.get(`${BASE_URL}:${PORT}/${ALERTS_API}/?limit=100&offset=${offset}`, { headers })
+        axios.get(`${BASE_URL}/${ALERTS_API}/?limit=100&offset=${offset}`, { headers })
           .then(res => {
             if (res.status === 200) {
-              var arr = res.data.results;
-              var Alertdata = []
-              for (var i = 0; i < arr.length; i++) {
-                Alertdata.push({ event: arr[i].event, asset: arr[i].asset, site: arr[i].site, timestamp: arr[i].timestamp })
-              }
-
+              var arr = [...res.data.results];
               this.setState({
-                Alertdata,
+                Alertdata: arr,
                 done: false
               })
             }
           }).catch(err => {
-            if (err.response.data.detail === "Authentication credentials were not provided.") {
+            if (err.response.status === 401) {
               localStorage.removeItem('accessToken');
-              this.setState({ redirect: true })
-            } else return err
+            }
+            return err
           })
       })
   }
@@ -130,8 +128,10 @@ class Alerts extends Component {
         return <tr key={i} style={{ height: '30px' }}>
           <td >{i + 1}</td>
           <td >{alt.event}</td>
-          {alt.site ? <td>{alt.site.name}</td> : <td>-</td>}
-          {alt.asset ? <td>{alt.asset.name}</td> : <td>-</td>}
+          <td>{alt.asset_id}</td>
+          <td>{alt.registered_site_id}</td>
+          <td>{alt.alert_site_id}</td>
+          <td>{alt.alert_type}</td>
           <td>{AlertTimeNow}</td>
         </tr>
       })
@@ -152,8 +152,10 @@ class Alerts extends Component {
                     <tr>
                       <th>Sr#</th>
                       <th>Events</th>
-                      <th>Site</th>
-                      <th>Asset</th>
+                      <th>Asset Id </th>
+                      <th>Registered Site Id</th>
+                      <th>Site Id</th>
+                      <td>Alert Type</td>
                       <th>Created At</th>
                     </tr>
                   </thead>
@@ -161,18 +163,7 @@ class Alerts extends Component {
                     {rows}
                   </tbody>
                 </Table>
-                {/* <nav>
-                <Pagination>
-                  <PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-                  <PaginationItem active>
-                    <PaginationLink tag="button">1</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
-                </Pagination>
-              </nav> */}
+
               </CardBody>
             </Card>
           </Col>

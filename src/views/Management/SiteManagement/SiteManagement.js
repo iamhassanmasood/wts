@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
-import { BASE_URL, PORT, SITES_API, REGIONS_API, DEVICES_API } from '../../../Config/Config'
+import { BASE_URL, SITES_API, REGIONS_API, DEVICES_API } from '../../../Config/Config'
 import axios from 'axios'
 import siteValidation from './Validator'
 
@@ -88,7 +88,8 @@ class SiteManagement extends Component {
         if (err.response.data.detail === "Authentication credentials were not provided.") {
           localStorage.removeItem('accessToken');
           this.props.history.push('/login')
-        } else return err
+        }
+        return err
       })
   }
   getRegion = () => {
@@ -135,20 +136,13 @@ class SiteManagement extends Component {
             this.setState({
               isSubmitted: true,
               openaddmodal: false,
+              errors: undefined,
+              isSubmitted: true
             })
             this.componentDidMount()
           }
         })
-        .catch(err => {
-          if (err.response.data.site_id) {
-            this.setState({ errors: "Oops! Site ID already exists ", isSubmitted: false })
-          } else if (err.response.data.site_name) {
-            this.setState({ errors: "Oops! Site Name already exists ", isSubmitted: false })
-          } else if (err.response.data.device) {
-            this.setState({ errors: "Oops! This device already exists ", isSubmitted: false })
-          }
-        }
-        )
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.device ? "This Device Already in Use" : '') || (err.response.data.site_location ? "Site Location Must Include ',' i.e 45,78 " : '') || (err.response.data.site_id ? "Sorry! This site id Already Exisit" : '') || (err.response.data.site_name ? "Sorry This Site Name Already Exist " : '')) }))
     }
   }
 
@@ -191,19 +185,13 @@ class SiteManagement extends Component {
             this.setState({
               isSubmitted: true,
               isOpen: false,
+              errors: undefined,
+              isSubmitted: true
             })
             this.componentDidMount();
           }
         })
-        .catch(err => {
-          if (err.response.data.site_id) {
-            this.setState({ errors: "Oops! Site ID already exists ", isSubmitted: false })
-          } else if (err.response.data.site_name) {
-            this.setState({ errors: "Oops! Site Name already exists ", isSubmitted: false })
-          } else if (err.response.data.device) {
-            this.setState({ errors: "Oops! This device already exists ", isSubmitted: false })
-          }
-        })
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.device ? "This Device Already in Use" : '') || (err.response.data.site_location ? "Site Location Must Include ',' i.e 45,78 " : '') || (err.response.data.site_name ? "Sorry This Site Name Already Exist " : '')) }))
     }
   }
   handleEmpty = () => {

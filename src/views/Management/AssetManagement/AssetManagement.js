@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
-import { BASE_URL, PORT, ASSET_API, TAGS_API, SITES_API } from '../../../Config/Config'
+import { BASE_URL, ASSET_API, TAGS_API, SITES_API } from '../../../Config/Config'
 import assetValidation from './Validator'
 import axios from 'axios'
 
@@ -51,9 +51,10 @@ class AssetManagement extends Component {
         }
       })
       .catch(err => {
-        if (err.response.data.detail === "Authentication credentials were not provided.") {
-          localStorage.removeItem('accessToken');
-        } else return err
+        if (err.response.status === 401) {
+          return localStorage.removeItem('accessToken');
+        }
+        return err
       })
 
     axios.get(`${BASE_URL}/${TAGS_API}/`, { headers })
@@ -65,7 +66,12 @@ class AssetManagement extends Component {
           })
         }
       })
-      .catch(err => err)
+      .catch(err => {
+        if (err.response.status === 401) {
+          return localStorage.removeItem('accessToken');
+        }
+        return err
+      })
 
     axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
@@ -158,29 +164,37 @@ class AssetManagement extends Component {
             this.setState({
               isSubmitted: true,
               openaddmodal: false,
+              errors: undefined
             })
             this.componentDidMount()
           }
         })
-        .catch(err => {
-          if (err.response.data.asset_id) {
-            this.setState({ errors: "Oops! Asset ID already exists ", isSubmitted: false })
-          } else if (err.response.data.asset_name) {
-            this.setState({ errors: "Oops! Asset Name already exists ", isSubmitted: false })
-          }
-        })
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.asset_id ? "Asset Id Must be Unique, Sorry! This Asset Id Already Exist" : '') || (err.response.data.asset_name ? "Asset Name Must Be Unique, Sorry! This Asset Name already exist" : '') || (err.response.data.tag ? "Tag Must Be Unique , Sorry! This Tag Already in use" : '')) }))
     }
   }
 
   handleEditSubmit = (e) => {
     e.preventDefault();
+    var siteValue;
+    for (var j = 0; j < this.state.siteData.length; j++) {
+      if (this.state.siteData[j].site_id === this.state.site) {
+        siteValue = this.state.siteData[j].id
+      }
+    }
+
+    var tagValue;
+    for (var i = 0; i < this.state.tagData.length; i++) {
+      if (this.state.tagData[i].tag_id === this.state.tag) {
+        tagValue = this.state.tagData[i].id
+      }
+    }
     this.setState({ isSubmitted: true, errors: undefined });
     const { isValid, errors } = assetValidation(this.state);
     if (!isValid) {
       this.setState({ errors, isSubmitted: false });
       return false;
     } else {
-      let body = "asset_id=" + this.state.asset_id + "&asset_name=" + this.state.asset_name + "&asset_brand=" + this.state.asset_brand + "&owner_name=" + this.state.owner_name + "&owner_type=" + this.state.owner_type + "&tag=" + this.state.tag + "&site=" + this.state.site + "&timestamp=" + this.state.timestamp;
+      let body = "asset_id=" + this.state.asset_id + "&asset_name=" + this.state.asset_name + "&asset_brand=" + this.state.asset_brand + "&owner_name=" + this.state.owner_name + "&owner_type=" + this.state.owner_type + "&tag=" + tagValue + "&site=" + siteValue + "&timestamp=" + this.state.timestamp;
 
       axios.put(`${BASE_URL}/${ASSET_API}/${this.state.id}/`, body, { headers })
         .then(res => {
@@ -188,18 +202,12 @@ class AssetManagement extends Component {
             this.setState({
               isSubmitted: true,
               isOpen: false,
+              errors: undefined
             })
             this.componentDidMount()
           }
         })
-        .catch(err => {
-          if (err.response.data.asset_id) {
-            this.setState({ errors: "Oops! AssetID already exists ", isSubmitted: false })
-          } else if (err.response.data.asset_name) {
-            this.setState({ errors: "Oops! AssetName already exists ", isSubmitted: false })
-          }
-        }
-        )
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.asset_name ? "Asset Name Must Be Unique, Sorry! This Asset Name already exist" : '') || (err.response.data.tag ? "Tag Must Be Unique , Sorry! This Tag Already in use" : '')) }))
     }
   }
 
@@ -241,7 +249,7 @@ class AssetManagement extends Component {
   render() {
 
     const { asset_name, asset_id, asset_brand, owner_name, owner_type, isOpen, AssetData, openaddmodal, site, siteData, opendeleteModal, tag, tagData, errors, done } = this.state;
-
+    console.log(site, tag)
     return (
       <div className="animated fadeIn">
         <Row>
@@ -352,11 +360,11 @@ class AssetManagement extends Component {
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="tag">Tag<span /> </Label>
-                    <Input type="select" name="tag" id="tag" value={tag} onChange={this.handleChangeTag} placeholder="Tag">
+                    <select className="form-control" type="select" name="tag" id="tag" value={tag} onChange={this.handleChangeTag} placeholder="Tag">
                       <option className="brave" value="" disabled defaultValue>Select Tag</option>
                       {tagData.map((tag, i) => (
                         <option key={i} value={tag.id}> {tag.tag_id} </option>))}
-                    </Input>
+                    </select>
                   </FormGroup>
                 </Col>
 

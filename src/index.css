@@ -15,6 +15,11 @@
 }
 td {
     color: white !important;
+    text-align: center;
+}
+th{
+    color: white !important;
+    text-align: center !important;
 }
 thead{
     background-color: #023e58;
@@ -72,4 +77,7 @@ a{
     flex-wrap: wrap;
     margin-right: -30px !important;
     margin-left: -30px !important;
+}
+.MapModule{
+    height: 20vh !important;
 }

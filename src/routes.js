@@ -1,18 +1,18 @@
 import React from 'react';
 
-const Dashboard = React.lazy(() => import('./views/Dashboard'));
-const Management = React.lazy(() => import('./views/Management/Management'))
-const DeviceManagement = React.lazy(() => import('./views/Management/DeviceManagement'));
-const AssetManagement = React.lazy(() => import('./views/Management/AssetManagement'));
-const TagManagement = React.lazy(() => import('./views/Management/TagManagement'));
-const SiteManagement = React.lazy(() => import('./views/Management/SiteManagement/SiteManagement'));
-const RegionManagement = React.lazy(() => import('./views/Management/RegionManagement'));
-const SiteConfiguration = React.lazy(() => import('./views/Management/SiteConfiguration/SiteConfiguration'));
-const TransferAssets = React.lazy(() => import('./views/TransferAssets'));
-const Alerts = React.lazy(() => import('./views/Alerts/Alerts'))
-const Reports = React.lazy(() => import('./views/Reports/Reports/Reports'))
-const GeneralReports = React.lazy(() => import('./views/Reports/GeneralReports/GeneralReports'))
-const ProgressReports = React.lazy(() => import('./views/Reports/ProgressReports/ProgressReports'))
+import Dashboard from './views/Dashboard';
+import Management from './views/Management/Management'
+import DeviceManagement from './views/Management/DeviceManagement';
+import AssetManagement from './views/Management/AssetManagement';
+import TagManagement from './views/Management/TagManagement';
+import SiteManagement from './views/Management/SiteManagement/SiteManagement';
+import RegionManagement from './views/Management/RegionManagement';
+import SiteConfiguration from './views/Management/SiteConfiguration/SiteConfiguration';
+import TransferAssets from './views/TransferAssets';
+import Alerts from './views/Alerts/Alerts'
+import Reports from './views/Reports/Reports/Reports'
+import GeneralReports from './views/Reports/GeneralReports/GeneralReports'
+import ProgressReports from './views/Reports/ProgressReports/ProgressReports'
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },

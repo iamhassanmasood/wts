@@ -117,13 +117,8 @@ export default class RegionManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => {
-          if (err.response.data.region_id) {
-            this.setState({ errors: "Oops! Region ID already exists ", isSubmitted: false })
-          } else if (err.response.data.region_name) {
-            this.setState({ errors: "Oops! Region Name already exists ", isSubmitted: false })
-          }
-        })
+        .catch(err =>
+          this.setState({ isSubmitted: false, errors: ((err.response.data.region_name ? "Region Name Must Be Unique, Sorry! This Region Name already exist" : '')) }))
     }
   }
 
@@ -148,14 +143,7 @@ export default class RegionManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => {
-          if (err.response.data.region_id) {
-            this.setState({ errors: "Oops! Region ID already exists ", isSubmitted: false })
-          } else if (err.response.data.region_name) {
-            this.setState({ errors: "Oops! Region Name already exists ", isSubmitted: false })
-          }
-        }
-        )
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.region_id ? "Region ID Must Be Unique, Sorry! This Region ID already exist" : '') || (err.response.data.region_name ? "Region Name Must Be Unique, Sorry! This Region Name already exist" : '')) }))
     }
   }
 
@@ -250,7 +238,7 @@ export default class RegionManagement extends Component {
 
               <FormGroup >
                 <Label>Region ID : </Label>
-                <Input type="text" value={region_id} name="region_id" value={region_id} onChange={this.handleChange} placeholder="Region ID" />
+                <Input type="text" value={region_id} name="region_id" value={region_id} disabled={true} />
               </FormGroup>
 
               <FormGroup >
