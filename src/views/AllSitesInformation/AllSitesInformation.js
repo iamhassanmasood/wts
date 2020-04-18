@@ -43,24 +43,19 @@ class AllSitesInformation extends Component {
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
     await axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
-        this.setState({ done: true })
         if (res.status === 200) {
+          const data = [...res.data]
           this.setState({
-            data: res.data.results.reverse(),
-            done: false
+            data: data,
           })
         }
       })
       .catch(err => {
-        if (err.response.data.detail === "Authentication credentials were not provided.") {
-          localStorage.removeItem('accessToken');
-          this.props.history.push('/login')
-        } else return err
+        if (err.response.status === 401) {
+          return localStorage.removeItem('accessToken');
+        }
+        return err
       })
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 
   getRegion = () => {
