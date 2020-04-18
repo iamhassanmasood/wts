@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
-import { BASE_URL, SITES_API } from '../../../Config/Config'
+import { BASE_URL, SITES_API, SITE_CONFIG } from '../../../Config/Config'
 import siteConfigValidation from './Validator'
 
 var token = localStorage.getItem('accessToken');
@@ -24,7 +24,7 @@ export default class SiteConfiguration extends Component {
   componentDidMount() {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get('http://staging-wats.cs-satms.com/api/site_config/', { headers })
+    axios.get(`${BASE_URL}/${SITE_CONFIG}/`, { headers })
       .then(res => {
         if (res.status === 200) {
           var data = [...res.data.results]
@@ -82,7 +82,7 @@ export default class SiteConfiguration extends Component {
   }
 
   removerow = () => {
-    axios.delete(`http://staging-wats.cs-satms.com/api/site_config/${this.state.delId}/`, { headers }).then(res => {
+    axios.delete(`${BASE_URL}/${SITE_CONFIG}/${this.state.delId}/`, { headers }).then(res => {
       var index = this.state.delId;
       const items = this.state.siteConfigData.filter(row => row.id !== index)
       if (res.status === 204) {
@@ -93,6 +93,7 @@ export default class SiteConfiguration extends Component {
 
   handleEditSubmit = (e) => {
     e.preventDefault();
+
     this.setState({ isSubmitted: true, errors: undefined });
     const { isValid, errors } = siteConfigValidation(this.state);
     if (!isValid) {
@@ -105,7 +106,7 @@ export default class SiteConfiguration extends Component {
         "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + this.state.site +
         "&power_down_alert_interval=" + this.state.power_down_alert_interval;
 
-      axios.put(`http://staging-wats.cs-satms.com/api/site_config/${this.state.id}/`, body, { headers })
+      axios.put(`${BASE_URL}/${SITE_CONFIG}/${this.state.id}/`, body, { headers })
         .then(res => {
           if (res.status === 200) {
             this.setState({
@@ -115,7 +116,7 @@ export default class SiteConfiguration extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => err)
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.site ? "Sorry! This Site Already in use" : '')) }))
     }
   }
 
@@ -134,7 +135,7 @@ export default class SiteConfiguration extends Component {
         "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + this.state.site +
         "&power_down_alert_interval=" + this.state.power_down_alert_interval;
 
-      axios.post('http://staging-wats.cs-satms.com/api/site_config/', body, { headers })
+      axios.post(`${BASE_URL}/${SITE_CONFIG}/`, body, { headers })
         .then(res => {
           if (res.status === 201) {
             this.setState({
@@ -144,7 +145,7 @@ export default class SiteConfiguration extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => err)
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.uuid ? "Sorry! This UUID Already Exist" : '') || (err.response.data.site ? "Sorry! This Site Already in use" : '')) }))
     }
   }
 
@@ -173,7 +174,6 @@ export default class SiteConfiguration extends Component {
     const { siteConfigData, opendeleteModal, openaddmodal, isOpen, uuid, tag_missing_timeout, site_heartbeat_interval, low_battery_threshold,
       high_temp_threshold, low_temp_threshold, power_down_alert_interval, site, errors, siteData } = this.state;
 
-    console.log(uuid, 'ssssssssssssssssssssssss')
     return (
       <div className="animated fadeIn">
         <Row>
@@ -191,7 +191,7 @@ export default class SiteConfiguration extends Component {
                     <tr>
                       <th>Sr#</th>
                       <th>UUID</th>
-                      <th>Site</th>
+                      <th col={2}>Site</th>
                       <th>Tag Missing Timeout</th>
                       <th>Site Heartbeat Interval</th>
                       <th>Low Battery Threshold</th>
@@ -260,7 +260,7 @@ export default class SiteConfiguration extends Component {
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="uuid">UUID<span /> </Label>
-                    <Input type="text" name="uuid" id="uuid" value={uuid} onChange={this.handleChange} />
+                    <Input type="text" name="uuid" id="uuid" value={uuid} disabled={true} />
                   </FormGroup>
                 </Col>
 
