@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
-import { BASE_URL, PORT, DEVICES_API } from '../../../Config/Config'
+import { BASE_URL, PORT, DEVICES_API, FORMAT } from '../../../Config/Config'
 import deviceValidation from './Validator'
 import axios from 'axios'
 
@@ -31,17 +31,17 @@ class DeviceManagement extends Component {
     this._isMounted = true;
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}/${DEVICES_API}/`, { headers })
+    axios.get(`${BASE_URL}/${DEVICES_API}/${FORMAT}`, { headers })
       .then(res => {
-        this.setState({ done: true })
         if (this._isMounted) {
           this.setState({
-            data: res.data.results,
+            data: res.data.data,
           })
         }
       }).catch(err => {
-        if (err.response.status === 204) {
-          return localStorage.removeItem('accessToken');
+        if (err.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
         }
         return err
       })

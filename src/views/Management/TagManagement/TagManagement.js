@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
-import { BASE_URL, TAGS_API } from '../../../Config/Config'
+import { BASE_URL, TAGS_API, FORMAT } from '../../../Config/Config'
 import tagValidation from './Validator'
 
 
@@ -32,21 +32,22 @@ class TagManagement extends Component {
   componentDidMount() {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}/${TAGS_API}/`, { headers })
+    axios.get(`${BASE_URL}/${TAGS_API}/${FORMAT}`, { headers })
       .then(res => {
         this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
-            tagData: res.data.results,
+            tagData: res.data.data,
             done: false
           })
         }
       })
       .catch(err => {
-        console.log(err, "error")
-        if (err.response.data.detail === "Authentication credentials were not provided.") {
+        if (err.status === 401) {
           localStorage.removeItem('accessToken');
-        } else return err
+          this.props.history.push('/login')
+        }
+        return err
       })
   }
 
@@ -63,9 +64,10 @@ class TagManagement extends Component {
         })
       }
     }).catch(err => {
-      if (err.response.data.detail === "Authentication credentials were not provided.") {
+      if (err.status === 401) {
         localStorage.removeItem('accessToken');
-      } else return err
+      }
+      return err
     })
   }
 

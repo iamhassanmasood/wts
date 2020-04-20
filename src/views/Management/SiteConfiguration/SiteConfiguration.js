@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
-import { BASE_URL, SITES_API, SITE_CONFIG } from '../../../Config/Config'
+import { BASE_URL, SITES_API, SITE_CONFIG, FORMAT } from '../../../Config/Config'
 import siteConfigValidation from './Validator'
 
 var token = localStorage.getItem('accessToken');
@@ -24,24 +24,35 @@ export default class SiteConfiguration extends Component {
   componentDidMount() {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}/${SITE_CONFIG}/`, { headers })
+    axios.get(`${BASE_URL}/${SITE_CONFIG}/${FORMAT}`, { headers })
       .then(res => {
         if (res.status === 200) {
-          var data = [...res.data.results]
+          var data = [...res.data.data]
           this.setState({
             siteConfigData: data
           })
         }
-      }).catch(err => err)
+      }).catch(err => {
+        if (err.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        }
+        return err
+      })
 
-    axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
+    axios.get(`${BASE_URL}/${SITES_API}/${FORMAT}`, { headers })
       .then(res => {
-        this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
-            siteData: res.data
+            siteData: res.data.data
           })
         }
+      }).catch(err => {
+        if (err.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        }
+        return err
       })
   }
 
@@ -232,7 +243,7 @@ export default class SiteConfiguration extends Component {
                       return <tr tabIndex={-1} key={i}>
                         <td>{i + 1}</td>
                         <td>{item.uuid}</td>
-                        <td>{site_name}</td>
+                        <td>{item.site}</td>
                         <td>{item.tag_missing_timeout}</td>
                         <td>{item.site_heartbeat_interval}</td>
                         <td>{item.low_battery_threshold}</td>

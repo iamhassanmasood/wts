@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
-import { BASE_URL, SITES_API, REGIONS_API, DEVICES_API } from '../../../Config/Config'
+import { BASE_URL, SITES_API, REGIONS_API, DEVICES_API, FORMAT } from '../../../Config/Config'
 import axios from 'axios'
 import siteValidation from './Validator'
 
@@ -74,18 +74,16 @@ class SiteManagement extends Component {
     this.getDevice();
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    await axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
+    await axios.get(`${BASE_URL}/${SITES_API}/${FORMAT}`, { headers })
       .then(res => {
-        this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
-            data: res.data.reverse(),
-            done: false
+            data: res.data.data.reverse(),
           })
         }
       })
       .catch(err => {
-        if (err.response.data.detail === "Authentication credentials were not provided.") {
+        if (err.status === 401) {
           localStorage.removeItem('accessToken');
           this.props.history.push('/login')
         }

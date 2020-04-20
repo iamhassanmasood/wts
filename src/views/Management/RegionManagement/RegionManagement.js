@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
-import { BASE_URL, PORT, REGIONS_API } from '../../../Config/Config'
+import { BASE_URL, FORMAT, REGIONS_API } from '../../../Config/Config'
 import regionValidation from './Validator'
 
 export default class RegionManagement extends Component {
@@ -32,17 +32,21 @@ export default class RegionManagement extends Component {
   componentDidMount() {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}/${REGIONS_API}/`, { headers })
+    axios.get(`${BASE_URL}/${REGIONS_API}/${FORMAT}`, { headers })
       .then(res => {
-        this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
-            RegionData: res.data.results,
-            done: false
+            RegionData: res.data.data,
           })
         }
       })
-      .catch(err => console.error(err, "error"))
+      .catch(err => {
+        if (err.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        }
+        return err
+      })
   }
 
   removerow = () => {
@@ -58,7 +62,7 @@ export default class RegionManagement extends Component {
         })
       }
     }).catch(err => {
-      if (err.response.data.detail === "Authentication credentials were not provided.") {
+      if (err.response.status === 401) {
         localStorage.removeItem('accessToken');
       } else return err
     })
