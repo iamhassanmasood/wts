@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
-import { BASE_URL, PORT, ALERTS_API, SITES_API } from '../../Config/Config'
+import { BASE_URL, FORMAT, ALERTS_API, SITES_API } from '../../Config/Config'
 
 import axios from 'axios'
 class Alerts extends Component {
@@ -23,27 +23,24 @@ class Alerts extends Component {
   loadPage = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}/${ALERTS_API}/?limit=1&offset=0`, { headers })
+    axios.get(`${BASE_URL}/${ALERTS_API}/${FORMAT}`, { headers })
       .then(res => {
-        console.log(res, "ssssssssss")
-        this.setState({ count: res.data.count })
-        var offset = this.state.count - 100;
-        axios.get(`${BASE_URL}/${ALERTS_API}/?limit=100&offset=${offset}`, { headers })
-          .then(res => {
-            if (res.status === 200) {
-              var arr = [...res.data.results];
-              this.setState({
-                Alertdata: arr,
-                done: false
-              })
-            }
-          }).catch(err => {
-            if (err.response.status === 401) {
-              localStorage.removeItem('accessToken');
-            }
-            return err
+        if (res.status === 200) {
+          var arr = [...res.data.data];
+          this.setState({
+            Alertdata: arr,
+            done: false
           })
+        }
       })
+      .catch(err => {
+        if (err.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        }
+        return err
+      })
+
   }
   connectAlert = () => {
     var wss = new WebSocket(`wss://wts.cs-satms.com:8443/ws/api/alerts/`);
