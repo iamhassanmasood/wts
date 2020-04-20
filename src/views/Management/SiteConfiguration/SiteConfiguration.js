@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
-import { BASE_URL, SITES_API } from '../../../Config/Config'
+import { BASE_URL, SITES_API, SITE_CONFIG, FORMAT } from '../../../Config/Config'
 import siteConfigValidation from './Validator'
 
 var token = localStorage.getItem('accessToken');
@@ -24,24 +24,35 @@ export default class SiteConfiguration extends Component {
   componentDidMount() {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get('http://staging-wats.cs-satms.com/api/site_config/', { headers })
+    axios.get(`${BASE_URL}/${SITE_CONFIG}/${FORMAT}`, { headers })
       .then(res => {
         if (res.status === 200) {
-          var data = [...res.data.results]
+          var data = [...res.data.data]
           this.setState({
             siteConfigData: data
           })
         }
-      }).catch(err => err)
+      }).catch(err => {
+        if (err.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        }
+        return err
+      })
 
-    axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
+    axios.get(`${BASE_URL}/${SITES_API}/${FORMAT}`, { headers })
       .then(res => {
-        this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
-            siteData: res.data
+            siteData: res.data.data
           })
         }
+      }).catch(err => {
+        if (err.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        }
+        return err
       })
   }
 
@@ -82,7 +93,7 @@ export default class SiteConfiguration extends Component {
   }
 
   removerow = () => {
-    axios.delete(`http://staging-wats.cs-satms.com/api/site_config/${this.state.delId}/`, { headers }).then(res => {
+    axios.delete(`${BASE_URL}/${SITE_CONFIG}/${this.state.delId}/`, { headers }).then(res => {
       var index = this.state.delId;
       const items = this.state.siteConfigData.filter(row => row.id !== index)
       if (res.status === 204) {
@@ -106,7 +117,7 @@ export default class SiteConfiguration extends Component {
         "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + this.state.site +
         "&power_down_alert_interval=" + this.state.power_down_alert_interval;
 
-      axios.put(`http://staging-wats.cs-satms.com/api/site_config/${this.state.id}/`, body, { headers })
+      axios.put(`${BASE_URL}/${SITE_CONFIG}/${this.state.id}/`, body, { headers })
         .then(res => {
           if (res.status === 200) {
             this.setState({
@@ -116,7 +127,17 @@ export default class SiteConfiguration extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.site ? "Sorry! This Site Already in use" : '')) }))
+        .catch(err => this.setState({
+          isSubmitted: false, errors: ((err.response.data.uuid ? "Sorry! This UUID already exist" : '')
+            || (err.response.data.site ? "Sorry! This site already in use" : '')
+            || (err.response.data.tag_missing_timeout ? "Tag missing timeout: " + err.response.data.tag_missing_timeout : '')
+            || (err.response.data.site_heartbeat_interval ? "Site heartbeat interval: " + err.response.data.site_heartbeat_interval : '')
+            || (err.response.data.low_battery_threshold ? "Low battery threshold: " + err.response.data.low_battery_threshold : '')
+            || (err.response.data.high_temp_threshold ? "High temperature threshold: " + err.response.data.high_temp_threshold : '')
+            || (err.response.data.low_temp_threshold ? "Low temperature threshold: " + err.response.data.low_temp_threshold : '')
+            || (err.response.data.power_down_alert_interval ? "Power down alert interval: " + err.response.data.power_down_alert_interval : '')
+          )
+        }))
     }
   }
 
@@ -135,7 +156,7 @@ export default class SiteConfiguration extends Component {
         "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + this.state.site +
         "&power_down_alert_interval=" + this.state.power_down_alert_interval;
 
-      axios.post('http://staging-wats.cs-satms.com/api/site_config/', body, { headers })
+      axios.post(`${BASE_URL}/${SITE_CONFIG}/`, body, { headers })
         .then(res => {
           if (res.status === 201) {
             this.setState({
@@ -145,8 +166,19 @@ export default class SiteConfiguration extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.uuid ? "Sorry! This UUID Already Exist" : '') || (err.response.data.site ? "Sorry! This Site Already in use" : '')) }))
+        .catch(err => this.setState({
+          isSubmitted: false, errors: ((err.response.data.uuid ? "Sorry! This UUID already exist" : '')
+            || (err.response.data.site ? "Sorry! This site already in use" : '')
+            || (err.response.data.tag_missing_timeout ? "Tag missing timeout: " + err.response.data.tag_missing_timeout : '')
+            || (err.response.data.site_heartbeat_interval ? "Site heartbeat interval: " + err.response.data.site_heartbeat_interval : '')
+            || (err.response.data.low_battery_threshold ? "Low battery threshold: " + err.response.data.low_battery_threshold : '')
+            || (err.response.data.high_temp_threshold ? "High temperature threshold: " + err.response.data.high_temp_threshold : '')
+            || (err.response.data.low_temp_threshold ? "Low temperature threshold: " + err.response.data.low_temp_threshold : '')
+            || (err.response.data.power_down_alert_interval ? "Power down alert interval: " + err.response.data.power_down_alert_interval : '')
+          )
+        }))
     }
+
   }
 
   handleChangeSite = () => {
@@ -174,7 +206,6 @@ export default class SiteConfiguration extends Component {
     const { siteConfigData, opendeleteModal, openaddmodal, isOpen, uuid, tag_missing_timeout, site_heartbeat_interval, low_battery_threshold,
       high_temp_threshold, low_temp_threshold, power_down_alert_interval, site, errors, siteData } = this.state;
 
-    console.log(uuid, 'ssssssssssssssssssssssss')
     return (
       <div className="animated fadeIn">
         <Row>
@@ -187,7 +218,7 @@ export default class SiteConfiguration extends Component {
                 </Button>
               </CardHeader>
               <CardBody>
-                <Table hover bordered striped responsive size="sm">
+                <Table hover bordered striped responsive size="sm" className="table table-striped table-dark">
                   <thead>
                     <tr>
                       <th>Sr#</th>
@@ -199,7 +230,7 @@ export default class SiteConfiguration extends Component {
                       <th>High Temperature Threshold</th>
                       <th>Low Temperature Threshold</th>
                       <th>Power Down Alert Interval</th>
-                      <th>Actions</th>
+                      <th className='actions-col-css'>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -212,16 +243,16 @@ export default class SiteConfiguration extends Component {
                       return <tr tabIndex={-1} key={i}>
                         <td>{i + 1}</td>
                         <td>{item.uuid}</td>
-                        <td>{site_name}</td>
+                        <td>{item.site}</td>
                         <td>{item.tag_missing_timeout}</td>
                         <td>{item.site_heartbeat_interval}</td>
                         <td>{item.low_battery_threshold}</td>
                         <td>{item.high_temp_threshold}</td>
                         <td>{item.low_temp_threshold}</td>
                         <td>{item.power_down_alert_interval}</td>
-                        <td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                        <td>
 
-                          <button className='btn btn-primary btn-sm'
+                          <button className='btn btn-primary btn-sm btn-margin'
                             onClick={this.openEditModal.bind(this, item.id, item.uuid, item.tag_missing_timeout, item.site_heartbeat_interval,
                               item.low_battery_threshold, item.high_temp_threshold, item.low_temp_threshold, item.power_down_alert_interval, item.site)} >
                             <i className='fa fa-edit fa-lg'></i></button>
@@ -261,14 +292,14 @@ export default class SiteConfiguration extends Component {
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="uuid">UUID<span /> </Label>
-                    <Input type="text" name="uuid" id="uuid" value={uuid} disabled={true} />
+                    <Input type="text" name="uuid" id="uuid" value={uuid} onChange={this.handleChange} />
                   </FormGroup>
                 </Col>
 
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="site">Site<span /> </Label>
-                    <Input type="select" name="site" id="site" value={site} onChange={this.handleChangeSite} placeholder="Site">
+                    <Input type="select" name="site" id="site" value={site} onChange={this.handleChangeSite} placeholder="Site" disabled={true}>
                       <option className="brave" value="" disabled defaultValue>Select Site</option>
                       {siteData.map((sit, i) => (
                         <option key={i} value={sit.id}> {sit.site_name} </option>))}
@@ -279,17 +310,17 @@ export default class SiteConfiguration extends Component {
 
               <FormGroup>
                 <Label htmlFor="tag_missing_timeout">Tag Missing Timeout<span /> </Label>
-                <Input type="text" name="tag_missing_timeout" value={tag_missing_timeout} onChange={this.handleChange} />
+                <Input type="number" name="tag_missing_timeout" value={tag_missing_timeout} onChange={this.handleChange} />
               </FormGroup>
 
               <FormGroup>
                 <Label htmlFor="site_heartbeat_interval">Site Heartbeat Interval<span /> </Label>
-                <Input type="text" name="site_heartbeat_interval" value={site_heartbeat_interval} onChange={this.handleChange} />
+                <Input type="number" name="site_heartbeat_interval" value={site_heartbeat_interval} onChange={this.handleChange} />
               </FormGroup>
 
               <FormGroup>
                 <Label htmlFor="low_battery_threshold">Low Battery Threshold<span /> </Label>
-                <Input type="text" name="low_battery_threshold" value={low_battery_threshold} onChange={this.handleChange} />
+                <Input type="number" name="low_battery_threshold" value={low_battery_threshold} onChange={this.handleChange} />
               </FormGroup>
 
               <Row form>
@@ -297,21 +328,21 @@ export default class SiteConfiguration extends Component {
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="high_temp_threshold">High Temperature Threshold<span /> </Label>
-                    <Input type="text" name="high_temp_threshold" value={high_temp_threshold} onChange={this.handleChange} />
+                    <Input type="number" name="high_temp_threshold" value={high_temp_threshold} onChange={this.handleChange} />
                   </FormGroup>
                 </Col>
 
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="low_temp_threshold">Low Temperature Threshold<span /> </Label>
-                    <Input type="text" name="low_temp_threshold" value={low_temp_threshold} onChange={this.handleChange} />
+                    <Input type="number" name="low_temp_threshold" value={low_temp_threshold} onChange={this.handleChange} />
                   </FormGroup>
                 </Col>
 
               </Row>
               <FormGroup>
                 <Label htmlFor="power_down_alert_interval">Power Down Alert Interval<span /> </Label>
-                <Input type="text" name="power_down_alert_interval" value={power_down_alert_interval} onChange={this.handleChange} />
+                <Input type="number" name="power_down_alert_interval" value={power_down_alert_interval} onChange={this.handleChange} />
               </FormGroup>
 
               <Button color="info" block onClick={this.handleEditSubmit} type="submit"> Done</Button>
@@ -347,17 +378,17 @@ export default class SiteConfiguration extends Component {
 
               <FormGroup>
                 <Label htmlFor="tag_missing_timeout">Tag Missing Timeout<span /> </Label>
-                <Input type="text" name="tag_missing_timeout" value={tag_missing_timeout} onChange={this.handleChange} placeholder='Tag Missing Timeout' />
+                <Input type="number" name="tag_missing_timeout" value={tag_missing_timeout} onChange={this.handleChange} placeholder='Tag Missing Timeout' />
               </FormGroup>
 
               <FormGroup>
                 <Label htmlFor="site_heartbeat_interval">Site Heartbeat Interval<span /> </Label>
-                <Input type="text" name="site_heartbeat_interval" value={site_heartbeat_interval} onChange={this.handleChange} placeholder='Site Heartbeat Interval' />
+                <Input type="number" name="site_heartbeat_interval" value={site_heartbeat_interval} onChange={this.handleChange} placeholder='Site Heartbeat Interval' />
               </FormGroup>
 
               <FormGroup>
                 <Label htmlFor="low_battery_threshold">Low Battery Threshold<span /> </Label>
-                <Input type="text" name="low_battery_threshold" value={low_battery_threshold} onChange={this.handleChange} placeholder='Low Battery Threshold' />
+                <Input type="number" name="low_battery_threshold" value={low_battery_threshold} onChange={this.handleChange} placeholder='Low Battery Threshold' />
               </FormGroup>
 
               <Row form>
@@ -365,21 +396,21 @@ export default class SiteConfiguration extends Component {
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="high_temp_threshold">High Temperature Threshold<span /> </Label>
-                    <Input type="text" name="high_temp_threshold" value={high_temp_threshold} onChange={this.handleChange} placeholder='High Temperature Threshold' />
+                    <Input type="number" name="high_temp_threshold" value={high_temp_threshold} onChange={this.handleChange} placeholder='High Temperature Threshold' />
                   </FormGroup>
                 </Col>
 
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="low_temp_threshold">Low Temperature Threshold<span /> </Label>
-                    <Input type="text" name="low_temp_threshold" value={low_temp_threshold} onChange={this.handleChange} placeholder='Low Temperature Threshold' />
+                    <Input type="number" name="low_temp_threshold" value={low_temp_threshold} onChange={this.handleChange} placeholder='Low Temperature Threshold' />
                   </FormGroup>
                 </Col>
 
               </Row>
               <FormGroup>
                 <Label htmlFor="power_down_alert_interval">Power Down Alert Interval<span /> </Label>
-                <Input type="text" name="power_down_alert_interval" value={power_down_alert_interval} onChange={this.handleChange} placeholder='Power Down Alert Interval' />
+                <Input type="number" name="power_down_alert_interval" value={power_down_alert_interval} onChange={this.handleChange} placeholder='Power Down Alert Interval' />
               </FormGroup>
 
               <Button color="success" block onClick={this.handleAddSubmit.bind(this)} type='submit'>Add Configuration</Button>

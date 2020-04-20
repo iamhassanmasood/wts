@@ -5,7 +5,7 @@ import transferValidation from './Validator'
 import axios from 'axios'
 
 class TransferAssets extends Component {
-  _isMounted = false;
+
   state = {
     sites: [],
     assets: [],
@@ -22,25 +22,24 @@ class TransferAssets extends Component {
   }
 
   componentDidMount() {
-    this._isMounted = true
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
     this.setState({ done: true })
     axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
         if (res.status === 200) {
+          const data = [...res.data]
           this.setState({
-            sites: res.data.results,
+            sites: data,
             done: false
           })
         }
       })
       .catch(err => {
-        if (err.response.data.detail === "Authentication credentials were not provided.") {
-          // toast("Sorry! Session Expired Please Login Again")
-          localStorage.removeItem('accessToken');
-          this.setState({ redirect: true })
-        } else return err
+        if (err.response.status === 401) {
+          return localStorage.removeItem('accessToken');
+        }
+        return err
       })
   }
 
@@ -78,7 +77,7 @@ class TransferAssets extends Component {
     this.setState({
       siteVal: result, errors: undefined, assetVal: ''
     })
-    this.handleChangeAssets(result);
+    // this.handleChangeAssets(result);
   }
 
   handleChangeAssets = (id) => {
@@ -94,11 +93,10 @@ class TransferAssets extends Component {
           })
         }
       }).catch(err => {
-        if (err.response.data.detail === "Authentication credentials were not provided.") {
-          // toast("Sorry! Session Expired Please Login Again")
-          localStorage.removeItem('accessToken');
-          this.setState({ redirect: true })
-        } else return err
+        if (err.response.status === 401) {
+          return localStorage.removeItem('accessToken')
+        }
+        return err
       })
   }
 
@@ -137,16 +135,11 @@ class TransferAssets extends Component {
           setTimeout(() => this.setState({ transfer: false }), 2000)
         }
       }).catch(err => {
-        if (err.response.data.detail === "Authentication credentials were not provided.") {
+        if (err.response.status === 401) {
           localStorage.removeItem('accessToken');
-          this.setState({ redirect: true })
-        } else if (err.response.status === 304) {
-          // toast.error("Sorry! Your Request can't fulfill right now :(")
-        } else return err
+        }
+        return err
       })
-  }
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 
 

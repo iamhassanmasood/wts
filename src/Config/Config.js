@@ -14,4 +14,5 @@ export const LOGIN = `o/token`
 export const CLIENT_SECRET = "tM8i79al4DXRX5l6ywJAYqnw17giqjCx9gVjNjmyJXunA0rpscuolQxkGfdXIzLjDcWO3HAN3GT4ZGOYXl0QmtHZBw8KLJQJVqVpoqQnk3wCg5dsh0DpV5UPYLaLg1vP";
 export const CLIENT_ID = "dLrXEw6WIj9shLkbXHfngd4LrRX1EzGVl57t91gu";
 export const ReportAPI = `alerts_reporting`
-export const SITE_CONFIG = `api/site_config`
+export const SITE_CONFIG = `api/site_config`;
+export const FORMAT = `?format=datatables`

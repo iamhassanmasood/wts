@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
-import { BASE_URL, ASSET_API, TAGS_API, SITES_API } from '../../../Config/Config'
+import { BASE_URL, ASSET_API, TAGS_API, SITES_API, FORMAT } from '../../../Config/Config'
 import assetValidation from './Validator'
 import axios from 'axios'
+import { connect } from 'react-redux'
 
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
@@ -41,48 +42,55 @@ class AssetManagement extends Component {
   componentDidMount() {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}/${ASSET_API}/`, { headers })
+    axios.get(`${BASE_URL}/${ASSET_API}/${FORMAT}`, { headers })
       .then(res => {
         this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
-            AssetData: res.data,
+            AssetData: res.data.data,
           })
         }
       })
       .catch(err => {
-        if (err.response.status === 401) {
-          return localStorage.removeItem('accessToken');
+        if (err.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
         }
         return err
       })
 
-    axios.get(`${BASE_URL}/${TAGS_API}/`, { headers })
+    axios.get(`${BASE_URL}/${TAGS_API}/${FORMAT}`, { headers })
       .then(res => {
         this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
-            tagData: res.data.results.sort((a, b) => b.timestamp - a.timestamp),
+            tagData: res.data.data.sort((a, b) => b.timestamp - a.timestamp),
           })
         }
       })
       .catch(err => {
-        if (err.response.status === 401) {
-          return localStorage.removeItem('accessToken');
+        if (err.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
         }
         return err
       })
 
-    axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
+    axios.get(`${BASE_URL}/${SITES_API}/${FORMAT}`, { headers })
       .then(res => {
-        this.setState({ done: true })
         if (res.status === 200) {
           this.setState({
-            siteData: res.data.sort((a, b) => b.timestamp - a.timestamp),
+            siteData: res.data.data.sort((a, b) => b.timestamp - a.timestamp),
           })
         }
       })
-      .catch(err => err)
+      .catch(err => {
+        if (err.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        }
+        return err
+      })
   }
 
 
@@ -96,11 +104,7 @@ class AssetManagement extends Component {
       if (res.status === 204) {
         this.setState({ AssetData: items })
       }
-    }).catch(err => {
-      if (err.response.data.detail === "Authentication credentials were not provided.") {
-        localStorage.removeItem('accessToken');
-      } else return err
-    })
+    }).catch(err => err)
   }
 
 
@@ -207,7 +211,7 @@ class AssetManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.asset_name ? "Asset Name Must Be Unique, Sorry! This Asset Name already exist" : '') || (err.response.data.tag ? "Tag Must Be Unique , Sorry! This Tag Already in use" : '')) }))
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.asset_name ? "Asset name must be unique, Sorry! This asset name already exist" : '') || (err.response.data.tag ? "Tag must be unique, Sorry! This Tag already in use" : '')) }))
     }
   }
 
@@ -262,7 +266,7 @@ class AssetManagement extends Component {
                 </Button>
               </CardHeader>
               <CardBody>
-                <Table hover bordered striped responsive size="sm">
+                <Table hover bordered striped responsive size="sm" className="table table-striped table-dark">
                   <thead>
                     <tr>
                       <th>Sr#</th>
@@ -291,9 +295,9 @@ class AssetManagement extends Component {
                         <td>{item.owner_name}</td>
                         <td>{item.owner_type}</td>
                         <td>{timeNow}</td>
-                        <td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                        <td>
 
-                          <button className='btn btn-primary btn-sm'
+                          <button className='btn btn-primary btn-sm btn-margin'
                             onClick={this.openEditModal.bind(this, item.id, item.asset_id, item.asset_name, item.asset_brand, item.owner_name, item.owner_type, item.tag, item.site)} >
                             <i className='fa fa-edit fa-lg'></i></button>
                           <button className='btn btn-danger btn-sm'
@@ -332,7 +336,7 @@ class AssetManagement extends Component {
             <form>
 
               <FormGroup>
-                <Label htmlFor="asset_id">Asset ID<span /> </Label>
+                <Label htmlFor="asset_id">Asset Id<span /> </Label>
                 <Input type="text" name="asset_id" value={asset_id} disabled={true} />
               </FormGroup>
 
@@ -392,7 +396,7 @@ class AssetManagement extends Component {
             <form>
 
               <FormGroup>
-                <Label >Asset ID<span /> </Label>
+                <Label >Asset Id<span /> </Label>
                 <Input type="text" name="asset_id" value={asset_id.trim()} onChange={this.handleChange} placeholder="Asset Id" />
               </FormGroup>
               <FormGroup>
@@ -449,4 +453,13 @@ class AssetManagement extends Component {
   }
 }
 
-export default AssetManagement;
+const mapStateToProps = state => {
+  return {
+
+  }
+}
+
+const mapDispatchToProps = dispatch => { }
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AssetManagement);
