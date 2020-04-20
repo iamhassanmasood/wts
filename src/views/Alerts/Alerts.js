@@ -5,7 +5,6 @@ import { BASE_URL, FORMAT, ALERTS_API, SITES_API } from '../../Config/Config'
 import axios from 'axios'
 class Alerts extends Component {
 
-  _isMounted = false
   state = {
     Alertdata: [],
     rowsPerPage: 15,
@@ -16,8 +15,7 @@ class Alerts extends Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
-    this.connectAlert();
+    // this.connectAlert();
     this.loadPage()
   }
   loadPage = () => {
@@ -29,7 +27,6 @@ class Alerts extends Component {
           var arr = [...res.data.data];
           this.setState({
             Alertdata: arr,
-            done: false
           })
         }
       })
@@ -42,6 +39,7 @@ class Alerts extends Component {
       })
 
   }
+  /**
   connectAlert = () => {
     var wss = new WebSocket(`wss://wts.cs-satms.com:8443/ws/api/alerts/`);
     let that = this;
@@ -82,18 +80,7 @@ class Alerts extends Component {
     const { wss } = this.state;
     if (!wss || wss.readyState === WebSocket.CLOSED) this.connect();
   };
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
-  handleChangePage = (event, newPage) => {
-    this.setState({ page: newPage });
-  }
-
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: +event.target.value, page: 0 });
-  };
+   */
 
   timeConverter(UNIX_timestamp) {
     var a = new Date(UNIX_timestamp * 1000);
