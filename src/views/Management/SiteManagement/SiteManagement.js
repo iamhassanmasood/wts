@@ -142,7 +142,14 @@ class SiteManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.device ? "This Device Already in Use" : '') || (err.response.data.site_location ? "Site Location Must Include ',' i.e 45,78 " : '') || (err.response.data.site_id ? "Sorry! This site id Already Exisit" : '') || (err.response.data.site_name ? "Sorry This Site Name Already Exist " : '')) }))
+        .catch(err => this.setState({
+          isSubmitted: false, errors: ((err.response.data.site_id ? err.response.data.site_id : '')
+            || (err.response.data.site_name ? "Sorry, This site name already exist" : '')
+            || (err.response.data.device ? "This device already in use!" : '')
+            || (err.response.data.site_location ? "Invalid site location!" : '')
+
+          )
+        }))
     }
   }
 
@@ -191,7 +198,14 @@ class SiteManagement extends Component {
             this.componentDidMount();
           }
         })
-        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.device ? "This Device Already in Use" : '') || (err.response.data.site_location ? "Site Location Must Include ',' i.e 45,78 " : '') || (err.response.data.site_name ? "Sorry This Site Name Already Exist " : '')) }))
+        .catch(err => this.setState({
+          isSubmitted: false, errors: ((err.response.data.site_id ? err.response.data.site_id : '')
+            || (err.response.data.site_name ? "Sorry, This site name already exist " : '')
+            || (err.response.data.device ? "This device already in use!" : '')
+            || (err.response.data.site_location ? "Invalid site location!" : '')
+
+          )
+        }))
     }
   }
   handleEmpty = () => {
@@ -295,7 +309,7 @@ class SiteManagement extends Component {
               </CardHeader>
               <CardBody>
                 {done ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} ><Spinner color='info' size='lg' /></div> :
-                  <Table hover bordered striped responsive size="sm">
+                  <Table hover bordered striped responsive size="sm" className="table table-striped table-dark">
                     <thead>
                       <tr>
                         <th>Sr#</th>
@@ -305,7 +319,7 @@ class SiteManagement extends Component {
                         <th>Site Type</th>
                         <th>Region</th>
                         <th>Device</th>
-                        <th>Time</th>
+                        <th>Created At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -321,8 +335,8 @@ class SiteManagement extends Component {
                           <td>{rowData.region}</td>
                           <td>{rowData.device}</td>
                           <td>{timeNow}</td>
-                          <td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                            <button className='btn btn-primary btn-sm'
+                          <td>
+                            <button className='btn btn-primary btn-sm btn-margin'
                               onClick={this.openEditModal.bind(this, rowData.id, rowData.site_id, rowData.site_name, rowData.site_type, rowData.site_location, rowData.region, rowData.device)}>
                               <i className='fa fa-edit fa-lg'></i></button>
                             <button className='btn btn-danger btn-sm'
@@ -371,13 +385,13 @@ class SiteManagement extends Component {
                 <Label htmlFor="site_name">Site Type <span /> </Label>
                 <Input type="select" name="site_type" value={site_type} onChange={this.handleChange} placeholder="Site Type" >
                   <option value="" disabled defaultValue>Select Site Type </option>
-                  <option>warehouse</option>
-                  <option>network</option>
+                  <option value="warehouse">Warehouse</option>
+                  <option value="network">Network</option>
                 </Input>
               </FormGroup>
 
               <FormGroup>
-                <Label htmlFor="site_location">Lat,Lng <span /> </Label>
+                <Label htmlFor="site_location">Location<span /> </Label>
                 <Input type="text" name="site_location" value={site_location.trim()} onChange={this.handleChange} placeholder="Latitude, Longitude" />
               </FormGroup>
 
@@ -419,8 +433,8 @@ class SiteManagement extends Component {
             <form>
 
               <FormGroup>
-                <Label htmlFor="site_id">Site ID <span /> </Label>
-                <Input type="text" name="site_id" value={site_id.trim()} onChange={this.handleChange} placeholder="Site ID" />
+                <Label htmlFor="site_id">Site Id <span /> </Label>
+                <Input type="text" name="site_id" value={site_id.trim()} onChange={this.handleChange} placeholder="Site Id" />
               </FormGroup>
 
               <FormGroup>
@@ -432,13 +446,13 @@ class SiteManagement extends Component {
                 <Label htmlFor="site_name">Site Type <span /> </Label>
                 <Input type="select" name="site_type" value={site_type} onChange={this.handleChange} placeholder="Site Type" >
                   <option value="" disabled defaultValue>Select Site Type </option>
-                  <option>warehouse</option>
-                  <option>network</option>
+                  <option value="warehouse">Warehouse</option>
+                  <option value="network">Network</option>
                 </Input>
               </FormGroup>
 
               <FormGroup>
-                <Label htmlFor="site_location">Lat,Lng <span /> </Label>
+                <Label htmlFor="site_location">Location <span /> </Label>
                 <Input type="text" name="site_location" value={site_location.trim()} onChange={this.handleChange} placeholder="Latitude, Longitude" />
               </FormGroup>
               <Row form>

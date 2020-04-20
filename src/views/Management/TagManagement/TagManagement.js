@@ -188,13 +188,13 @@ class TagManagement extends Component {
                 </Button>
               </CardHeader>
               <CardBody>
-                <Table hover bordered striped centred responsive size="sm">
+                <Table hover bordered striped centred responsive size="sm" className="table table-striped table-dark">
                   <thead>
                     <tr>
                       <th>Sr#</th>
-                      <th>Tag ID</th>
+                      <th>Tag Id</th>
                       <th>Tag Type</th>
-                      <th>Time</th>
+                      <th>Created At</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -206,8 +206,8 @@ class TagManagement extends Component {
                         <td>{item.tag_id}</td>
                         <td>{item.tag_type}</td>
                         <td>{timeNow}</td>
-                        <td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                          <button className='btn btn-primary btn-sm'
+                        <td>
+                          <button className='btn btn-primary btn-sm btn-margin'
                             onClick={this.openEditModal.bind(this, item.id, item.tag_id, item.tag_type)} >
                             <i className='fa fa-edit fa-lg'></i></button>
                           <button className='btn btn-danger btn-sm'
@@ -245,7 +245,7 @@ class TagManagement extends Component {
             <form >
 
               <FormGroup >
-                <Label>Tag ID : </Label>
+                <Label>Tag Id</Label>
                 <Input type="text" value={tag_id} name="tag_id" value={tag_id} disabled={true} />
               </FormGroup>
 
@@ -271,8 +271,8 @@ class TagManagement extends Component {
             <form onSubmit={this.handleEditSubmit}>
 
               <FormGroup >
-                <Label>Tag ID <span /></Label>
-                <Input type="text" name="tag_id" value={tag_id} onChange={this.handleChange} placeholder="tag ID" required />
+                <Label>Tag Id <span /></Label>
+                <Input type="text" name="tag_id" value={tag_id} onChange={this.handleChange} placeholder="Tag Id" required />
               </FormGroup>
 
               <FormGroup >
@@ -287,7 +287,7 @@ class TagManagement extends Component {
 
               <Button onClick={this.handleAddSubmit.bind(this)}
                 type="submit" color="success" block>
-                ADD Tag</Button>
+                ADD TAG</Button>
               {errors ? <span style={{ color: 'red', margin: "auto", fontSize: '12px' }}>{errors}</span> : ""}
             </form>
           </ModalBody>

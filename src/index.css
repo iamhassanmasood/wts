@@ -81,3 +81,20 @@ a{
 .MapModule{
     height: 20vh !important;
 }
+.table {
+    text-align: center;
+    background-color: #1b1b1b !important;
+}
+.actions-col-css{
+    width: 13%;
+}
+.btn-margin{
+    margin-right: 10px;
+}
+.modal.show .modal-dialog {
+    transform: none;
+    margin-top: 60px;
+}
+.table-dark th, .table-dark td, .table-dark thead th {
+    vertical-align: middle !important;
+}

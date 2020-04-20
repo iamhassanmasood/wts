@@ -208,7 +208,7 @@ class AssetManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.asset_name ? "Asset Name Must Be Unique, Sorry! This Asset Name already exist" : '') || (err.response.data.tag ? "Tag Must Be Unique , Sorry! This Tag Already in use" : '')) }))
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.asset_name ? "Asset name must be unique, Sorry! This asset name already exist" : '') || (err.response.data.tag ? "Tag must be unique, Sorry! This Tag already in use" : '')) }))
     }
   }
 
@@ -263,7 +263,7 @@ class AssetManagement extends Component {
                 </Button>
               </CardHeader>
               <CardBody>
-                <Table hover bordered striped responsive size="sm">
+                <Table hover bordered striped responsive size="sm" className="table table-striped table-dark">
                   <thead>
                     <tr>
                       <th>Sr#</th>
@@ -292,9 +292,9 @@ class AssetManagement extends Component {
                         <td>{item.owner_name}</td>
                         <td>{item.owner_type}</td>
                         <td>{timeNow}</td>
-                        <td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                        <td>
 
-                          <button className='btn btn-primary btn-sm'
+                          <button className='btn btn-primary btn-sm btn-margin'
                             onClick={this.openEditModal.bind(this, item.id, item.asset_id, item.asset_name, item.asset_brand, item.owner_name, item.owner_type, item.tag, item.site)} >
                             <i className='fa fa-edit fa-lg'></i></button>
                           <button className='btn btn-danger btn-sm'
@@ -333,7 +333,7 @@ class AssetManagement extends Component {
             <form>
 
               <FormGroup>
-                <Label htmlFor="asset_id">Asset ID<span /> </Label>
+                <Label htmlFor="asset_id">Asset Id<span /> </Label>
                 <Input type="text" name="asset_id" value={asset_id} disabled={true} />
               </FormGroup>
 
@@ -393,7 +393,7 @@ class AssetManagement extends Component {
             <form>
 
               <FormGroup>
-                <Label >Asset ID<span /> </Label>
+                <Label >Asset Id<span /> </Label>
                 <Input type="text" name="asset_id" value={asset_id.trim()} onChange={this.handleChange} placeholder="Asset Id" />
               </FormGroup>
               <FormGroup>

@@ -118,7 +118,7 @@ export default class RegionManagement extends Component {
           }
         })
         .catch(err =>
-          this.setState({ isSubmitted: false, errors: ((err.response.data.region_name ? "Region Name Must Be Unique, Sorry! This Region Name already exist" : '')) }))
+          this.setState({ isSubmitted: false, errors: ((err.response.data.region_name ? "Region name must be unique, Sorry! This region name already exist" : '')) }))
     }
   }
 
@@ -143,7 +143,7 @@ export default class RegionManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.region_id ? "Region ID Must Be Unique, Sorry! This Region ID already exist" : '') || (err.response.data.region_name ? "Region Name Must Be Unique, Sorry! This Region Name already exist" : '')) }))
+        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.region_id ? "Region Id must be unique, Sorry! This region Id already exist" : '') || (err.response.data.region_name ? "Region name must be unique, Sorry! This region name already exist" : '')) }))
     }
   }
 
@@ -180,13 +180,13 @@ export default class RegionManagement extends Component {
                 </Button>
               </CardHeader>
               <CardBody>
-                <Table hover bordered striped centred responsive size="sm">
+                <Table hover bordered striped centred responsive size="sm" className="table table-striped table-dark">
                   <thead>
                     <tr>
                       <th>Sr#</th>
-                      <th>Region ID</th>
+                      <th>Region Id</th>
                       <th>Region Name</th>
-                      <th>Time</th>
+                      <th>Created At</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -198,8 +198,8 @@ export default class RegionManagement extends Component {
                         <td>{rd.region_id}</td>
                         <td>{rd.region_name}</td>
                         <td>{timeNow}</td>
-                        <td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                          <button className='btn btn-primary btn-sm'
+                        <td>
+                          <button className='btn btn-primary btn-sm btn-margin'
                             onClick={this.openEditModal.bind(this, rd.id, rd.region_id, rd.region_name)} >
                             <i className='fa fa-edit fa-lg'></i></button>
                           <button className='btn btn-danger btn-sm'
@@ -237,12 +237,12 @@ export default class RegionManagement extends Component {
             <form >
 
               <FormGroup >
-                <Label>Region ID : </Label>
+                <Label>Region Id </Label>
                 <Input type="text" value={region_id} name="region_id" value={region_id} disabled={true} />
               </FormGroup>
 
               <FormGroup >
-                <Label>Region Name : </Label>
+                <Label>Region Name </Label>
                 <Input type="text" name="region_name" value={region_name} onChange={this.handleChange} placeholder="Region Name" />
               </FormGroup>
 
@@ -258,7 +258,7 @@ export default class RegionManagement extends Component {
             <form onSubmit={this.handleEditSubmit}>
 
               <FormGroup >
-                <Label>Region ID <span /></Label>
+                <Label>Region Id <span /></Label>
                 <Input type="text" name="region_id" value={region_id} onChange={this.handleChange} placeholder="Region ID" required />
               </FormGroup>
 

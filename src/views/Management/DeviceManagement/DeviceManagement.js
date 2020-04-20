@@ -142,7 +142,7 @@ class DeviceManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({ isSubmitted: false, errors: (err.response.data.device_id ? "Device Id Must Be Unique, Sorry this device id already exist" : '') }))
+        .catch(err => this.setState({ isSubmitted: false, errors: (err.response.data.device_id ? err.response.data.device_id : '') }))
     }
   }
 
@@ -178,7 +178,7 @@ class DeviceManagement extends Component {
                 </Button>
               </CardHeader>
               <CardBody>
-                <Table hover bordered striped responsive size="sm" >
+                <Table hover bordered striped responsive size="sm" className="table table-striped table-dark">
                   <thead>
                     <tr>
                       <th>Sr#</th>
@@ -197,9 +197,9 @@ class DeviceManagement extends Component {
                         <td>{alt.device_id}</td>
                         <td>{alt.api_key}</td>
                         <td>{timeNow}</td>
-                        <td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                        <td>
 
-                          <button className='btn btn-primary btn-sm'
+                          <button className='btn btn-primary btn-sm btn-margin'
                             onClick={this.openEditModal.bind(this, alt.id, alt.device_id, alt.api_key)}
                           >
                             <i className='fa fa-edit fa-lg'></i></button>
@@ -234,7 +234,7 @@ class DeviceManagement extends Component {
             <form >
 
               <FormGroup >
-                <Label>Device ID : </Label>
+                <Label>Device Id : </Label>
                 <Input type="text" value={device_id} disabled={true} />
               </FormGroup>
 
@@ -250,8 +250,8 @@ class DeviceManagement extends Component {
             <form onSubmit={this.handleEditSubmit}>
 
               <FormGroup >
-                <Label>Device ID <span /></Label>
-                <Input type="text" name="device_id" value={device_id.trim()} onChange={this.handleChange} placeholder="Device ID" required />
+                <Label>Device Id <span /></Label>
+                <Input type="text" name="device_id" value={device_id.trim()} onChange={this.handleChange} placeholder="Device Id" required />
               </FormGroup>
 
               <Button onClick={this.handleAddSubmit.bind(this)}
