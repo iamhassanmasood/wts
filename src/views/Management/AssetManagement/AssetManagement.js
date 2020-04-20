@@ -3,6 +3,7 @@ import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, P
 import { BASE_URL, ASSET_API, TAGS_API, SITES_API } from '../../../Config/Config'
 import assetValidation from './Validator'
 import axios from 'axios'
+import { connect } from 'react-redux'
 
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
@@ -449,4 +450,13 @@ class AssetManagement extends Component {
   }
 }
 
-export default AssetManagement;
+const mapStateToProps = state => {
+  return {
+
+  }
+}
+
+const mapDispatchToProps = dispatch => { }
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AssetManagement);
