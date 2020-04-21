@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
 import assetReducer from './assetReducer'
+import alertsReducer from './alertsReducer';
 
 const reducer = combineReducers({
-    assetReducer
+    assetReducer,
+    alertsReducer
 })
 
 export default reducer;

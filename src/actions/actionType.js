@@ -1,3 +1,8 @@
+export const ASSET_DATA = 'ASSET_DATA';
 export const ADD_ASSET = 'ADD_ASSET';
 export const REMOVE_ASSET = 'REMOVE_ASSET';
 export const UPDATE_ASSET = 'UPDATE_ASSET';
+
+export const GET_ALERTS = 'GET_ALERTS'
+export const GET_ALERTS_SUCCESS = 'GET_ALERTS_SUCCESS'
+export const GET_ALERTS_FAILURE = 'GET_ALERTS_FAILURE'
