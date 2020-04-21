@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import { BASE_URL, FORMAT, ALERTS_API, SITES_API } from '../../Config/Config'
+import { connect } from 'react-redux'
+import { fetchAlerts } from '../../actions/action'
 
 import axios from 'axios'
+
 class Alerts extends Component {
 
   state = {
@@ -158,4 +161,4 @@ class Alerts extends Component {
   }
 }
 
-export default Alerts;
+export default connect()(Alerts);
