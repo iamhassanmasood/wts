@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Pagination } from 'antd';
 import { BASE_URL, TAGS_API, FORMAT } from '../../../Config/Config'
 import tagValidation from './Validator'
-
+import { timeConverter } from '../../../GlobalFunctions/timeConverter'
 
 class TagManagement extends Component {
 
@@ -164,19 +164,6 @@ class TagManagement extends Component {
     this.setState({ opendeleteModal: !currentState, delId: id })
   }
 
-  timeConverter = (UNIX_timestamp) => {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-    return time;
-  }
-
   paginate = pageNumber => {
     this.setState({
       currentPage: pageNumber
@@ -214,7 +201,7 @@ class TagManagement extends Component {
                   </thead>
                   <tbody>
                     {tagData.slice(indexOfFirstAlert, indexOfLastAlert).map((item, i) => {
-                      var timeNow = this.timeConverter(item.timestamp)
+                      var timeNow = timeConverter(item.timestamp)
                       return <tr tabIndex={-1} key={i}>
                         <td>{i + 1 + (currentPage - 1) * tagPerPage}</td>
                         <td>{item.tag_id}</td>

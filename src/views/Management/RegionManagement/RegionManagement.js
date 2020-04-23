@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Pagination } from 'antd';
 import { BASE_URL, FORMAT, REGIONS_API } from '../../../Config/Config'
 import regionValidation from './Validator'
+import { timeConverter } from '../../../GlobalFunctions/timeConverter'
 
 export default class RegionManagement extends Component {
   constructor(props) {
@@ -160,19 +161,6 @@ export default class RegionManagement extends Component {
     this.setState({ opendeleteModal: !currentState, delId: id })
   }
 
-  timeConverter = (UNIX_timestamp) => {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-    return time;
-  }
-
   paginate = pageNumber => {
     this.setState({
       currentPage: pageNumber
@@ -209,7 +197,7 @@ export default class RegionManagement extends Component {
                   </thead>
                   <tbody>
                     {RegionData.slice(indexOfFirstAlert, indexOfLastAlert).map((rd, i) => {
-                      var timeNow = this.timeConverter(rd.timestamp)
+                      var timeNow = timeConverter(rd.timestamp)
                       return <tr tabIndex={-1} key={i}>
                         <td>{i + 1 + (currentPage - 1) * regionPerPage}</td>
                         <td>{rd.region_id}</td>

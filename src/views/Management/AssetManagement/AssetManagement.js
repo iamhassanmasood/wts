@@ -4,7 +4,8 @@ import { BASE_URL, ASSET_API, TAGS_API, SITES_API, FORMAT } from '../../../Confi
 import assetValidation from './Validator'
 import axios from 'axios'
 import { Pagination } from 'antd';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { timeConverter } from '../../../GlobalFunctions/timeConverter'
 
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
@@ -40,7 +41,6 @@ class AssetManagement extends Component {
       assetsPerPage: 1,
 
     }
-    this.timeConverter = this.timeConverter.bind(this)
   }
 
   componentDidMount() {
@@ -240,19 +240,6 @@ class AssetManagement extends Component {
     })
   }
 
-  timeConverter(UNIX_timestamp) {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-    return time;
-  }
-
   paginate = pageNumber => {
     this.setState({
       currentPage: pageNumber
@@ -296,7 +283,7 @@ class AssetManagement extends Component {
                   <tbody>
                     {AssetData.slice(indexOfFirstAlert, indexOfLastAlert).map((item, i) => {
 
-                      var timeNow = this.timeConverter(item.timestamp)
+                      var timeNow = timeConverter(item.timestamp)
                       return <tr tabIndex={-1} key={i}>
                         <td>{i + 1 + (currentPage - 1) * assetsPerPage}</td>
                         <td>{item.asset_id}</td>

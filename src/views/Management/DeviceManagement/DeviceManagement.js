@@ -4,6 +4,7 @@ import { BASE_URL, PORT, DEVICES_API, FORMAT } from '../../../Config/Config'
 import deviceValidation from './Validator'
 import axios from 'axios'
 import { Pagination } from 'antd';
+import { timeConverter } from '../../../GlobalFunctions/timeConverter'
 
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
@@ -27,7 +28,6 @@ class DeviceManagement extends Component {
       devicePerPage: 1,
       errors: undefined, done: undefined, redirect: false,
     }
-    this.timeConverter = this.timeConverter.bind(this)
   }
 
   componentDidMount() {
@@ -154,19 +154,6 @@ class DeviceManagement extends Component {
     this.setState({ opendeleteModal: !currentState, delId: id })
   }
 
-  timeConverter(UNIX_timestamp) {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-    return time;
-  }
-
   paginate = pageNumber => {
     this.setState({
       currentPage: pageNumber
@@ -203,7 +190,7 @@ class DeviceManagement extends Component {
                   <tbody>
                     {data.slice(indexOfFirstAlert, indexOfLastAlert).map((alt, i) => {
 
-                      var timeNow = this.timeConverter(alt.timestamp)
+                      var timeNow = timeConverter(alt.timestamp)
                       return <tr key={i}>
                         <td>{i + 1 + (currentPage - 1) * devicePerPage}</td>
                         <td>{alt.device_id}</td>

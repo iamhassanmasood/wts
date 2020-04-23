@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
 import { BASE_URL, SITES_API, REGIONS_API, DEVICES_API, FORMAT } from '../../../Config/Config'
 import axios from 'axios'
-import { Pagination } from 'antd';
+import { Pagination } from 'antd'; import { timeConverter } from '../../../GlobalFunctions/timeConverter'
 import siteValidation from './Validator'
 
 var token = localStorage.getItem('accessToken');
@@ -279,18 +279,6 @@ class SiteManagement extends Component {
     const currentState = this.state.opendeleteModal;
     this.setState({ opendeleteModal: !currentState, delId: id })
   }
-  timeConverter(UNIX_timestamp) {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-    return time;
-  }
 
   paginate = pageNumber => {
     this.setState({
@@ -334,7 +322,7 @@ class SiteManagement extends Component {
                     </thead>
                     <tbody>
                       {data.slice(indexOfFirstAlert, indexOfLastAlert).map((rowData, i) => {
-                        var timeNow = this.timeConverter(rowData.timestamp)
+                        var timeNow = timeConverter(rowData.timestamp)
                         return <tr key={i}>
                           <td>{i + 1 + (currentPage - 1) * sitePerPage}</td>
                           <td>{rowData.site_id}</td>
