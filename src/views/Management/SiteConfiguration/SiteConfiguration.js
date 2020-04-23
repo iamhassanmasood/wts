@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
-import axios from 'axios'
+import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
+import axios from 'axios'; import { Pagination } from 'antd';
 import { BASE_URL, SITES_API, SITE_CONFIG, FORMAT } from '../../../Config/Config'
 import siteConfigValidation from './Validator'
 
@@ -244,10 +244,6 @@ export default class SiteConfiguration extends Component {
                   </thead>
                   <tbody>
                     {siteConfigData.slice(indexOfFirstAlert, indexOfLastAlert).map((item, i) => {
-                      var sName = this.state.siteData[this.state.siteData.findIndex(x => x.id === parseInt(item.site))]
-                      if (sName) {
-                        var site_name = sName.site_name;
-                      }
 
                       return <tr tabIndex={-1} key={i}>
                         <td>{i + 1 + (currentPage - 1) * sitePerPage}</td>
