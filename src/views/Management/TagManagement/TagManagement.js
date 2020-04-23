@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
+import { Pagination } from 'antd';
 import { BASE_URL, TAGS_API, FORMAT } from '../../../Config/Config'
 import tagValidation from './Validator'
 
@@ -24,7 +25,10 @@ class TagManagement extends Component {
       timestamp: Math.floor(Date.now() / 1000),
       id: '',
       delId: '',
-      opendeleteModal: false
+      opendeleteModal: false,
+
+      currentPage: 1,
+      tagPerPage: 1,
 
     }
   }
@@ -173,9 +177,17 @@ class TagManagement extends Component {
     return time;
   }
 
+  paginate = pageNumber => {
+    this.setState({
+      currentPage: pageNumber
+    })
+  };
 
   render() {
-    const { tagData, done, isOpen, openaddmodal, opendeleteModal, errors, tag_id, tag_type } = this.state;
+    const { tagData, currentPage, tagPerPage, isOpen, openaddmodal, opendeleteModal, errors, tag_id, tag_type } = this.state;
+    const indexOfLastAlert = currentPage * tagPerPage;
+    const indexOfFirstAlert = indexOfLastAlert - tagPerPage;
+
     return (
       <div className="animated fadeIn">
         <Row>
@@ -201,10 +213,10 @@ class TagManagement extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {tagData.map((item, i) => {
+                    {tagData.slice(indexOfFirstAlert, indexOfLastAlert).map((item, i) => {
                       var timeNow = this.timeConverter(item.timestamp)
                       return <tr tabIndex={-1} key={i}>
-                        <td>{i + 1}</td>
+                        <td>{i + 1 + (currentPage - 1) * tagPerPage}</td>
                         <td>{item.tag_id}</td>
                         <td>{item.tag_type}</td>
                         <td>{timeNow}</td>
@@ -240,6 +252,14 @@ class TagManagement extends Component {
             </Card>
           </Col>
         </Row>
+
+        <Pagination
+          showQuickJumper
+          defaultCurrent={2}
+          pageSize={tagPerPage}
+          total={tagData.length}
+          onChange={this.paginate} />
+
 
         <Modal isOpen={isOpen} toggle={this.openEditModal} backdrop={false}>
           <ModalHeader toggle={() => this.setState({ isOpen: false })}>Edit Tag</ModalHeader>

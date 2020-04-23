@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import { BASE_URL, ASSET_API, TAGS_API, SITES_API, FORMAT } from '../../../Config/Config'
 import assetValidation from './Validator'
 import axios from 'axios'
+import { Pagination } from 'antd';
 import { connect } from 'react-redux'
 
 var token = localStorage.getItem('accessToken');
@@ -35,6 +36,9 @@ class AssetManagement extends Component {
       errors: undefined,
       done: false,
       redirect: false,
+      currentPage: 1,
+      assetsPerPage: 1,
+
     }
     this.timeConverter = this.timeConverter.bind(this)
   }
@@ -249,11 +253,19 @@ class AssetManagement extends Component {
     return time;
   }
 
+  paginate = pageNumber => {
+    this.setState({
+      currentPage: pageNumber
+    })
+  };
+
 
   render() {
 
-    const { asset_name, asset_id, asset_brand, owner_name, owner_type, isOpen, AssetData, openaddmodal, site, siteData, opendeleteModal, tag, tagData, errors, done } = this.state;
-    console.log(site, tag)
+    const { asset_name, assetsPerPage, currentPage, asset_id, asset_brand, owner_name, owner_type, isOpen, AssetData, openaddmodal, site, siteData, opendeleteModal, tag, tagData, errors, done } = this.state;
+    const indexOfLastAlert = currentPage * assetsPerPage;
+    const indexOfFirstAlert = indexOfLastAlert - assetsPerPage;
+
     return (
       <div className="animated fadeIn">
         <Row>
@@ -282,11 +294,11 @@ class AssetManagement extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {AssetData.map((item, i) => {
+                    {AssetData.slice(indexOfFirstAlert, indexOfLastAlert).map((item, i) => {
 
                       var timeNow = this.timeConverter(item.timestamp)
                       return <tr tabIndex={-1} key={i}>
-                        <td>{i + 1}</td>
+                        <td>{i + 1 + (currentPage - 1) * assetsPerPage}</td>
                         <td>{item.asset_id}</td>
                         <td>{item.asset_name}</td>
                         <td>{item.tag}</td>
@@ -328,6 +340,12 @@ class AssetManagement extends Component {
           </Col>
         </Row>
 
+        <Pagination
+          showQuickJumper
+          defaultCurrent={2}
+          pageSize={assetsPerPage}
+          total={AssetData.length}
+          onChange={this.paginate} />
 
 
         <Modal isOpen={isOpen} fade={false} toggle={this.openEditModal} backdrop={false}>

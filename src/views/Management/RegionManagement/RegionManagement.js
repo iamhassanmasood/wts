@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
+import { Pagination } from 'antd';
 import { BASE_URL, FORMAT, REGIONS_API } from '../../../Config/Config'
 import regionValidation from './Validator'
 
@@ -24,7 +25,10 @@ export default class RegionManagement extends Component {
       timestamp: Math.floor(Date.now() / 1000),
       id: '',
       delId: '',
-      opendeleteModal: false
+      opendeleteModal: false,
+
+      currentPage: 1,
+      regionPerPage: 1,
 
     }
   }
@@ -169,9 +173,18 @@ export default class RegionManagement extends Component {
     return time;
   }
 
+  paginate = pageNumber => {
+    this.setState({
+      currentPage: pageNumber
+    })
+  };
+
+
   render() {
 
-    const { RegionData, done, isOpen, openaddmodal, opendeleteModal, errors, region_id, region_name } = this.state
+    const { RegionData, done, isOpen, openaddmodal, opendeleteModal, errors, region_id, region_name, currentPage, regionPerPage } = this.state
+    const indexOfLastAlert = currentPage * regionPerPage;
+    const indexOfFirstAlert = indexOfLastAlert - regionPerPage;
     return (
       <div className="animated fadeIn">
         <Row>
@@ -195,10 +208,10 @@ export default class RegionManagement extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {RegionData.map((rd, i) => {
+                    {RegionData.slice(indexOfFirstAlert, indexOfLastAlert).map((rd, i) => {
                       var timeNow = this.timeConverter(rd.timestamp)
                       return <tr tabIndex={-1} key={i}>
-                        <td>{i + 1}</td>
+                        <td>{i + 1 + (currentPage - 1) * regionPerPage}</td>
                         <td>{rd.region_id}</td>
                         <td>{rd.region_name}</td>
                         <td>{timeNow}</td>
@@ -234,6 +247,13 @@ export default class RegionManagement extends Component {
             </Card>
           </Col>
         </Row>
+
+        <Pagination
+          showQuickJumper
+          defaultCurrent={2}
+          pageSize={regionPerPage}
+          total={RegionData.length}
+          onChange={this.paginate} />
 
         <Modal isOpen={isOpen} toggle={this.openEditModal} backdrop={false}>
           <ModalHeader toggle={() => this.setState({ isOpen: false })}>Edit Region</ModalHeader>

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import { BASE_URL, PORT, DEVICES_API, FORMAT } from '../../../Config/Config'
 import deviceValidation from './Validator'
 import axios from 'axios'
+import { Pagination } from 'antd';
 
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
@@ -22,6 +23,8 @@ class DeviceManagement extends Component {
       id: '',
       delId: '',
       isSubmitted: false,
+      currentPage: 1,
+      devicePerPage: 1,
       errors: undefined, done: undefined, redirect: false,
     }
     this.timeConverter = this.timeConverter.bind(this)
@@ -164,8 +167,17 @@ class DeviceManagement extends Component {
     return time;
   }
 
+  paginate = pageNumber => {
+    this.setState({
+      currentPage: pageNumber
+    })
+  };
+
   render() {
-    const { data, opendeleteModal, isOpen, api_key, device_id, openaddmodal, errors } = this.state;
+    const { data, opendeleteModal, devicePerPage, currentPage, isOpen, api_key, device_id, openaddmodal, errors } = this.state;
+    const indexOfLastAlert = currentPage * devicePerPage;
+    const indexOfFirstAlert = indexOfLastAlert - devicePerPage;
+
     return (
       <div className="justify-content-center">
         <Row>
@@ -189,11 +201,11 @@ class DeviceManagement extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((alt, i) => {
+                    {data.slice(indexOfFirstAlert, indexOfLastAlert).map((alt, i) => {
 
                       var timeNow = this.timeConverter(alt.timestamp)
                       return <tr key={i}>
-                        <td>{i + 1}</td>
+                        <td>{i + 1 + (currentPage - 1) * devicePerPage}</td>
                         <td>{alt.device_id}</td>
                         <td>{alt.api_key}</td>
                         <td>{timeNow}</td>
@@ -227,6 +239,13 @@ class DeviceManagement extends Component {
             </Card>
           </Col>
         </Row>
+
+        <Pagination
+          showQuickJumper
+          defaultCurrent={2}
+          pageSize={devicePerPage}
+          total={data.length}
+          onChange={this.paginate} />
 
         <Modal isOpen={isOpen} toggle={this.openEditModal} backdrop={false}>
           <ModalHeader toggle={() => this.setState({ isOpen: false })}>Edit Device</ModalHeader>

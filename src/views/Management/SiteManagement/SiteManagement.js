@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
 import { BASE_URL, SITES_API, REGIONS_API, DEVICES_API, FORMAT } from '../../../Config/Config'
 import axios from 'axios'
+import { Pagination } from 'antd';
 import siteValidation from './Validator'
 
 var token = localStorage.getItem('accessToken');
@@ -32,7 +33,9 @@ class SiteManagement extends Component {
       isSubmitted: false,
       errors: undefined,
       done: false,
-      redirect: false
+      redirect: false,
+      currentPage: 1,
+      sitePerPage: 1,
     }
   }
 
@@ -289,10 +292,18 @@ class SiteManagement extends Component {
     return time;
   }
 
+  paginate = pageNumber => {
+    this.setState({
+      currentPage: pageNumber
+    })
+  };
+
   render() {
     const { site_name, site_id, site_type, id, site_location, region, device, isOpen, data,
-      openaddmodal, opendeleteModal, regionData, deviceData, errors, done } = this.state;
+      openaddmodal, opendeleteModal, regionData, deviceData, errors, done, sitePerPage, currentPage } = this.state;
 
+    const indexOfLastAlert = currentPage * sitePerPage;
+    const indexOfFirstAlert = indexOfLastAlert - sitePerPage;
     return (
 
       <div className="animated fadeIn">
@@ -322,10 +333,10 @@ class SiteManagement extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {data.map((rowData, i) => {
+                      {data.slice(indexOfFirstAlert, indexOfLastAlert).map((rowData, i) => {
                         var timeNow = this.timeConverter(rowData.timestamp)
                         return <tr key={i}>
-                          <td>{i + 1}</td>
+                          <td>{i + 1 + (currentPage - 1) * sitePerPage}</td>
                           <td>{rowData.site_id}</td>
                           <td>{rowData.site_name}</td>
                           <td>{rowData.site_location}</td>
@@ -363,6 +374,13 @@ class SiteManagement extends Component {
             </Card>
           </Col>
         </Row>
+
+        <Pagination
+          showQuickJumper
+          defaultCurrent={2}
+          pageSize={sitePerPage}
+          total={data.length}
+          onChange={this.paginate} />
 
         <Modal isOpen={isOpen} toggle={this.openEditModal} backdrop={false}>
           <ModalHeader toggle={() => this.setState({ isOpen: false })}>Edit Site</ModalHeader>

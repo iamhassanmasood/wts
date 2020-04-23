@@ -9,7 +9,7 @@ var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorizat
 export default class SiteConfiguration extends Component {
   state = {
     siteConfigData: [], opendeleteModal: false, isOpen: false,
-    openaddmodal: false, errors: undefined, isSubmitted: false, delId: '',
+    openaddmodal: false, errors: undefined, isSubmitted: false, delId: '', currentPage: 1, sitePerPage: 1,
     id: undefined, siteData: [],
     uuid: undefined,
     tag_missing_timeout: undefined,
@@ -202,9 +202,18 @@ export default class SiteConfiguration extends Component {
     })
   }
 
+  paginate = pageNumber => {
+    this.setState({
+      currentPage: pageNumber
+    })
+  };
+
   render() {
     const { siteConfigData, opendeleteModal, openaddmodal, isOpen, uuid, tag_missing_timeout, site_heartbeat_interval, low_battery_threshold,
-      high_temp_threshold, low_temp_threshold, power_down_alert_interval, site, errors, siteData } = this.state;
+      high_temp_threshold, low_temp_threshold, power_down_alert_interval, site, errors, siteData, sitePerPage, currentPage } = this.state;
+
+    const indexOfLastAlert = currentPage * sitePerPage;
+    const indexOfFirstAlert = indexOfLastAlert - sitePerPage;
 
     return (
       <div className="animated fadeIn">
@@ -234,14 +243,14 @@ export default class SiteConfiguration extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {siteConfigData.map((item, i) => {
+                    {siteConfigData.slice(indexOfFirstAlert, indexOfLastAlert).map((item, i) => {
                       var sName = this.state.siteData[this.state.siteData.findIndex(x => x.id === parseInt(item.site))]
                       if (sName) {
                         var site_name = sName.site_name;
                       }
 
                       return <tr tabIndex={-1} key={i}>
-                        <td>{i + 1}</td>
+                        <td>{i + 1 + (currentPage - 1) * sitePerPage}</td>
                         <td>{item.uuid}</td>
                         <td>{item.site}</td>
                         <td>{item.tag_missing_timeout}</td>
@@ -282,6 +291,13 @@ export default class SiteConfiguration extends Component {
             </Card>
           </Col>
         </Row>
+
+        <Pagination
+          showQuickJumper
+          defaultCurrent={2}
+          pageSize={sitePerPage}
+          total={siteConfigData.length}
+          onChange={this.paginate} />
 
 
         <Modal isOpen={isOpen} fade={false} toggle={this.openEditModal} backdrop={false}>
