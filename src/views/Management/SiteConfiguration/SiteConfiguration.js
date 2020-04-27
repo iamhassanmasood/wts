@@ -19,7 +19,6 @@ export default class SiteConfiguration extends Component {
     low_temp_threshold: undefined,
     power_down_alert_interval: undefined,
     site: undefined,
-    loading: false,
   }
 
   componentDidMount() {
@@ -123,7 +122,6 @@ export default class SiteConfiguration extends Component {
         + this.state.low_battery_threshold + "&low_temp_threshold=" + this.state.low_temp_threshold +
         "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + siteValue +
         "&power_down_alert_interval=" + this.state.power_down_alert_interval;
-      this.setState({ loading: true })
       axios.put(`${BASE_URL}/${SITE_CONFIG}/${this.state.id}/`, body, { headers })
         .then(res => {
           if (res.status === 200) {
@@ -162,21 +160,19 @@ export default class SiteConfiguration extends Component {
         + this.state.low_battery_threshold + "&low_temp_threshold=" + this.state.low_temp_threshold +
         "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + this.state.site +
         "&power_down_alert_interval=" + this.state.power_down_alert_interval;
-      this.setState({ loading: true })
       axios.post(`${BASE_URL}/${SITE_CONFIG}/`, body, { headers })
         .then(res => {
           if (res.status === 201) {
             this.setState({
               isSubmitted: true,
-              openaddmodal: false,
-              loading: false
+              openaddmodal: false
             })
             this.componentDidMount()
           }
         })
         .catch(err =>
           this.setState({
-            isSubmitted: false, loading: false, errors: ((err.response.data.uuid ? "Sorry! This UUID already exist" : '')
+            isSubmitted: false, errors: ((err.response.data.uuid ? "Sorry! This UUID already exist" : '')
               || (err.response.data.site ? "Sorry! This site already in use" : '')
               || (err.response.data.tag_missing_timeout ? "Tag missing timeout: " + err.response.data.tag_missing_timeout : '')
               || (err.response.data.site_heartbeat_interval ? "Site heartbeat interval: " + err.response.data.site_heartbeat_interval : '')
@@ -432,9 +428,7 @@ export default class SiteConfiguration extends Component {
                 <Label htmlFor="power_down_alert_interval">Power Down Alert Interval<span /> </Label>
                 <Input type="number" name="power_down_alert_interval" value={power_down_alert_interval} onChange={this.handleChange} placeholder='Power Down Alert Interval' />
               </FormGroup>
-              {loading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
-                <Spinner color='success' size='lg' /></div> :
-                <Button color="success" block onClick={this.handleAddSubmit.bind(this)} type='submit'>Add Configuration</Button>}
+              <Button color="success" block onClick={this.handleAddSubmit.bind(this)} type='submit'>Add Configuration</Button>
               {errors ? <span style={{ color: 'red', margin: "auto", fontSize: '12px' }}>{errors}</span> : ""}
             </form>
           </ModalBody>
