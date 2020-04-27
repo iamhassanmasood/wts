@@ -44,12 +44,13 @@ export default function Alerts() {
       {
         !loading ?
           <Pagination
-            showQuickJumper
-            defaultPageSize={10}
-            defaultCurrent={2}
+            showSizeChanger={false}
+            defaultCurrent={1}
             pageSize={alertsPerPage}
             total={alerts.length}
-            onChange={paginate} /> : ''
+            onChange={paginate}
+
+          /> : ''
       }
     </Fragment >
   )
