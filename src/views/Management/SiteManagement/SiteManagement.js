@@ -35,7 +35,7 @@ class SiteManagement extends Component {
       done: false,
       redirect: false,
       currentPage: 1,
-      sitePerPage: 1,
+      sitePerPage: 10,
     }
   }
 
@@ -96,11 +96,11 @@ class SiteManagement extends Component {
   getRegion = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}/${REGIONS_API}/`, { headers })
+    axios.get(`${BASE_URL}/${REGIONS_API}/${FORMAT}`, { headers })
       .then(res => {
         if (res.status === 200) {
           this.setState({
-            regionData: res.data.results
+            regionData: res.data.data
           })
         }
       })
@@ -110,11 +110,11 @@ class SiteManagement extends Component {
   getDevice = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}/${DEVICES_API}/`, { headers })
+    axios.get(`${BASE_URL}/${DEVICES_API}/${FORMAT}`, { headers })
       .then(res => {
         if (res.status === 200) {
           this.setState({
-            deviceData: res.data.results,
+            deviceData: res.data.data,
           })
         }
       })
@@ -415,8 +415,8 @@ class SiteManagement extends Component {
                     <Label htmlFor="Device">Device <span /> </Label>
                     <Input type="select" name="device" id="device" value={device} onChange={this.handleChangeDevice} placeholder="Device" >
                       <option value="" disabled defaultValue>Select Device</option>
-                      {deviceData.map((dev, i) => (
-                        <option key={i} value={dev.id}> {dev.device_id} </option>))}
+                      {deviceData ? deviceData.map((dev, i) => (
+                        <option key={i} value={dev.id}> {dev.device_id} </option>)) : ''}
                     </Input>
                   </FormGroup>
                 </Col>
@@ -476,8 +476,8 @@ class SiteManagement extends Component {
                     <Label htmlFor="device">Device <span /> </Label>
                     <Input type='select' name="device" id="device" value={device} onChange={this.handleChangeDevice} placeholder="Device" >
                       <option value="" disabled defaultValue>Select Device</option>
-                      {deviceData.map((dev, i) => (
-                        <option key={i} value={dev.id}> {dev.device_id} </option>))}
+                      {deviceData ? deviceData.map((dev, i) => (
+                        <option key={i} value={dev.id}> {dev.device_id} </option>)) : ''}
                     </Input>
                   </FormGroup>
                 </Col>

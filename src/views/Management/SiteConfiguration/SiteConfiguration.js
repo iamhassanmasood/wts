@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
 import axios from 'axios'; import { Pagination } from 'antd';
 import { BASE_URL, SITES_API, SITE_CONFIG, FORMAT } from '../../../Config/Config'
 import siteConfigValidation from './Validator'
@@ -9,7 +9,7 @@ var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorizat
 export default class SiteConfiguration extends Component {
   state = {
     siteConfigData: [], opendeleteModal: false, isOpen: false,
-    openaddmodal: false, errors: undefined, isSubmitted: false, delId: '', currentPage: 1, sitePerPage: 1,
+    openaddmodal: false, errors: undefined, isSubmitted: false, delId: '', currentPage: 1, sitePerPage: 10,
     id: undefined, siteData: [],
     uuid: undefined,
     tag_missing_timeout: undefined,
@@ -18,7 +18,8 @@ export default class SiteConfiguration extends Component {
     high_temp_threshold: undefined,
     low_temp_threshold: undefined,
     power_down_alert_interval: undefined,
-    site: undefined
+    site: undefined,
+    loading: false,
   }
 
   componentDidMount() {
@@ -33,8 +34,8 @@ export default class SiteConfiguration extends Component {
           })
         }
       }).catch(err => {
-        if (err.status === 401) {
-          localStorage.removeItem('accessToken');
+        if (err.response.status === 401) {
+          localStorage.clear();
           this.props.history.push('/login')
         }
         return err
@@ -48,8 +49,8 @@ export default class SiteConfiguration extends Component {
           })
         }
       }).catch(err => {
-        if (err.status === 401) {
-          localStorage.removeItem('accessToken');
+        if (err.response.status === 401) {
+          localStorage.clear();
           this.props.history.push('/login')
         }
         return err
@@ -107,6 +108,12 @@ export default class SiteConfiguration extends Component {
 
     this.setState({ isSubmitted: true, errors: undefined });
     const { isValid, errors } = siteConfigValidation(this.state);
+    var siteValue;
+    for (var i = 0; i < this.state.siteData.length; i++) {
+      if (this.state.siteData[i].site_id === this.state.site) {
+        siteValue = this.state.siteData[i].id
+      }
+    }
     if (!isValid) {
       this.setState({ errors, isSubmitted: false });
       return false;
@@ -114,21 +121,22 @@ export default class SiteConfiguration extends Component {
       let body = "uuid=" + this.state.uuid + "&tag_missing_timeout=" + this.state.tag_missing_timeout
         + "&site_heartbeat_interval=" + this.state.site_heartbeat_interval + "&low_battery_threshold="
         + this.state.low_battery_threshold + "&low_temp_threshold=" + this.state.low_temp_threshold +
-        "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + this.state.site +
+        "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + siteValue +
         "&power_down_alert_interval=" + this.state.power_down_alert_interval;
-
+      this.setState({ loading: true })
       axios.put(`${BASE_URL}/${SITE_CONFIG}/${this.state.id}/`, body, { headers })
         .then(res => {
           if (res.status === 200) {
             this.setState({
               isSubmitted: true,
               isOpen: false,
+              loading: false
             })
             this.componentDidMount()
           }
         })
         .catch(err => this.setState({
-          isSubmitted: false, errors: ((err.response.data.uuid ? "Sorry! This UUID already exist" : '')
+          isSubmitted: false, loading: false, errors: ((err.response.data.uuid ? "Sorry! This UUID already exist" : '')
             || (err.response.data.site ? "Sorry! This site already in use" : '')
             || (err.response.data.tag_missing_timeout ? "Tag missing timeout: " + err.response.data.tag_missing_timeout : '')
             || (err.response.data.site_heartbeat_interval ? "Site heartbeat interval: " + err.response.data.site_heartbeat_interval : '')
@@ -149,34 +157,36 @@ export default class SiteConfiguration extends Component {
       this.setState({ errors, isSubmitted: false });
       return false;
     } else {
-
       let body = "uuid=" + this.state.uuid + "&tag_missing_timeout=" + this.state.tag_missing_timeout
         + "&site_heartbeat_interval=" + this.state.site_heartbeat_interval + "&low_battery_threshold="
         + this.state.low_battery_threshold + "&low_temp_threshold=" + this.state.low_temp_threshold +
         "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + this.state.site +
         "&power_down_alert_interval=" + this.state.power_down_alert_interval;
-
+      this.setState({ loading: true })
       axios.post(`${BASE_URL}/${SITE_CONFIG}/`, body, { headers })
         .then(res => {
           if (res.status === 201) {
             this.setState({
               isSubmitted: true,
               openaddmodal: false,
+              loading: false
             })
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({
-          isSubmitted: false, errors: ((err.response.data.uuid ? "Sorry! This UUID already exist" : '')
-            || (err.response.data.site ? "Sorry! This site already in use" : '')
-            || (err.response.data.tag_missing_timeout ? "Tag missing timeout: " + err.response.data.tag_missing_timeout : '')
-            || (err.response.data.site_heartbeat_interval ? "Site heartbeat interval: " + err.response.data.site_heartbeat_interval : '')
-            || (err.response.data.low_battery_threshold ? "Low battery threshold: " + err.response.data.low_battery_threshold : '')
-            || (err.response.data.high_temp_threshold ? "High temperature threshold: " + err.response.data.high_temp_threshold : '')
-            || (err.response.data.low_temp_threshold ? "Low temperature threshold: " + err.response.data.low_temp_threshold : '')
-            || (err.response.data.power_down_alert_interval ? "Power down alert interval: " + err.response.data.power_down_alert_interval : '')
-          )
-        }))
+        .catch(err =>
+          this.setState({
+            isSubmitted: false, loading: false, errors: ((err.response.data.uuid ? "Sorry! This UUID already exist" : '')
+              || (err.response.data.site ? "Sorry! This site already in use" : '')
+              || (err.response.data.tag_missing_timeout ? "Tag missing timeout: " + err.response.data.tag_missing_timeout : '')
+              || (err.response.data.site_heartbeat_interval ? "Site heartbeat interval: " + err.response.data.site_heartbeat_interval : '')
+              || (err.response.data.low_battery_threshold ? "Low battery threshold: " + err.response.data.low_battery_threshold : '')
+              || (err.response.data.high_temp_threshold ? "High temperature threshold: " + err.response.data.high_temp_threshold : '')
+              || (err.response.data.low_temp_threshold ? "Low temperature threshold: " + err.response.data.low_temp_threshold : '')
+              || (err.response.data.power_down_alert_interval ? "Power down alert interval: " + err.response.data.power_down_alert_interval : '')
+            )
+          })
+        )
     }
 
   }
@@ -210,10 +220,11 @@ export default class SiteConfiguration extends Component {
 
   render() {
     const { siteConfigData, opendeleteModal, openaddmodal, isOpen, uuid, tag_missing_timeout, site_heartbeat_interval, low_battery_threshold,
-      high_temp_threshold, low_temp_threshold, power_down_alert_interval, site, errors, siteData, sitePerPage, currentPage } = this.state;
+      high_temp_threshold, low_temp_threshold, power_down_alert_interval, site, errors, siteData, sitePerPage, currentPage, loading } = this.state;
 
     const indexOfLastAlert = currentPage * sitePerPage;
     const indexOfFirstAlert = indexOfLastAlert - sitePerPage;
+    console.log(this.state.site, "ssssssss")
 
     return (
       <div className="animated fadeIn">
@@ -311,11 +322,7 @@ export default class SiteConfiguration extends Component {
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="site">Site<span /> </Label>
-                    <Input type="select" name="site" id="site" value={site} onChange={this.handleChangeSite} placeholder="Site" disabled={true}>
-                      <option className="brave" value="" disabled defaultValue>Select Site</option>
-                      {siteData.map((sit, i) => (
-                        <option key={i} value={sit.id}> {sit.site_name} </option>))}
-                    </Input>
+                    <Input type="text" name="site" id="site" value={site} placeholder="Site" disabled={true} />
                   </FormGroup>
                 </Col>
               </Row>
@@ -356,8 +363,9 @@ export default class SiteConfiguration extends Component {
                 <Label htmlFor="power_down_alert_interval">Power Down Alert Interval<span /> </Label>
                 <Input type="number" name="power_down_alert_interval" value={power_down_alert_interval} onChange={this.handleChange} />
               </FormGroup>
-
-              <Button color="info" block onClick={this.handleEditSubmit} type="submit"> Done</Button>
+              {loading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
+                <Spinner color='info' size='lg' /></div> :
+                <Button color="info" block onClick={this.handleEditSubmit} type="submit"> Done</Button>}
               {errors ? <span style={{ color: 'red', margin: "auto", fontSize: '12px' }}>{errors}</span> : ""}
             </form>
           </ModalBody>
@@ -424,8 +432,9 @@ export default class SiteConfiguration extends Component {
                 <Label htmlFor="power_down_alert_interval">Power Down Alert Interval<span /> </Label>
                 <Input type="number" name="power_down_alert_interval" value={power_down_alert_interval} onChange={this.handleChange} placeholder='Power Down Alert Interval' />
               </FormGroup>
-
-              <Button color="success" block onClick={this.handleAddSubmit.bind(this)} type='submit'>Add Configuration</Button>
+              {loading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
+                <Spinner color='success' size='lg' /></div> :
+                <Button color="success" block onClick={this.handleAddSubmit.bind(this)} type='submit'>Add Configuration</Button>}
               {errors ? <span style={{ color: 'red', margin: "auto", fontSize: '12px' }}>{errors}</span> : ""}
             </form>
           </ModalBody>

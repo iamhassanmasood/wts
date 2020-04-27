@@ -29,7 +29,7 @@ export default class RegionManagement extends Component {
       opendeleteModal: false,
 
       currentPage: 1,
-      regionPerPage: 1,
+      regionPerPage: 10,
 
     }
   }

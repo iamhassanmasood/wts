@@ -91,9 +91,13 @@ a{
 .btn-margin{
     margin-right: 10px;
 }
-.modal.show .modal-dialog {
+/* .modal.show .modal-dialog {
     transform: none;
     margin-top: 60px;
+} */
+
+h1, h2, h3, h4, h5, h6 {
+    color: white !important;
 }
 .table-dark th, .table-dark td, .table-dark thead th {
     vertical-align: middle !important;

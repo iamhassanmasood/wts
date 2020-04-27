@@ -3,7 +3,7 @@ import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, M
 import { BASE_URL, ASSET_API, TAGS_API, SITES_API, FORMAT } from '../../../Config/Config'
 import assetValidation from './Validator'
 import axios from 'axios'
-import { Pagination } from 'antd';
+import { Pagination, message } from 'antd';
 import { connect } from 'react-redux';
 import { timeConverter } from '../../../GlobalFunctions/timeConverter'
 
@@ -38,7 +38,7 @@ class AssetManagement extends Component {
       done: false,
       redirect: false,
       currentPage: 1,
-      assetsPerPage: 1,
+      assetsPerPage: 10,
 
     }
   }
@@ -174,12 +174,15 @@ class AssetManagement extends Component {
               openaddmodal: false,
               errors: undefined
             })
+            this.success()
             this.componentDidMount()
           }
         })
         .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.asset_id ? "Asset Id Must be Unique, Sorry! This Asset Id Already Exist" : '') || (err.response.data.asset_name ? "Asset Name Must Be Unique, Sorry! This Asset Name already exist" : '') || (err.response.data.tag ? "Tag Must Be Unique , Sorry! This Tag Already in use" : '')) }))
     }
   }
+
+  success = () => message.success(`A new Asset added successfully`, 1);
 
   handleEditSubmit = (e) => {
     e.preventDefault();
