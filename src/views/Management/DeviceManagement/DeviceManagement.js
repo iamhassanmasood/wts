@@ -25,7 +25,7 @@ class DeviceManagement extends Component {
       delId: '',
       isSubmitted: false,
       currentPage: 1,
-      devicePerPage: 10,
+      devicePerPage: 1,
       errors: undefined, done: undefined, redirect: false,
     }
   }

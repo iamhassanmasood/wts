@@ -28,7 +28,7 @@ class TagManagement extends Component {
       opendeleteModal: false,
 
       currentPage: 1,
-      tagPerPage: 10,
+      tagPerPage: 1,
 
     }
   }
