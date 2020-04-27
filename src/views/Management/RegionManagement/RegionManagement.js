@@ -237,7 +237,6 @@ export default class RegionManagement extends Component {
         </Row>
 
         <Pagination
-          showQuickJumper
           defaultCurrent={2}
           pageSize={regionPerPage}
           total={RegionData.length}

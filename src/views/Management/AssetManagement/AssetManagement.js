@@ -328,7 +328,6 @@ class AssetManagement extends Component {
         </Row>
 
         <Pagination
-          showQuickJumper
           defaultCurrent={2}
           pageSize={assetsPerPage}
           total={AssetData.length}

@@ -364,7 +364,6 @@ class SiteManagement extends Component {
         </Row>
 
         <Pagination
-          showQuickJumper
           defaultCurrent={2}
           pageSize={sitePerPage}
           total={data.length}

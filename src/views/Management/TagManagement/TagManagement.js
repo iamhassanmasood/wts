@@ -241,7 +241,6 @@ class TagManagement extends Component {
         </Row>
 
         <Pagination
-          showQuickJumper
           defaultCurrent={2}
           pageSize={tagPerPage}
           total={tagData.length}
