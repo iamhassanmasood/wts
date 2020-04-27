@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
 import { Pagination } from 'antd';
 import { BASE_URL, TAGS_API, FORMAT } from '../../../Config/Config'
@@ -28,7 +28,7 @@ class TagManagement extends Component {
       opendeleteModal: false,
 
       currentPage: 1,
-      tagPerPage: 1,
+      tagPerPage: 10,
 
     }
   }

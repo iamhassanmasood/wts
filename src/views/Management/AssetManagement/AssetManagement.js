@@ -38,7 +38,7 @@ class AssetManagement extends Component {
       done: false,
       redirect: false,
       currentPage: 1,
-      assetsPerPage: 1,
+      assetsPerPage: 10,
 
     }
   }

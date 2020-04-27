@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
 import { Pagination } from 'antd';
 import { BASE_URL, FORMAT, REGIONS_API } from '../../../Config/Config'
@@ -29,7 +29,7 @@ export default class RegionManagement extends Component {
       opendeleteModal: false,
 
       currentPage: 1,
-      regionPerPage: 1,
+      regionPerPage: 10,
 
     }
   }

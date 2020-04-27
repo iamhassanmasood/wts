@@ -35,7 +35,7 @@ class SiteManagement extends Component {
       done: false,
       redirect: false,
       currentPage: 1,
-      sitePerPage: 1,
+      sitePerPage: 10,
     }
   }
 

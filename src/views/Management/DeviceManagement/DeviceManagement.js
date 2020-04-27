@@ -10,7 +10,6 @@ var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
 
 class DeviceManagement extends Component {
-  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -25,13 +24,12 @@ class DeviceManagement extends Component {
       delId: '',
       isSubmitted: false,
       currentPage: 1,
-      devicePerPage: 1,
+      devicePerPage: 10,
       errors: undefined, done: undefined, redirect: false,
     }
   }
 
   componentDidMount() {
-    this._isMounted = true;
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
     axios.get(`${BASE_URL}/${DEVICES_API}/${FORMAT}`, { headers })

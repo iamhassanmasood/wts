@@ -9,7 +9,7 @@ var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorizat
 export default class SiteConfiguration extends Component {
   state = {
     siteConfigData: [], opendeleteModal: false, isOpen: false,
-    openaddmodal: false, errors: undefined, isSubmitted: false, delId: '', currentPage: 1, sitePerPage: 1,
+    openaddmodal: false, errors: undefined, isSubmitted: false, delId: '', currentPage: 1, sitePerPage: 10,
     id: undefined, siteData: [],
     uuid: undefined,
     tag_missing_timeout: undefined,
