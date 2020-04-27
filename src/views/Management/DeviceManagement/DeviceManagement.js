@@ -34,7 +34,7 @@ class DeviceManagement extends Component {
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
     axios.get(`${BASE_URL}/${DEVICES_API}/${FORMAT}`, { headers })
       .then(res => {
-        if (this._isMounted) {
+        if (res.status === 200) {
           this.setState({
             data: res.data.data,
           })
