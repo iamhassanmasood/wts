@@ -226,7 +226,6 @@ class DeviceManagement extends Component {
         </Row>
 
         <Pagination
-          showQuickJumper
           defaultCurrent={2}
           pageSize={devicePerPage}
           total={data.length}
