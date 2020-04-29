@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
 import axios from 'axios'; import { Pagination } from 'antd';
-import { BASE_URL, SITES_API, SITE_CONFIG, FORMAT } from '../../../Config/Config'
+import { BASE_URL, SITES_API, SITE_CONFIG, FORMAT } from '../../../config/config'
 import siteConfigValidation from './Validator'
 
 var token = localStorage.getItem('accessToken');

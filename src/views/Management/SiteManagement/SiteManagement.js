@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
-import { BASE_URL, SITES_API, REGIONS_API, DEVICES_API, FORMAT } from '../../../Config/Config'
+import { BASE_URL, SITES_API, REGIONS_API, DEVICES_API, FORMAT } from '../../../config/config'
 import axios from 'axios'
-import { Pagination } from 'antd'; import { timeConverter } from '../../../GlobalFunctions/timeConverter'
+import { Pagination } from 'antd'; import { timeConverter } from '../../../globalFunctions/timeConverter'
 import siteValidation from './Validator'
 
 var token = localStorage.getItem('accessToken');

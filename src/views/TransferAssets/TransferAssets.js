@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Card, CardBody, CardHeader, Col, Row, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
-import { BASE_URL, PORT, SITES_API, ASSET_BY_SITE, TRANSFER_ASSET } from '../../Config/Config'
+import { BASE_URL, PORT, SITES_API, ASSET_BY_SITE, TRANSFER_ASSET } from '../../config/config'
 import transferValidation from './Validator'
 import axios from 'axios'
 

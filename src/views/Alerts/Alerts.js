@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { BASE_URL, FORMAT, ALERTS_API } from '../../Config/Config'
+import { BASE_URL, FORMAT, ALERTS_API } from '../../config/config'
 import { Pagination } from 'antd';
-import { timeConverter } from '../../GlobalFunctions/timeConverter'
+import { timeConverter } from '../../globalFunctions/timeConverter'
 import axios from 'axios'; import AlertsModule from './AlertsModule';
 
 export default function Alerts() {

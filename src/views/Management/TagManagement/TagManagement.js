@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
 import { Pagination } from 'antd';
-import { BASE_URL, TAGS_API, FORMAT } from '../../../Config/Config'
+import { BASE_URL, TAGS_API, FORMAT } from '../../../config/config'
 import tagValidation from './Validator'
-import { timeConverter } from '../../../GlobalFunctions/timeConverter'
+import { timeConverter } from '../../../globalFunctions/timeConverter'
 
 class TagManagement extends Component {
 

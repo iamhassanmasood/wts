@@ -3,7 +3,7 @@ import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputG
 
 import loginValidation from './Validator';
 import axios from 'axios'
-import { BASE_URL, PORT, LOGIN, CLIENT_ID, CLIENT_SECRET } from '../../../Config/Config'
+import { BASE_URL, PORT, LOGIN, CLIENT_ID, CLIENT_SECRET } from '../../../config/config'
 import Logo from '../../../assets/img/brand/Logo.PNG'
 
 class Login extends Component {

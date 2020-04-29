@@ -1,15 +1,13 @@
 import React, { Component, lazy } from 'react';
 import MapModule from './../MapModule/MapModule'
 import Chart from 'react-apexcharts'
-import { BASE_URL, PORT, SITES_API, ASSET_API, ASSET_BY_SITE, ALERTS_API, REGIONS_API, DEVICES_API, } from '../../Config/Config'
+import { BASE_URL, PORT, SITES_API, ASSET_API, ASSET_BY_SITE, ALERTS_API, REGIONS_API, DEVICES_API, } from '../../config/config'
 import axios from 'axios';
 import { Button, Card, CardHeader, CardGroup, CardColumns, CardBody, Col, Row } from 'reactstrap';
 import AllSitesInformation from '../AllSitesInformation/AllSitesInformation.js'
 import SearchSite from '../SeachModule/SearchSite'
 import SearchAsset from '../SeachModule/SearchAsset'
 import Widget04 from '../../views/Widgets/Widget04'
-
-// const Widget04 = lazy(() => import());
 
 class Dashboard extends Component {
   state = {
@@ -29,11 +27,40 @@ class Dashboard extends Component {
     wss: null,
     options: {
       labels: ['Registered Undiscovered', 'Registered Discovered', 'UnAuthorized Entry', 'Stolen', 'In Transit'],
-      colors: ['#5bc0de',
-        '#4BB543',
-        '#0275d8',
-        '#d9534f',
-        '#FFCC00'],
+      colors: ['#20a8d8',
+        '#53af50',
+        '#f4cb08',
+        '#da534f',
+        '#72808f'],
+      legend: {
+        show: false,
+        position: 'bottom',
+        labels: {
+          colors: 'white',
+          useSeriesColors: false
+        },
+      },
+      plotOptions: {
+        pie: {
+          size: '65%'
+        }
+      },
+      responsive: [{
+        breakpoint: undefined,
+        options: {
+          chart: {
+            sparkline: {
+              enabled: false
+            }
+          }
+        }
+      }]
+    },
+    warehousePie: {
+      labels: ['Check-In', 'Check-Out', 'Stolen'],
+      colors: ['#90ee90',
+        '#72808f',
+        '#da534f'],
       legend: {
         show: false,
         position: 'bottom',
@@ -63,7 +90,6 @@ class Dashboard extends Component {
   componentDidMount() {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    // this.handleAssetData();
     axios.get(`${BASE_URL}/${SITES_API}/`, { headers })
       .then(res => {
         if (res.status === 200) {
@@ -77,8 +103,7 @@ class Dashboard extends Component {
           //   }
           // })
           this.setState({
-            siteData: data,
-            // latlng
+            siteData: data
           })
         }
       })
@@ -117,8 +142,9 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { options, flag, latlng, siteData, assetData, site, asset } = this.state;
+    const { warehousePie, options, flag, latlng, siteData, assetData, site, asset } = this.state;
     const data = [10, 20, 30, 40, 50];
+    const warehouseData = [10, 20, 30];
 
     return (
       <div className="">
@@ -139,11 +165,9 @@ class Dashboard extends Component {
               <Widget04 icon="icon-speedometer" color="delivered" header="50" value="50"></Widget04>
             </CardGroup>
           </Col>
-          {/* </Row>
-        <Row> */}
+
           <Col>
             <b>NETWORK SITES</b>
-
             <CardGroup className="mb-3">
               <Widget04 icon="icon-people" color="info" header="10" value="10"></Widget04>
               <Widget04 icon="icon-user-follow" color="success" header="20" value="20"></Widget04>
@@ -156,45 +180,33 @@ class Dashboard extends Component {
         </Row>
         <Row>
 
-          <div className='col-lg-8 MapModule'>
+
+          <div className='col-lg-9 MapModule'>
             <Card>
-              <CardHeader ><i className='fa fa-map'></i>Location </CardHeader>
-              {/* <MapModule
-                isMarkerShown
-              // markers={latlng}
-              /> */}
+              <CardHeader style={{ width: "104%" }} ><i className='fa fa-map'></i>Location </CardHeader>
             </Card>
           </div>
-          <div className='col-lg-4'>
 
-            {flag ? <Card>
+          <div className='col-lg-3'>
+            <Card>
               <CardHeader ><i class="far fa-chart-pie"></i>
-            Asset Summary
-              <a className="card-header-actions" onClick={this.switchCharts}>
-                  <i className="fa fa-plus"></i> Switch Alarms
-              </a>
+            WAREHOUSE
                 <CardBody>
-                  <Chart options={options} series={data} type="pie" width={`100%`} height={300} />
+                  <Chart options={warehousePie} series={warehouseData} type="pie" width={`100%`} height={250} />
                 </CardBody>
               </CardHeader>
-            </Card> : ""}
-
-            {!flag ? <Card>
               <CardHeader >
-                Asset Alarms
-              <a className="card-header-actions" color='info' size='sm' onClick={this.switchCharts}>
-                  <i className="fa fa-plus"></i> Switch Summary
-              </a>
-                <CardBody>
-                  <Chart options={options} series={data} type="donut" width={`100%`} height={300} />
+                NETWORK SITE
+                <CardBody><Chart options={options} series={data} type="pie" width={`100%`} height={250} />
                 </CardBody>
               </CardHeader>
-            </Card> : ''}
+            </Card>
 
 
           </div>
 
         </Row>
+
 
         <AllSitesInformation />
       </div>

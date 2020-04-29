@@ -1,5 +1,5 @@
 import { ADD_ASSET, REMOVE_ASSET, UPDATE_ASSET, ASSET_DATA, GET_ALERTS, GET_ALERTS_SUCCESS, GET_ALERTS_FAILURE } from './actionType'
-import { BASE_URL, ASSET_API, FORMAT, token, headers } from './../Config/Config'
+import { BASE_URL, ASSET_API, FORMAT, token, headers } from './../config/config'
 import axios from 'axios'
 
 export const assetData = () => {

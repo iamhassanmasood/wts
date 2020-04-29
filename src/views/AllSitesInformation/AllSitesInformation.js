@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
 
-import { BASE_URL, PORT, SITES_API, REGIONS_API, DEVICES_API } from '../../Config/Config'
+import { BASE_URL, PORT, SITES_API, REGIONS_API, DEVICES_API } from '../../config/config'
 import axios from 'axios'
 
 class AllSitesInformation extends Component {

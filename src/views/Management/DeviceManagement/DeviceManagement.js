@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
-import { BASE_URL, PORT, DEVICES_API, FORMAT } from '../../../Config/Config'
+import { BASE_URL, PORT, DEVICES_API, FORMAT } from '../../../config/config'
 import deviceValidation from './Validator'
 import axios from 'axios'
 import { Pagination } from 'antd';
-import { timeConverter } from '../../../GlobalFunctions/timeConverter'
+import { timeConverter } from '../../../globalFunctions/timeConverter'
 
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
