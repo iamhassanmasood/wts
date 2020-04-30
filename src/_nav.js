@@ -50,6 +50,17 @@ export default {
           icon: 'fa fa-apple',
         },
 
+        {
+          name: 'Asset Assignment',
+          url: '/management/assignment',
+          icon: 'fa fa-apple',
+        },
+        {
+          name: 'Transfer Asset',
+          url: '/management/transfer',
+          icon: 'fa fa-apple',
+        }
+
       ],
     },
     {

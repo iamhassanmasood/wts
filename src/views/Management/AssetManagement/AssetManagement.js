@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
-import { BASE_URL, ASSET_API, TAGS_API, SITES_API, FORMAT } from '../../../config/config'
+import { BASE_URL, ASSET_API, TAGS_API, SITES_API, FORMAT } from './../../../config/config'
 import assetValidation from './Validator'
 import axios from 'axios'
 import { Pagination } from 'antd';
@@ -354,7 +354,22 @@ class AssetManagement extends Component {
                 <Input type="text" name="asset_brand" value={asset_brand} onChange={this.handleChange} placeholder="Asset Brand" />
               </FormGroup>
 
-              <FormGroup>
+              <Row form>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="owner_name">Owner Name<span /> </Label>
+                    <Input type="text" name="owner_name" value={owner_name} onChange={this.handleChange} placeholder="Owner Name " />
+                  </FormGroup>
+                </Col>
+
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="owner_type">Owner Type<span /> </Label>
+                    <Input type="text" name="owner_type" value={owner_type} onChange={this.handleChange} placeholder="Owner Type" />
+                  </FormGroup>
+                </Col>
+              </Row>
+              {/* <FormGroup>
                 <Label htmlFor="owner_name">Owner Name<span /> </Label>
                 <Input type="text" name="owner_name" value={owner_name} onChange={this.handleChange} placeholder="Owner Name " />
               </FormGroup>
@@ -362,7 +377,7 @@ class AssetManagement extends Component {
               <FormGroup>
                 <Label htmlFor="owner_type">Owner Type<span /> </Label>
                 <Input type="text" name="owner_type" value={owner_type} onChange={this.handleChange} placeholder="Owner Type" />
-              </FormGroup>
+              </FormGroup> */}
 
               <Row form>
                 <Col md={6}>
@@ -413,15 +428,21 @@ class AssetManagement extends Component {
                 <Input type="text" name="asset_brand" value={asset_brand} onChange={this.handleChange} placeholder="Asset Brand" />
               </FormGroup>
 
-              <FormGroup>
-                <Label htmlFor="owner_name">Owner Name<span /> </Label>
-                <Input type="text" name="owner_name" value={owner_name} onChange={this.handleChange} placeholder="Owner Name " />
-              </FormGroup>
+              <Row form>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="owner_name">Owner Name<span /> </Label>
+                    <Input type="text" name="owner_name" value={owner_name} onChange={this.handleChange} placeholder="Owner Name " />
+                  </FormGroup>
+                </Col>
 
-              <FormGroup>
-                <Label htmlFor="owner_type">Owner Type<span /> </Label>
-                <Input type="text" name="owner_type" value={owner_type} onChange={this.handleChange} placeholder="Owner Type" />
-              </FormGroup>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label htmlFor="owner_type">Owner Type<span /> </Label>
+                    <Input type="text" name="owner_type" value={owner_type} onChange={this.handleChange} placeholder="Owner Type" />
+                  </FormGroup>
+                </Col>
+              </Row>
 
               <Row form>
                 <Col md={6}>

@@ -13,6 +13,8 @@ import Alerts from './views/Alerts/Alerts'
 import Reports from './views/Reports/Reports/Reports'
 import GeneralReports from './views/Reports/GeneralReports/GeneralReports'
 import ProgressReports from './views/Reports/ProgressReports/ProgressReports'
+import AssetAssignment from './views/Management/AssetAssignment';
+import AssetTransfer from './views/Management/AssetTransfer';
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -27,6 +29,8 @@ const routes = [
   { path: '/management/TagManagement', name: 'TagManagement', component: TagManagement },
   { path: '/management/RegionManagement', name: 'RegionManagement', component: RegionManagement },
   { path: '/management/SiteConfiguration', name: 'SiteConfiguration', component: SiteConfiguration },
+  { path: '/management/assignment', name: 'AssetAssignment', component: AssetAssignment },
+  { path: '/management/transfer', name: 'AssetTransfer', component: AssetTransfer },
   { path: '/TransferAssets', exact: true, name: 'TransferAssets', component: TransferAssets },
   { path: '/Alerts', exact: true, name: 'Alerts', component: Alerts },
   { path: '/Reports', exact: true, name: 'Reports', component: Reports },

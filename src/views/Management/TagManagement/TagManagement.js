@@ -13,23 +13,18 @@ class TagManagement extends Component {
     this.state = {
       tagData: [],
       done: false,
-
       isOpen: false,
       openaddmodal: false,
       tag_id: undefined,
       tag_type: undefined,
-
       isSubmitted: false,
       errors: undefined,
-
       timestamp: Math.floor(Date.now() / 1000),
       id: '',
       delId: '',
       opendeleteModal: false,
-
       currentPage: 1,
       tagPerPage: 10,
-
     }
   }
 
