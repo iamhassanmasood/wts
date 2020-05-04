@@ -10,8 +10,8 @@ const MapModule = compose(
     withProps({
         googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyCHZV-ToxlUuJbLbuMNb7NrWhZYTgfT0L8",
         loadingElement: <div style={{ height: "100%" }} />,
-        containerElement: <div style={{ height: "355px" }} />,
-        mapElement: <div style={{ height: "100%" }} />
+        containerElement: <div style={{ height: "620px" }} />,
+        mapElement: <div style={{ height: "100%", }} />
     }),
     withHandlers({
         onMarkerClustererClick: () => (markerClusterer) => {
@@ -25,7 +25,7 @@ const MapModule = compose(
 )(props => {
     if (!props.lat) {
         return (
-            <GoogleMap ref={props.onMapLoad} onClick={props.onMapClick} defaultOptions={{ styles: mapStyles }} defaultZoom={1} center={{ lat: 23.6260333, lng: -102.5375005 }}>
+            <GoogleMap ref={props.onMapLoad} onClick={props.onMapClick} defaultOptions={{ styles: mapStyles }} defaultZoom={4} center={{ lat: 23.6260333, lng: -102.5375005 }}>
                 <MarkerClusterer
                     onClick={props.onMarkerClustererClick}
                     averageCenter

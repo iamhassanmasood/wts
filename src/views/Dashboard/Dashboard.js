@@ -1,4 +1,4 @@
-import React, { Component, lazy } from 'react';
+import React, { Component } from 'react';
 import MapModule from './../MapModule/MapModule'
 import Chart from 'react-apexcharts'
 import { BASE_URL, PORT, SITES_API, ASSET_API, ASSET_BY_SITE, ALERTS_API, REGIONS_API, DEVICES_API, } from '../../config/config'
@@ -94,16 +94,16 @@ class Dashboard extends Component {
       .then(res => {
         if (res.status === 200) {
           const data = [...res.data]
-          // console.log(data, "this is res")
-          // var latlng = data.map(item => {
-          //   return {
-          //     latitude: parseFloat(item.site_loction.split(",")[0]), longitude: parseFloat(item.site_loction.split(",")[1]),
-          //     site_name: item.site_name, site_type: item.site_type, id: item.id, site_id: item.site_id, region: item.region, timestamp: item.timestamp,
-          //     device: item.device
-          //   }
-          // })
+
+          var latlong = data.map((item, index) => {
+            return {
+              latitude: parseFloat(item.site_location.split(",")[0]), longitude: parseFloat(item.site_location.split(",")[1]),
+            }
+          })
           this.setState({
-            siteData: data
+            siteData: data,
+            latlng: latlong
+
           })
         }
       })
@@ -181,16 +181,20 @@ class Dashboard extends Component {
         <Row>
 
 
-          <div className='col-lg-9 MapModule'>
+          <Col className='col-lg-8 MapModule'>
             <Card>
-              <CardHeader style={{ width: "104%" }} ><i className='fa fa-map'></i>Location </CardHeader>
-            </Card>
-          </div>
+              <CardHeader ><i className='fa fa-map'></i>Location </CardHeader>
+              <MapModule
+                markers={this.state.latlng}
+              />
 
-          <div className='col-lg-3'>
+            </Card>
+          </Col>
+
+          <div className='col-lg-4'>
             <Card>
-              <CardHeader ><i class="far fa-chart-pie"></i>
-            WAREHOUSE
+              <CardHeader >
+                WAREHOUSE
                 <CardBody>
                   <Chart options={warehousePie} series={warehouseData} type="pie" width={`100%`} height={250} />
                 </CardBody>
