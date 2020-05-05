@@ -42,7 +42,7 @@ class TagManagement extends Component {
         }
       })
       .catch(err => {
-        if (err.status === 401) {
+        if (err.response.status === 401) {
           localStorage.removeItem('accessToken');
           this.props.history.push('/login')
         }
@@ -63,8 +63,9 @@ class TagManagement extends Component {
         })
       }
     }).catch(err => {
-      if (err.status === 401) {
+      if (err.response.status === 401) {
         localStorage.removeItem('accessToken');
+        this.props.history.push('/login')
       }
       return err
     })
@@ -123,7 +124,13 @@ class TagManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => err)
+        .catch(err => {
+          if (err.response.status === 401) {
+            localStorage.removeItem('accessToken');
+            this.props.history.push('/login')
+          }
+          return err
+        })
     }
   }
 

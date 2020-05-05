@@ -41,7 +41,7 @@ export default class RegionManagement extends Component {
         }
       })
       .catch(err => {
-        if (err.status === 401) {
+        if (err.response.status === 401) {
           localStorage.removeItem('accessToken');
           this.props.history.push('/login')
         }
@@ -64,7 +64,9 @@ export default class RegionManagement extends Component {
     }).catch(err => {
       if (err.response.status === 401) {
         localStorage.removeItem('accessToken');
-      } else return err
+        this.props.history.push('/login')
+      }
+      return err
     })
   }
 

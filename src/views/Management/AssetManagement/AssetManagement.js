@@ -73,7 +73,7 @@ class AssetManagement extends Component {
         }
       })
       .catch(err => {
-        if (err.status === 401) {
+        if (err.response.status === 401) {
           localStorage.removeItem('accessToken');
           this.props.history.push('/login')
         }
@@ -89,7 +89,7 @@ class AssetManagement extends Component {
         }
       })
       .catch(err => {
-        if (err.status === 401) {
+        if (err.response.status === 401) {
           localStorage.removeItem('accessToken');
           this.props.history.push('/login')
         }
@@ -108,7 +108,13 @@ class AssetManagement extends Component {
       if (res.status === 204) {
         this.setState({ AssetData: items })
       }
-    }).catch(err => err)
+    }).catch(err => {
+      if (err.response.status === 401) {
+        localStorage.removeItem('accessToken');
+        this.props.history.push('/login')
+      }
+      return err
+    })
   }
 
 
@@ -177,7 +183,11 @@ class AssetManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({ isSubmitted: false, errors: ((err.response.data.asset_id ? "Asset Id Must be Unique, Sorry! This Asset Id Already Exist" : '') || (err.response.data.asset_name ? "Asset Name Must Be Unique, Sorry! This Asset Name already exist" : '') || (err.response.data.tag ? "Tag Must Be Unique , Sorry! This Tag Already in use" : '')) }))
+        .catch(err => this.setState({
+          isSubmitted: false, errors: ((err.response.data.asset_id ? "Asset Id Must be Unique, Sorry! This Asset Id Already Exist" : '')
+            || (err.response.data.asset_name ? "Asset Name Must Be Unique, Sorry! This Asset Name already exist" : '')
+            || (err.response.data.tag ? "Tag Must Be Unique , Sorry! This Tag Already in use" : ''))
+        }))
     }
   }
 

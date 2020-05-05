@@ -40,7 +40,6 @@ class SiteManagement extends Component {
   }
 
   removerow = () => {
-    this._isMounted = true;
     var index = this.state.delId;
     let data = this.state.data.filter(row => row.id !== index)
     axios.delete(`${BASE_URL}/${SITES_API}/${this.state.delId}/`, { headers }).then(res => {
@@ -50,9 +49,9 @@ class SiteManagement extends Component {
       }
 
     }).catch(err => {
-      if (err.response.data.detail === "Authentication credentials were not provided.") {
+      if (err.response.status === 401) {
         localStorage.removeItem('accessToken');
-        this.setState({ redirect: true })
+        this.props.history.push('/login')
       } else return err
     })
   }
@@ -86,7 +85,7 @@ class SiteManagement extends Component {
         }
       })
       .catch(err => {
-        if (err.status === 401) {
+        if (err.response.status === 401) {
           localStorage.removeItem('accessToken');
           this.props.history.push('/login')
         }
@@ -96,29 +95,39 @@ class SiteManagement extends Component {
   getRegion = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}/${REGIONS_API}/`, { headers })
+    axios.get(`${BASE_URL}/${REGIONS_API}/${FORMAT}`, { headers })
       .then(res => {
         if (res.status === 200) {
           this.setState({
-            regionData: res.data.results
+            regionData: res.data.data
           })
         }
       })
-      .catch(err => err)
+      .catch(err => {
+        if (err.response.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        } else return err
+      })
   }
 
   getDevice = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-    axios.get(`${BASE_URL}/${DEVICES_API}/`, { headers })
+    axios.get(`${BASE_URL}/${DEVICES_API}/${FORMAT}`, { headers })
       .then(res => {
         if (res.status === 200) {
           this.setState({
-            deviceData: res.data.results,
+            deviceData: res.data.data,
           })
         }
       })
-      .catch(err => err)
+      .catch(err => {
+        if (err.response.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        } else return err
+      })
   }
 
   handleAddSubmit(e) {
@@ -148,7 +157,6 @@ class SiteManagement extends Component {
             || (err.response.data.site_name ? "Sorry, This site name already exist" : '')
             || (err.response.data.device ? "This device already in use!" : '')
             || (err.response.data.site_location ? "Invalid site location!" : '')
-
           )
         }))
     }
@@ -200,7 +208,7 @@ class SiteManagement extends Component {
           }
         })
         .catch(err => this.setState({
-          isSubmitted: false, errors: ((err.response.data.site_id ? err.response.data.site_id : '')
+          isSubmitted: false, errors: ((err.response.data.site_id ? "Sorry! this site id already exists" : '')
             || (err.response.data.site_name ? "Sorry, This site name already exist " : '')
             || (err.response.data.device ? "This device already in use!" : '')
             || (err.response.data.site_location ? "Invalid site location!" : '')
