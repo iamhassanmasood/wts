@@ -3,7 +3,7 @@ import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputG
 
 import loginValidation from './Validator';
 import axios from 'axios'
-import { BASE_URL, PORT, LOGIN, CLIENT_ID, CLIENT_SECRET } from '../../../config/config'
+import { BASE_URL, LOGIN, CLIENT_ID, CLIENT_SECRET } from '../../../config/config'
 import Logo from '../../../assets/img/brand/Logo.PNG'
 
 class Login extends Component {
@@ -73,17 +73,17 @@ class Login extends Component {
       <div className="app flex-row align-items-center">
         <Container>
           <Row className="justify-content-center">
-            <Col md="9" lg="7" xl="6">
+            <Col md="9" lg="7" xl="4">
 
               <Card className="mx-4">
                 <CardBody className="p-4" style={{ backgroundColor: 'white', color: "black" }}>
-                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '2rem', marginBottom: '2rem' }} ><img src={Logo} /> </div>
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '2rem', marginBottom: '3rem' }} ><img src={Logo} style={{ height: "30px" }} /> </div>
                   <Form>
                     <div style={{ textAlign: "center" }}>
-                      <h1 className="text-muted">Login</h1>
+                      <h3 className="text-muted">Login</h3>
                       {errors ?
-                        <p style={{ color: 'red', fontWeight: 'bold' }}>Please enter valid username and password</p> :
-                        <p className="text-muted">Please enter your username and password to login</p>
+                        <p style={{ color: 'red' }}>Please enter valid username and password</p> :
+                        <p className="text-muted">Please enter your username and password</p>
                       }
                     </div>
                     <InputGroup className="mb-3">
