@@ -40,7 +40,7 @@ class DeviceManagement extends Component {
           })
         }
       }).catch(err => {
-        if (err.status === 401) {
+        if (err.response.status === 401) {
           localStorage.removeItem('accessToken');
           this.props.history.push('/login')
         }
@@ -58,7 +58,13 @@ class DeviceManagement extends Component {
           data: items
         })
       }
-    }).catch(err => err)
+    }).catch(err => {
+      if (err.response.status === 401) {
+        localStorage.removeItem('accessToken');
+        this.props.history.push('/login')
+      }
+      return err
+    })
   }
 
   openEditModal = (id, d_id, api) => {
@@ -118,7 +124,12 @@ class DeviceManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({ isSubmitted: false }))
+        .catch(err => {
+          if (err.response.status === 401) {
+            localStorage.removeItem('accessToken');
+            this.props.history.push('/login')
+          } else return err
+        })
     }
   }
 
@@ -143,7 +154,7 @@ class DeviceManagement extends Component {
             this.componentDidMount()
           }
         })
-        .catch(err => this.setState({ isSubmitted: false, errors: (err.response.data.device_id ? err.response.data.device_id : '') }))
+        .catch(err => this.setState({ isSubmitted: false, errors: (err.response.data.device_id ? "Sorry! this please insert a valid id" : '') }))
     }
   }
 
