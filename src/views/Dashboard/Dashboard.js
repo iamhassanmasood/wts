@@ -107,7 +107,13 @@ class Dashboard extends Component {
           })
         }
       })
-      .catch(err => err)
+      .catch(err => {
+        if (err.response.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        }
+        return err
+      })
 
     axios.get(`${BASE_URL}/${ASSET_API}/`, { headers })
       .then(res => {
@@ -117,7 +123,13 @@ class Dashboard extends Component {
             assetData: data,
           })
         }
-      }).catch(err => err)
+      }).catch(err => {
+        if (err.response.status === 401) {
+          localStorage.removeItem('accessToken');
+          this.props.history.push('/login')
+        }
+        return err
+      })
   }
 
 
