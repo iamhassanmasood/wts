@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
-import { Pagination } from 'antd';
+import { Pagination, message } from 'antd';
 import { BASE_URL, FORMAT, REGIONS_API } from '../../../config/config'
 import regionValidation from './Validator'
 import { timeConverter } from '../../../globalFunctions/timeConverter'
@@ -60,6 +60,7 @@ export default class RegionManagement extends Component {
         this.setState({
           RegionData: items
         })
+        message.error(`Region Removed Successfully`)
       }
     }).catch(err => {
       if (err.response.status === 401) {
@@ -120,6 +121,7 @@ export default class RegionManagement extends Component {
               isSubmitted: true,
               isOpen: false,
             })
+            message.info(`${this.state.region_name} Region Updated Successfully`)
             this.componentDidMount()
           }
         })
@@ -146,6 +148,7 @@ export default class RegionManagement extends Component {
               isSubmitted: true,
               openaddmodal: false,
             })
+            message.success(`${this.state.region_name} Region Added Successfully`)
             this.componentDidMount()
           }
         })

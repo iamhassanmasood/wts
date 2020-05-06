@@ -3,7 +3,7 @@ import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, M
 import { BASE_URL, ASSET_API, TAGS_API, SITES_API, FORMAT } from './../../../config/config'
 import assetValidation from './Validator'
 import axios from 'axios'
-import { Pagination } from 'antd';
+import { Pagination, message } from 'antd';
 import { connect } from 'react-redux';
 import { timeConverter } from '../../../globalFunctions/timeConverter'
 
@@ -107,6 +107,7 @@ class AssetManagement extends Component {
       const items = this.state.AssetData.filter(row => row.id !== index)
       if (res.status === 204) {
         this.setState({ AssetData: items })
+        message.error(` Asset Deleted Successfully`)
       }
     }).catch(err => {
       if (err.response.status === 401) {
@@ -180,6 +181,7 @@ class AssetManagement extends Component {
               openaddmodal: false,
               errors: undefined
             })
+            message.success(`${this.state.asset_name} Asset Configured Successfully`)
             this.componentDidMount()
           }
         })
@@ -222,6 +224,7 @@ class AssetManagement extends Component {
               isOpen: false,
               errors: undefined
             })
+            message.info(`${this.state.asset_name} Asset Updated Successfully`)
             this.componentDidMount()
           }
         })
@@ -345,7 +348,7 @@ class AssetManagement extends Component {
 
 
         <Modal isOpen={isOpen} fade={false} toggle={this.openEditModal} backdrop={false}>
-          <ModalHeader toggle={() => this.setState({ isOpen: false })}>Edit Assets</ModalHeader>
+          <ModalHeader toggle={() => this.setState({ isOpen: false })}>Edit Asset</ModalHeader>
           <ModalBody>
             <form>
 
@@ -379,15 +382,6 @@ class AssetManagement extends Component {
                   </FormGroup>
                 </Col>
               </Row>
-              {/* <FormGroup>
-                <Label htmlFor="owner_name">Owner Name<span /> </Label>
-                <Input type="text" name="owner_name" value={owner_name} onChange={this.handleChange} placeholder="Owner Name " />
-              </FormGroup>
-
-              <FormGroup>
-                <Label htmlFor="owner_type">Owner Type<span /> </Label>
-                <Input type="text" name="owner_type" value={owner_type} onChange={this.handleChange} placeholder="Owner Type" />
-              </FormGroup> */}
 
               <Row form>
                 <Col md={6}>

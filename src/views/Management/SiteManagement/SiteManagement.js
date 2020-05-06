@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
 import { BASE_URL, SITES_API, REGIONS_API, DEVICES_API, FORMAT } from '../../../config/config'
 import axios from 'axios'
-import { Pagination } from 'antd'; import { timeConverter } from '../../../globalFunctions/timeConverter'
+import { Pagination, message } from 'antd'; import { timeConverter } from '../../../globalFunctions/timeConverter'
 import siteValidation from './Validator'
 
 var token = localStorage.getItem('accessToken');
@@ -46,6 +46,7 @@ class SiteManagement extends Component {
       this.setState({ done: true })
       if (res.status === 204) {
         this.setState({ data, done: false })
+        message.error(`Site Removed`)
       }
 
     }).catch(err => {
@@ -149,6 +150,7 @@ class SiteManagement extends Component {
               errors: undefined,
               isSubmitted: true
             })
+            message.success(` New Site ${this.state.site_name} Added Successfully`)
             this.componentDidMount()
           }
         })
@@ -204,6 +206,7 @@ class SiteManagement extends Component {
               errors: undefined,
               isSubmitted: true
             })
+            message.info(`${this.state.site_name} Updated Successfully`)
             this.componentDidMount();
           }
         })
@@ -245,29 +248,6 @@ class SiteManagement extends Component {
     this.setState({ [name]: val, errors: "" });
   }
 
-  handleChangeLatLng = (e) => {
-    let val = e.target.value;
-    var k = e ? e.which : window.event.keyCode;
-    if (k === 32) return false;
-    var comma = val.includes(',')
-    if (!comma) {
-      this.setState({
-        errors: "Please insert valid lat long, i.e 76,34"
-      })
-    }
-    if (comma) {
-      this.setState({
-        errors: ""
-      })
-    }
-    var space = val.includes(' ')
-    if (space) {
-      this.setState({
-        errors: "No Space allow in lat long, i.e 76,34"
-      })
-    }
-    this.setState({ site_location: val });
-  }
   handleChangeRegion = () => {
     var e = document.getElementById("region");
     var result = e.options[e.selectedIndex].value;
@@ -434,9 +414,6 @@ class SiteManagement extends Component {
             </form>
           </ModalBody>
         </Modal>
-
-
-
 
         <Modal isOpen={openaddmodal} toggle={this.openAddModal} backdrop={false}>
           <ModalHeader toggle={this.openAddModal}>Add New Site</ModalHeader>
