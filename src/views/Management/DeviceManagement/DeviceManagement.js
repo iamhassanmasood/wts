@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
-import { BASE_URL, PORT, DEVICES_API, FORMAT } from '../../../config/config'
+import { BASE_URL, DEVICES_API, FORMAT } from '../../../config/config'
 import deviceValidation from './Validator'
 import axios from 'axios'
-import { Pagination } from 'antd';
+import { Pagination, message } from 'antd';
 import { timeConverter } from '../../../globalFunctions/timeConverter'
 
 var token = localStorage.getItem('accessToken');
@@ -57,6 +57,7 @@ class DeviceManagement extends Component {
         this.setState({
           data: items
         })
+        message.error(`Device Deleted Successfully`)
       }
     }).catch(err => {
       if (err.response.status === 401) {
@@ -151,6 +152,7 @@ class DeviceManagement extends Component {
               isSubmitted: true,
               openaddmodal: false,
             })
+            message.success(`${this.state.device_id} Device Configured Successfully`)
             this.componentDidMount()
           }
         })

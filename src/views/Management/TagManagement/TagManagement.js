@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios'
-import { Pagination } from 'antd';
+import { Pagination, message } from 'antd';
 import { BASE_URL, TAGS_API, FORMAT } from '../../../config/config'
 import tagValidation from './Validator'
 import { timeConverter } from '../../../globalFunctions/timeConverter'
@@ -61,6 +61,7 @@ class TagManagement extends Component {
         this.setState({
           tagData: items
         })
+        message.error(`Tag Removed`)
       }
     }).catch(err => {
       if (err.response.status === 401) {
@@ -121,6 +122,7 @@ class TagManagement extends Component {
               isSubmitted: true,
               isOpen: false,
             })
+            message.info(`Tag ${this.state.tag_id} Updated Successfully`)
             this.componentDidMount()
           }
         })
@@ -152,6 +154,7 @@ class TagManagement extends Component {
               isSubmitted: true,
               openaddmodal: false,
             })
+            message.success(`Tag ${this.state.tag_id} Added Successfully`)
             this.componentDidMount()
           }
         })

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, Modal, ModalBody, ModalHeader, ModalFooter, Button, Spinner } from 'reactstrap';
-import axios from 'axios'; import { Pagination } from 'antd';
+import axios from 'axios'; import { Pagination, message } from 'antd';
 import { BASE_URL, SITES_API, SITE_CONFIG, FORMAT } from '../../../config/config'
 import siteConfigValidation from './Validator'
 
@@ -98,6 +98,7 @@ export default class SiteConfiguration extends Component {
       const items = this.state.siteConfigData.filter(row => row.id !== index)
       if (res.status === 204) {
         this.setState({ siteConfigData: items })
+        message.error(`Configuration Removed`)
       }
     }).catch(err => {
       if (err.response.status === 401) {
@@ -110,6 +111,12 @@ export default class SiteConfiguration extends Component {
 
   handleEditSubmit = (e) => {
     e.preventDefault();
+    var siteValue;
+    for (var i = 0; i < this.state.siteData.length; i++) {
+      if (this.state.siteData[i].site_id === this.state.site) {
+        siteValue = this.state.siteData[i].id
+      }
+    }
 
     this.setState({ isSubmitted: true, errors: undefined });
     const { isValid, errors } = siteConfigValidation(this.state);
@@ -120,7 +127,7 @@ export default class SiteConfiguration extends Component {
       let body = "uuid=" + this.state.uuid + "&tag_missing_timeout=" + this.state.tag_missing_timeout
         + "&site_heartbeat_interval=" + this.state.site_heartbeat_interval + "&low_battery_threshold="
         + this.state.low_battery_threshold + "&low_temp_threshold=" + this.state.low_temp_threshold +
-        "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + this.state.site +
+        "&high_temp_threshold=" + this.state.high_temp_threshold + "&site=" + siteValue +
         "&power_down_alert_interval=" + this.state.power_down_alert_interval;
 
       axios.put(`${BASE_URL}/${SITE_CONFIG}/${this.state.id}/`, body, { headers })
@@ -131,6 +138,7 @@ export default class SiteConfiguration extends Component {
               isOpen: false,
               loading: false
             })
+            message.info(`Site UUID ${this.state.uuid} Updated Successfully`)
             this.componentDidMount()
           }
         })
@@ -170,6 +178,7 @@ export default class SiteConfiguration extends Component {
               isSubmitted: true,
               openaddmodal: false,
             })
+            message.success(`Site UUID ${this.state.uuid} Configured Successfully`)
             this.componentDidMount()
           }
         })
@@ -318,11 +327,7 @@ export default class SiteConfiguration extends Component {
                 <Col md={6}>
                   <FormGroup>
                     <Label htmlFor="site">Site<span /> </Label>
-                    <Input type="select" name="site" id="site" value={site} onChange={this.handleChangeSite} placeholder="Site" disabled={true}>
-                      <option className="brave" value="" disabled defaultValue>Select Site</option>
-                      {siteData.map((sit, i) => (
-                        <option key={i} value={sit.id}> {sit.site_name} </option>))}
-                    </Input>
+                    <Input type="text" name="site" id="site" value={site} placeholder="Site" disabled={true} />
                   </FormGroup>
                 </Col>
               </Row>
