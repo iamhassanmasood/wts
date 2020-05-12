@@ -104,3 +104,63 @@ h1, h2, h3, h4, h5, h6 {
 .ant-message{
 margin-top: 6rem !important;
 }
+.ant-picker-cell-inner{
+    color: #000 !important;
+} 
+.ant-picker-cell-week{
+    color: #000 !important;
+}
+
+
+.main-nav{
+text-decoration: none;
+}
+.main-nav:hover div{
+color: #023e58 !important;
+text-decoration: none;
+}
+.main-nav-active div{
+color: #09acf3 !important;
+text-decoration: none;
+}
+.main-nav:hover{
+text-decoration: none;
+}
+.close{
+color:white !important;
+}
+.apexcharts-canvas{
+    color: black !important;
+}
+.apexcharts-legend-text{
+    color:white !important;
+}
+#SvgjsTspan1117 {
+    color:white !important;
+}
+.apexcharts-menu-icon{
+    color:white !important;
+}
+.apexcharts-menu-icon{
+    display: none !important;
+}
+
+.apexcharts-canvas{
+    background-color:#023e58 !important;
+}
+.MuiIconButton-label{
+    font-size: 16px !important;
+}
+
+.apexcharts-pie-area {
+display: flex !important;
+justify-content: center !important;
+align-items: center !important;
+align-content: center !important;
+}
+.apexcharts-pie-slice-3{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    align-content: center !important; 
+}
