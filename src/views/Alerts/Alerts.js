@@ -4,7 +4,17 @@ import { Pagination } from 'antd';
 import { timeConverter } from '../../globalFunctions/timeConverter'
 import axios from 'axios'; import AlertsModule from './AlertsModule';
 
+
 export default function Alerts() {
+
+  const headers = [
+    { label: "Event", key: "event" },
+    { label: "Asset Id", key: "asset_id" },
+    { label: "Register Site ID", key: "registered_site_id" },
+    { label: "Alert Site ID", key: "alert_site_id" },
+    { label: "Alert Type", key: "alert_type" },
+
+  ];
 
   const [alerts, setAlerts] = useState([]);
   const [hasError, setErrors] = useState(false);
@@ -36,6 +46,8 @@ export default function Alerts() {
   return (
     < Fragment >
       <AlertsModule
+        Headers={headers}
+        csvData={alerts}
         Data={currentAlerts}
         timeConverter={timeConverter}
         loading={loading}
@@ -49,7 +61,6 @@ export default function Alerts() {
             pageSize={alertsPerPage}
             total={alerts.length}
             onChange={paginate}
-
           /> : ''
       }
     </Fragment >
