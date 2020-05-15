@@ -3,9 +3,21 @@ import { Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Table, M
 import axios from 'axios'; import { Pagination, message } from 'antd';
 import { BASE_URL, SITES_API, SITE_CONFIG, FORMAT } from '../../../config/config'
 import siteConfigValidation from './Validator'
+import { CSVLink } from "react-csv";
 
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
+
+const Headers = [
+  { label: "UUID", key: "uuid" },
+  { label: "Site", key: "site" },
+  { label: "Tag Missing Timeout", key: "tag_missing_timeout" },
+  { label: "Site Heartbeat Interval", key: "site_heartbeat_interval" },
+  { label: "Low Battery Threshold", key: "low_battery_threshold" },
+  { label: "High Temperature Threshold", key: "high_temp_threshold" },
+  { label: "Low Temperature Threshold", key: "low_temp_threshold" },
+  { label: "Power Down Alert Interval", key: "power_down_alert_interval" },
+]
 export default class SiteConfiguration extends Component {
   state = {
     siteConfigData: [], opendeleteModal: false, isOpen: false,
@@ -230,7 +242,6 @@ export default class SiteConfiguration extends Component {
 
     const indexOfLastAlert = currentPage * sitePerPage;
     const indexOfFirstAlert = indexOfLastAlert - sitePerPage;
-    console.log(this.state.site, "ssssssss")
 
     return (
       <div className="animated fadeIn">
@@ -239,7 +250,7 @@ export default class SiteConfiguration extends Component {
             <Card>
               <CardHeader>
                 <i className="fa fa-apple"></i> Site Configuration
-                <Button color='success' onClick={this.openAddModal} size='sm' className="card-header-actions">
+                <Button color='success' onClick={this.openAddModal} size='sm' className="card-header-actions btn-pill">
                   <i className="fa fa-plus"></i> Configure New Site
                 </Button>
               </CardHeader>
@@ -300,6 +311,9 @@ export default class SiteConfiguration extends Component {
                     })}
                   </tbody>
                 </Table>
+                <CSVLink data={siteConfigData} headers={Headers} filename={"SiteConfigurations.csv"} className='card-header-actions'>
+                  <Button color="primary" size="sm" className="btn-pill">Export CSV</Button>
+                </CSVLink>
               </CardBody>
             </Card>
           </Col>

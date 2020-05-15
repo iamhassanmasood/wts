@@ -6,9 +6,19 @@ import axios from 'axios'
 import { Pagination, message } from 'antd';
 import { connect } from 'react-redux';
 import { timeConverter } from '../../../globalFunctions/timeConverter'
+import { CSVLink } from "react-csv";
 
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
+const Headers = [
+  { label: "Asset Id", key: "asset_id" },
+  { label: "Asset Name", key: "asset_name" },
+  { label: "Site", key: "site" },
+  { label: "Tag", key: "tag" },
+  { label: "Asset Brand", key: 'asset_brand' },
+  { label: "Owner Name", key: "owner_name" },
+  { label: "Owner Type", key: "owner_type" },
+];
 class AssetManagement extends Component {
 
   constructor(props) {
@@ -259,7 +269,6 @@ class AssetManagement extends Component {
     })
   };
 
-
   render() {
 
     const { asset_name, assetsPerPage, currentPage, asset_id, asset_brand, owner_name, owner_type, isOpen, AssetData, openaddmodal, site, siteData, opendeleteModal, tag, tagData, errors, done } = this.state;
@@ -273,9 +282,10 @@ class AssetManagement extends Component {
             <Card>
               <CardHeader>
                 <i className="fa fa-ticket"></i> Asset Management
-                <Button color='success' onClick={this.openAddModal} size='sm' className="card-header-actions">
+                <Button color='success' onClick={this.openAddModal} size='sm' className="card-header-actions btn-pill">
                   <i className="fa fa-plus"></i> Add New Asset
                 </Button>
+
               </CardHeader>
               <CardBody>
                 <Table hover bordered striped responsive size="sm" className="table table-striped table-dark">
@@ -335,6 +345,9 @@ class AssetManagement extends Component {
                     })}
                   </tbody>
                 </Table>
+                <CSVLink data={AssetData} headers={Headers} filename={"Assets.csv"} className='card-header-actions'>
+                  <Button color="primary" size="sm" className="btn-pill">Export CSV</Button>
+                </CSVLink>
               </CardBody>
             </Card>
           </Col>

@@ -6,6 +6,12 @@ import { BASE_URL, FORMAT, REGIONS_API } from '../../../config/config'
 import regionValidation from './Validator'
 import { timeConverter } from '../../../globalFunctions/timeConverter'
 
+import { CSVLink } from "react-csv";
+const Headers = [
+  { label: "Region Id", key: "region_id" },
+  { label: "Region Name", key: "region_name" },
+]
+
 export default class RegionManagement extends Component {
   constructor(props) {
     super(props)
@@ -180,7 +186,7 @@ export default class RegionManagement extends Component {
             <Card>
               <CardHeader>
                 <i className="fa fa-apple"></i> Region Management
-                <Button color='success' size='sm' className="card-header-actions" onClick={this.openAddModal}>
+                <Button color='success' size='sm' className="card-header-actions btn-pill" onClick={this.openAddModal}>
                   <i className="fa fa-plus"></i> Add New Region
                 </Button>
               </CardHeader>
@@ -229,6 +235,9 @@ export default class RegionManagement extends Component {
                     })}
                   </tbody>
                 </Table>
+                <CSVLink data={RegionData} headers={Headers} filename={"Region.csv"} className='card-header-actions'>
+                  <Button color="primary" size="sm" className="btn-pill">Export CSV</Button>
+                </CSVLink>
               </CardBody>
             </Card>
           </Col>

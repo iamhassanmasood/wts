@@ -4,10 +4,19 @@ import { BASE_URL, SITES_API, REGIONS_API, DEVICES_API, FORMAT } from '../../../
 import axios from 'axios'
 import { Pagination, message } from 'antd'; import { timeConverter } from '../../../globalFunctions/timeConverter'
 import siteValidation from './Validator'
+import { CSVLink } from "react-csv";
 
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
 
+const Headers = [
+  { label: "Site Id", key: "site_id" },
+  { label: "Site Name", key: "site_name" },
+  { label: "Site Location", key: "site_location" },
+  { label: "Site Type", key: "site_type" },
+  { label: "Region", key: "region" },
+  { label: "Device", key: "device" },
+]
 
 class SiteManagement extends Component {
 
@@ -288,64 +297,66 @@ class SiteManagement extends Component {
             <Card>
               <CardHeader>
                 <i className="fa fa-sitemap"></i> Site Management
-                <Button color='success' onClick={this.openAddModal} size='sm' className="card-header-actions">
+                <Button color='success' onClick={this.openAddModal} size='sm' className="card-header-actions btn-pill">
                   <i className="fa fa-plus"></i> Add New Site
                 </Button>
               </CardHeader>
               <CardBody>
-                {done ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} ><Spinner color='info' size='lg' /></div> :
-                  <Table hover bordered striped responsive size="sm" className="table table-striped table-dark">
-                    <thead>
-                      <tr>
-                        <th>Sr#</th>
-                        <th>Site Id</th>
-                        <th>Site Name</th>
-                        <th>Location</th>
-                        <th>Site Type</th>
-                        <th>Region</th>
-                        <th>Device</th>
-                        <th>Created At</th>
-                        <th>Action</th>
+                <Table hover bordered striped responsive size="sm" className="table table-striped table-dark">
+                  <thead>
+                    <tr>
+                      <th>Sr#</th>
+                      <th>Site Id</th>
+                      <th>Site Name</th>
+                      <th>Location</th>
+                      <th>Site Type</th>
+                      <th>Region</th>
+                      <th>Device</th>
+                      <th>Created At</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.slice(indexOfFirstAlert, indexOfLastAlert).map((rowData, i) => {
+                      var timeNow = timeConverter(rowData.timestamp)
+                      return <tr key={i}>
+                        <td>{i + 1 + (currentPage - 1) * sitePerPage}</td>
+                        <td>{rowData.site_id}</td>
+                        <td>{rowData.site_name}</td>
+                        <td>{rowData.site_location}</td>
+                        <td>{rowData.site_type}</td>
+                        <td>{rowData.region}</td>
+                        <td>{rowData.device}</td>
+                        <td>{timeNow}</td>
+                        <td>
+                          <button className='btn btn-primary btn-sm btn-margin'
+                            onClick={this.openEditModal.bind(this, rowData.id, rowData.site_id, rowData.site_name, rowData.site_type, rowData.site_location, rowData.region, rowData.device)}>
+                            <i className='fa fa-edit fa-lg'></i></button>
+                          <button className='btn btn-danger btn-sm'
+                            onClick={this.toggleDeleteModal.bind(this, rowData.id)}>
+                            <i className='fa fa-trash fa-lg'></i></button>
+
+                          <Modal isOpen={opendeleteModal} toggle={this.toggleDeleteModal} backdrop={false}>
+                            <ModalHeader toggle={() => this.setState({ opendeleteModal: false })}>  Delete Site </ModalHeader>
+                            <ModalBody>Are you want to delete this Site ? </ModalBody>
+                            <ModalFooter>
+                              <Button color='danger' onClick={() => {
+                                this.setState({ opendeleteModal: false })
+                                this.removerow(rowData.id)
+                              }}>Delete</Button >
+                              <span></span>
+                              <Button color='primary' onClick={() => this.setState({ opendeleteModal: false })}>Cancel</Button >
+                            </ModalFooter>
+                          </Modal>
+
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {data.slice(indexOfFirstAlert, indexOfLastAlert).map((rowData, i) => {
-                        var timeNow = timeConverter(rowData.timestamp)
-                        return <tr key={i}>
-                          <td>{i + 1 + (currentPage - 1) * sitePerPage}</td>
-                          <td>{rowData.site_id}</td>
-                          <td>{rowData.site_name}</td>
-                          <td>{rowData.site_location}</td>
-                          <td>{rowData.site_type}</td>
-                          <td>{rowData.region}</td>
-                          <td>{rowData.device}</td>
-                          <td>{timeNow}</td>
-                          <td>
-                            <button className='btn btn-primary btn-sm btn-margin'
-                              onClick={this.openEditModal.bind(this, rowData.id, rowData.site_id, rowData.site_name, rowData.site_type, rowData.site_location, rowData.region, rowData.device)}>
-                              <i className='fa fa-edit fa-lg'></i></button>
-                            <button className='btn btn-danger btn-sm'
-                              onClick={this.toggleDeleteModal.bind(this, rowData.id)}>
-                              <i className='fa fa-trash fa-lg'></i></button>
-
-                            <Modal isOpen={opendeleteModal} toggle={this.toggleDeleteModal} backdrop={false}>
-                              <ModalHeader toggle={() => this.setState({ opendeleteModal: false })}>  Delete Site </ModalHeader>
-                              <ModalBody>Are you want to delete this Site ? </ModalBody>
-                              <ModalFooter>
-                                <Button color='danger' onClick={() => {
-                                  this.setState({ opendeleteModal: false })
-                                  this.removerow(rowData.id)
-                                }}>Delete</Button >
-                                <span></span>
-                                <Button color='primary' onClick={() => this.setState({ opendeleteModal: false })}>Cancel</Button >
-                              </ModalFooter>
-                            </Modal>
-
-                          </td>
-                        </tr>
-                      })}
-                    </tbody>
-                  </Table>}
+                    })}
+                  </tbody>
+                </Table>
+                <CSVLink data={data} headers={Headers} filename={"Sites.csv"} className='card-header-actions'>
+                  <Button color="primary" size="sm" className="btn-pill">Export CSV</Button>
+                </CSVLink>
               </CardBody>
             </Card>
           </Col>

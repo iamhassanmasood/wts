@@ -5,10 +5,14 @@ import deviceValidation from './Validator'
 import axios from 'axios'
 import { Pagination, message } from 'antd';
 import { timeConverter } from '../../../globalFunctions/timeConverter'
+import { CSVLink } from "react-csv";
 
 var token = localStorage.getItem('accessToken');
 var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
-
+const Headers = [
+  { label: "Device Id", key: "device_id" },
+  { label: "Device Api Key", key: "api_key" },
+];
 class DeviceManagement extends Component {
   constructor(props) {
     super(props);
@@ -183,9 +187,10 @@ class DeviceManagement extends Component {
             <Card>
               <CardHeader>
                 <i className="fa fas fa-tablet"></i> Device Management
-                <Button className="card-header-actions" color='success' size='sm' onClick={this.openAddModal}>
+                <Button className="card-header-actions btn-pill" color='success' size='sm' onClick={this.openAddModal}>
                   <i className="fa fa-plus"></i> Add New Device
                 </Button>
+
               </CardHeader>
               <CardBody>
                 <Table hover bordered striped responsive size="sm" className="table table-striped table-dark">
@@ -233,6 +238,9 @@ class DeviceManagement extends Component {
                     })}
                   </tbody>
                 </Table>
+                <CSVLink data={data} headers={Headers} filename={"Device.csv"} className='card-header-actions'>
+                  <Button color="primary" size="sm" className="btn-pill">Export CSV</Button>
+                </CSVLink>
               </CardBody>
             </Card>
           </Col>

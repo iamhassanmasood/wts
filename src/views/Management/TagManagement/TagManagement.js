@@ -5,6 +5,12 @@ import { Pagination, message } from 'antd';
 import { BASE_URL, TAGS_API, FORMAT } from '../../../config/config'
 import tagValidation from './Validator'
 import { timeConverter } from '../../../globalFunctions/timeConverter'
+import { CSVLink } from "react-csv";
+
+const Headers = [
+  { label: "Tag Id", key: "tag_id" },
+  { label: "Tag Type", key: "tag_type" },
+]
 
 class TagManagement extends Component {
 
@@ -187,10 +193,8 @@ class TagManagement extends Component {
             <Card>
               <CardHeader>
                 <i className="fa fa-tag"></i> Tag Management
-                <Button color='success' size='sm' className="card-header-actions" onClick={this.openAddModal}>
-                  <a>
-                    <i className="fa fa-plus"></i> Add New Tag
-                  </a>
+                <Button color='success' size='sm' className="card-header-actions btn-pill" onClick={this.openAddModal}>
+                  <i className="fa fa-plus"></i> Add New Tag
                 </Button>
               </CardHeader>
               <CardBody>
@@ -239,7 +243,9 @@ class TagManagement extends Component {
                     })}
                   </tbody>
                 </Table>
-
+                <CSVLink data={tagData} headers={Headers} filename={"Tags.csv"} className='card-header-actions'>
+                  <Button color="primary" size="sm" className="btn-pill">Export CSV</Button>
+                </CSVLink>
               </CardBody>
             </Card>
           </Col>
