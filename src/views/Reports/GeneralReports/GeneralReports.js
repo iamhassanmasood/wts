@@ -17,9 +17,8 @@ export default class GeneralReports extends Component {
       week: '', month: '', date: '', timeperiod: '', level: '', alertsReporting: [], statesReporting: [],
 
       optionPie: {
-        labels: ['Link Up', 'Link Down', 'Registered Discovered', 'UnAuthorized', 'Stolen', 'Motion', 'Battery', 'Temperature', 'Tempering'],
-        colors: ["#0992e1", "#fd3550", '#7f8281', "#1e5aa0", "#fb551d",
-          "#0992e1", "#fd3550", '#7f8281', "#1e5aa0", "#fb551d"],
+        labels: ['Check In', 'Assigned', 'Check out', 'Delivered', 'Registered Undiscovered', 'Registered Discovered', 'UnAuthorized', 'Stolen', 'In Transit'],
+        colors: ["#90ee90", "#feff33", "#72808f", "red", "blue", "green", '#f4cb08', "#da534f", "#72808f",],
         legend: {
           position: 'bottom',
           labels: {
@@ -39,16 +38,15 @@ export default class GeneralReports extends Component {
         }]
       },
       series: [{
-        name: 'Asset',
-        data: [40, 37, 48, 70, 54, 10, 20, 40, 50, 60]
+        name: 'Alerts',
+        data: [1, 2, 3, 4, 5, 6, 7, 8, 9]
       }],
       optionsBar: {
         plotOptions: {
           bar: { distributed: true },
           dataLabels: { show: false }
         },
-        colors: ["#0992e1", "#fd3550", '#7f8281', "#1e5aa0", "#fb551d",
-          "#0992e1", "#fd3550", '#7f8281', "#1e5aa0", "#fb551d",],
+        colors: ["#90ee90", "#72808f", '#53af50', "red", "blue", "green", "#c5201f", "#e81413", "#c50a09"],
         legend: { position: 'bottom' },
         responsive: [
           {
@@ -183,71 +181,67 @@ export default class GeneralReports extends Component {
     const sitesData = siteData.map((item, i) => (
       <option key={i} value={item.id}>{item.site_name}</option>
     ))
-    var finalPie = [10, 20, 40, 50, 60,]
+    var finalPie = [1, 2, 4, 5, 6, 7, 8, 9]
 
     console.log(alertsReporting, "Alerts hy", statesReporting, "States hain")
     return (
       <div className="animated fadeIn">
-        <CardHeader>  <i className="fa fa-clipboard"></i>Reporting Form </CardHeader>
-        <Card>
+        <Card className="mx-12">
+          <CardHeader>  <i className="fa fa-clipboard"></i>Reports Form </CardHeader>
           <CardBody style={{ backgroundColor: "white", color: 'black' }}>
-            <form>
-              <div className='row'>
-                <div className='col-lg-3'>
-                  <div className="row  m-auto">
-                    <div className='col-lg-4 mt-2'> <Label> <Input type="radio" name="radio1" onChange={this.handleChangeLevel} checked={level === "network"} value='network' /> Network Level </Label></div>
-                    <div className='col-lg-4 mt-2'> <Label> <Input type="radio" name="radio1" onChange={this.handleChangeLevel} checked={level === "site"} value='site' /> Site Level </Label></div>
-                    <div className='col-lg-4 mt-2'> <Label> <Input type="radio" name="radio1" onChange={this.handleChangeLevel} checked={level === "asset"} value='asset' />  Asset Level </Label></div>
+            <div className='col-lg-12'>
+              <form>
+                <div className='row'>
+                  <div className="col-lg-3 m-auto row">
+                    <div className='col-lg-4'> <Label> <Input type="radio" name="radio1" onChange={this.handleChangeLevel} checked={level === "network"} value='network' /> Network Level </Label></div>
+                    <div className='col-lg-4'> <Label> <Input type="radio" name="radio1" onChange={this.handleChangeLevel} checked={level === "site"} value='site' /> Site Level </Label></div>
+                    <div className='col-lg-4'> <Label> <Input type="radio" name="radio1" onChange={this.handleChangeLevel} checked={level === "asset"} value='asset' />  Asset Level </Label></div>
+                  </div>
+
+
+                  <div className='col-lg-3 mb-1'>
+                    <Input type="select" id="site" name="site" onChange={this.handleChange} value={siteValue} placeholder="Select Site">
+                      <option value='' disabled defaultValue>Select Site</option>
+                      {sitesData}
+                    </Input>
+                  </div>
+
+                  <div className="col-lg-3 m-auto row">
+                    <div className='col-lg-4'> <Label> <Input type="radio" name="radio2" onChange={this.handleChangeValue} id="daily" checked={timeperiod === "daily"} value="daily" /> Daily </Label></div>
+                    <div className='col-lg-4'> <Label> <Input type="radio" name="radio2" onChange={this.handleChangeValue} id="weekly" checked={timeperiod === "weekly"} value="weekly" /> Weekly </Label></div>
+                    <div className='col-lg-4'> <Label> <Input type="radio" name="radio2" onChange={this.handleChangeValue} id="monthly" checked={timeperiod === "monthly"} value="monthly" />  Monthly </Label></div>
+                  </div>
+
+                  <div className='col-lg-3 mb-1'>
+                    {timeperiod === "daily" ?
+                      <Fragment>
+                        <DatePicker className="col-lg-12" format={"DD-MM-YYYY"}
+                          bordered={true} name='d' onChange={(d, ds) => this.handleChangeDate(d, ds)} />
+                      </Fragment>
+                      : ''}
+
+                    {timeperiod === "weekly" ?
+                      <Fragment>
+                        <DatePicker
+                          className="col-lg-12" picker="week" format={"WW-YYYY"}
+                          bordered={true} name='w' onChange={(w, ws) => this.handleChangeWeek(w, ws)} />
+                      </Fragment> : ''}
+
+                    {timeperiod === "monthly" ?
+                      <Fragment>
+                        <DatePicker className="col-lg-12" picker="month" format={"MM-YYYY"}
+                          bordered={true} name='m' onChange={(m, ms) => this.handleChangeMonth(m, ms)} />
+                      </Fragment> : ''}
                   </div>
                 </div>
-
-
-                <div className='col-lg-3'>
-                  <Input type='select' id="site" name="site" onChange={this.handleChange} value={siteValue} placeholder="Select Site">
-                    <option value='' disabled defaultValue>Select Site</option>
-                    {sitesData}
-                  </Input>
+                <div className='col-lg-4 m-auto'>
+                  <Button color="primary" block type="submit" onClick={this.handleSubmit}>Get Report</Button>
                 </div>
-
-                <div className='col-lg-3'>
-                  <div className="row  m-auto">
-                    <div className='col-lg-4 mt-2'> <Label> <Input type="radio" name="radio2" onChange={this.handleChangeValue} id="daily" checked={timeperiod === "daily"} value="daily" /> Daily </Label></div>
-                    <div className='col-lg-4 mt-2'> <Label> <Input type="radio" name="radio2" onChange={this.handleChangeValue} id="weekly" checked={timeperiod === "weekly"} value="weekly" /> Weekly </Label></div>
-                    <div className='col-lg-4 mt-2'> <Label> <Input type="radio" name="radio2" onChange={this.handleChangeValue} id="monthly" checked={timeperiod === "monthly"} value="monthly" />  Monthly </Label></div>
-                  </div>
-                </div>
-
-                <div className='col-lg-3'>
-                  {timeperiod === "daily" ?
-                    <Fragment>
-                      <DatePicker className="form-control" format={"DD-MM-YYYY"}
-                        bordered={true} name='d' onChange={(d, ds) => this.handleChangeDate(d, ds)} />
-                    </Fragment>
-                    : ''}
-
-                  {timeperiod === "weekly" ?
-                    <Fragment>
-                      <DatePicker
-                        className="form-control" picker="week" format={"WW-YYYY"}
-                        bordered={true} name='w' onChange={(w, ws) => this.handleChangeWeek(w, ws)} />
-                    </Fragment> : ''}
-
-                  {timeperiod === "monthly" ?
-                    <Fragment>
-                      <DatePicker className="form-control" picker="month" format={"MM-YYYY"}
-                        bordered={true} name='m' onChange={(m, ms) => this.handleChangeMonth(m, ms)} />
-                    </Fragment> : ''}
-                </div>
-              </div>
-              <br />
-              <div className='col-lg-3 m-auto'>
-                <Button color="primary" block type="submit" onClick={this.handleSubmit}>Get Report</Button>
-              </div>
-            </form>
-            {errors ? <p style={{ color: 'red', fontWeight: 'bold', textAlign: 'center' }}>{errors}</p> : ''}
+              </form>
+              {errors ? <p style={{ color: 'red', fontWeight: 'bold', textAlign: 'center' }}>{errors}</p> : ''}
+            </div>
           </CardBody>
         </Card>
-
         <br />
         <div className='col-lg-12' >
           <div className='row'>
@@ -290,6 +284,8 @@ export default class GeneralReports extends Component {
 
           </CardBody>
         </Card>
+
+        {/* </Col> */}
 
       </div>
     )
