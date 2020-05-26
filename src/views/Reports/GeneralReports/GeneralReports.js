@@ -234,11 +234,11 @@ export default class GeneralReports extends Component {
                       </Fragment> : ''}
                   </div>
                 </div>
-                <div className='col-lg-4 m-auto'>
+                <div className='col-lg-3 m-auto'>
                   <Button color="primary" block type="submit" onClick={this.handleSubmit}>Get Report</Button>
                 </div>
               </form>
-              {errors ? <p style={{ color: 'red', fontWeight: 'bold', textAlign: 'center' }}>{errors}</p> : ''}
+              {errors ? <p style={{ color: 'red', textAlign: 'center' }}>{errors}</p> : ''}
             </div>
           </CardBody>
         </Card>
