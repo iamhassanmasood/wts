@@ -28,7 +28,7 @@ class DeviceManagement extends Component {
       delId: '',
       isSubmitted: false,
       currentPage: 1,
-      devicePerPage: 10,
+      devicePerPage: 15,
       errors: undefined, done: undefined, redirect: false,
     }
   }
@@ -52,6 +52,38 @@ class DeviceManagement extends Component {
       })
   }
 
+  /*
+  exportPDF = () => {
+    const unit = "pt";
+    const size = "A4";
+    const orientation = "portrait";
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+    doc.setFontSize(14);
+    const title = "Device Managemnet";
+    const headers = [["Sr#", "Device Id", "Api Key"]];
+    const data = this.state.data.map((device, index) => [index + 1, device.device_id, device.api_key]);
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data
+    };
+
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save("DeviceMangement.pdf")
+  }
+
+  exportXLSX = (csvData, fileName) => {
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const fileExtension = '.xlsx';
+    const ws = XLSX.utils.json_to_sheet(csvData);
+    const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(data, fileName + fileExtension);
+  }
+  */
 
   removerow = () => {
     axios.delete(`${BASE_URL}/${DEVICES_API}/${this.state.delId}/`, { headers }).then(res => {

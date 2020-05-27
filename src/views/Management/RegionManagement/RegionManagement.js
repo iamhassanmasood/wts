@@ -31,7 +31,7 @@ export default class RegionManagement extends Component {
       delId: '',
       opendeleteModal: false,
       currentPage: 1,
-      regionPerPage: 10,
+      regionPerPage: 15,
     }
   }
 
@@ -54,6 +54,39 @@ export default class RegionManagement extends Component {
         return err
       })
   }
+
+  /*
+  exportPDF = () => {
+    const unit = "pt";
+    const size = "A4";
+    const orientation = "portrait";
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+    doc.setFontSize(14);
+    const title = "Region Managemnet";
+    const headers = [["Sr#", "Region Id", "Region Name"]];
+    const data = this.state.RegionData.map((region, index) => [index + 1, region.region_id, region.region_name]);
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data
+    };
+
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save("RegionMangement.pdf")
+  }
+
+  exportXLSX = (csvData, fileName) => {
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const fileExtension = '.xlsx';
+    const ws = XLSX.utils.json_to_sheet(csvData);
+    const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(data, fileName + fileExtension);
+  }
+  */
 
   removerow = () => {
     var token = localStorage.getItem('accessToken');

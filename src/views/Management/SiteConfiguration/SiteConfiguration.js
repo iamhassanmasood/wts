@@ -68,6 +68,39 @@ export default class SiteConfiguration extends Component {
       })
   }
 
+  /*
+  exportPDF = () => {
+    const unit = "pt";
+    const size = "A4";
+    const orientation = "portrait";
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+    doc.setFontSize(14);
+    const title = "Site Configuration";
+    const headers = [["Sr#", "UUID", "Site", "Tag Missing Timeout", "Site Heartbeat Interval", "Low Battery Threshold", "High Temperature Threshold", "Low Temperature Threshold", "Power Down Alert Interval"]];
+    const data = this.state.siteConfigData.map((sc, index) => [ index + 1,sc.uuid,sc.site,sc.tag_missing_timeout,sc.site_heartbeat_interval,sc.low_battery_threshold,sc.high_temp_threshold,sc.low_temp_threshold,sc.power_down_alert_interval]);
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data
+    };
+
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save("SiteConfiguration.pdf")
+  }
+
+  exportXLSX = (csvData, fileName) => {
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const fileExtension = '.xlsx';
+    const ws = XLSX.utils.json_to_sheet(csvData);
+    const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(data, fileName + fileExtension);
+  }
+  */
+
   toggleDeleteModal(id) {
     const currentState = this.state.opendeleteModal;
     this.setState({ opendeleteModal: !currentState, delId: id })

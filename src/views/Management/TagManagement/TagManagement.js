@@ -56,6 +56,40 @@ class TagManagement extends Component {
       })
   }
 
+  /*
+ exportPDF = () => {
+   const unit = "pt";
+   const size = "A4";
+   const orientation = "portrait";
+   const marginLeft = 40;
+   const doc = new jsPDF(orientation, unit, size);
+   doc.setFontSize(14);
+   const title = "Tag Managemnet";
+   const headers = [["Sr#", "Tag Id", "Tag Type"]];
+   const data = this.state.tagData.map((tag, index) => [index + 1, tag.tag_id, tag.tag_type]);
+   let content = {
+     startY: 50,
+     head: headers,
+     body: data
+   };
+
+   doc.text(title, marginLeft, 40);
+   doc.autoTable(content);
+   doc.save("TagsMangement.pdf")
+ }
+
+ exportXLSX = (csvData, fileName) => {
+   const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+   const fileExtension = '.xlsx';
+   const ws = XLSX.utils.json_to_sheet(csvData);
+   const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+   const data = new Blob([excelBuffer], { type: fileType });
+   FileSaver.saveAs(data, fileName + fileExtension);
+ }
+ */
+
+
   removerow = () => {
     var token = localStorage.getItem('accessToken');
     var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + token }
